@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait RelationshipTrait
 {
+    /**
+     * Get the posts for the user.
+     *
+     * @return HasMany
+     */
     public function post(): HasMany
     {
         return $this->hasMany(Post::class);

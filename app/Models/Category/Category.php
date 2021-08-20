@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Post;
+namespace App\Models\Category;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Category extends Model
 {
     use RelationshipTrait,
         AttributesTrait,
@@ -15,7 +15,7 @@ class Post extends Model
      *
      * @var array
      */
-    protected $fillable = [ ];
+    protected $fillable = [];
 
     /**
      * The attributes that aren't mass assignable.

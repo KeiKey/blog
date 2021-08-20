@@ -10,7 +10,8 @@ class User extends Authenticatable
 {
     use Notifiable,
         RelationshipTrait,
-        AttributesTrait;
+        AttributesTrait,
+        SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +20,15 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name', 'email', 'password',
+    ];
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [
+        'id'
     ];
 
     /**
