@@ -60,6 +60,7 @@
             </div>
         @endisset
 
+{{--        todo - category as multiple options    --}}
         @isset($items['category'])
             <div class="form-group row">
                 <label for="category" class="col-md-4 col-form-label text-md-right">Category</label>
