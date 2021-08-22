@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     private $userService;
 
-    public function __constructor(
+    public function __construct(
         UserService $userService
     ) {
         $this->userService = $userService;

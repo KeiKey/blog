@@ -13,7 +13,7 @@ class CategoryController extends Controller
 {
     private $categoryService;
 
-    public function __constructor(
+    public function __construct(
         CategoryService $categoryService
     ) {
         $this->categoryService = $categoryService;

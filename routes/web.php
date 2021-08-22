@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
 
 Auth::routes();
 
@@ -28,67 +28,67 @@ Route::get('/posts')
 
 Route::get('/posts/{id}')
     ->uses('PostController@index')
-    ->name('posts.index');
+    ->name('posts.show');
 
 Route::middleware('auth')
     ->prefix('panel')
     ->group(function () {
         Route::get('/posts/')
             ->uses('Panel\PostController@index')
-            ->name('posts.index');
-
-        Route::get('/posts/{post}')
-            ->uses('Panel\PostController@show')
-            ->name('posts.show');
-
-        Route::delete('/posts/{post}')
-            ->uses('Panel\PostController@destroy')
-            ->name('posts.destroy');
-
-        Route::get('/posts/{post}/edit')
-            ->uses('Panel\PostController@edit')
-            ->name('posts.edit');
-
-        Route::post('/posts/{post}/edit')
-            ->uses('Panel\PostController@update')
-            ->name('posts.update');
+            ->name('panel.posts.index');
 
         Route::get('/posts/create')
             ->uses('Panel\PostController@create')
-            ->name('posts.create');
+            ->name('panel.posts.create');
 
         Route::post('/posts/create')
             ->uses('Panel\PostController@store')
-            ->name('posts.store');
+            ->name('panel.posts.store');
+
+        Route::get('/posts/{post}')
+            ->uses('Panel\PostController@show')
+            ->name('panel.posts.show');
+
+        Route::delete('/posts/{post}')
+            ->uses('Panel\PostController@destroy')
+            ->name('panel.posts.destroy');
+
+        Route::get('/posts/{post}/edit')
+            ->uses('Panel\PostController@edit')
+            ->name('panel.posts.edit');
+
+        Route::post('/posts/{post}/edit')
+            ->uses('Panel\PostController@update')
+            ->name('panel.posts.update');
 
         //todo- middleware with the role admin
         Route::prefix('admin')->group(function () {
             Route::get('/posts/')
                 ->uses('Admin\PostController@index')
-                ->name('posts.index');
+                ->name('panel.admin.posts.index');
 
             Route::get('/posts/{post}')
                 ->uses('Admin\PostController@show')
-                ->name('posts.show');
+                ->name('panel.admin.posts.show');
 
             Route::delete('/posts/{post}')
                 ->uses('Admin\PostController@destroy')
-                ->name('posts.destroy');
+                ->name('panel.admin.posts.destroy');
 
             Route::get('/posts/{post}/edit')
                 ->uses('Admin\PostController@edit')
-                ->name('posts.edit');
+                ->name('panel.admin.posts.edit');
 
             Route::post('/posts/{post}/edit')
                 ->uses('Admin\PostController@update')
-                ->name('posts.update');
+                ->name('panel.admin.posts.update');
 
             Route::get('/posts/create')
                 ->uses('Admin\PostController@create')
-                ->name('posts.create');
+                ->name('panel.admin.posts.create');
 
             Route::post('/posts/')
                 ->uses('Admin\PostController@store')
-                ->name('posts.store');
+                ->name('panel.admin.posts.store');
         });
     });

@@ -5,6 +5,13 @@ namespace App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property mixed id
+ * @property mixed title
+ * @property mixed content
+ * @property mixed thumbnail
+ * @property mixed bg_image
+ */
 class Post extends Model
 {
     use RelationshipTrait,
@@ -16,7 +23,14 @@ class Post extends Model
      *
      * @var array
      */
-    protected $fillable = [ ];
+    protected $fillable = [
+        'title',
+        'content',
+        'category_id',
+        'thumbnail',
+        'bg_image',
+        'user_id'
+    ];
 
     /**
      * The attributes that aren't mass assignable.

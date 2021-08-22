@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostStoreRequest;
+use App\Models\Category\Category;
+use App\Models\Post\Post;
 use App\Services\PostService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,7 +17,7 @@ class PostController extends Controller
 {
     private $postService;
 
-    public function __constructor(
+    public function __construct(
         PostService $postService
     ) {
         $this->postService = $postService;
@@ -26,7 +30,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('panel.posts.show');
+//        return view('panel.posts.create');
     }
 
     /**
@@ -36,30 +40,29 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('panel.posts.create');
+        return view('panel.posts.create', ['categories' => Category::all()]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param PostStoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(PostStoreRequest $request): RedirectResponse
     {
-        //todo - create a form request and add the entry into db
-//        return view('panel.posts.show');
+        return $this->postService->create($request);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @return Application|Factory|View
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        return view('panel.posts.show');
+        return view('panel.posts.show',['post' => $post]);
     }
 
     /**
