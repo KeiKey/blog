@@ -41,4 +41,14 @@ class PostService
 
         return Post::all();
     }
+
+    public function getUserPosts($id, $disabled = false)
+    {
+//        dd(Post::withTrashed()->where('user_id',$id));
+        if ($disabled) {
+            return Post::withTrashed()->where('user_id',$id);
+        }
+
+        return Post::all()->where('user_id',$id);
+    }
 }

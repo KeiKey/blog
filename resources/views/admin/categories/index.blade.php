@@ -8,12 +8,12 @@
             </div>
         </div>
         <div class="row mt-3">
-            <table class="table table-striped">
+            <table id="category-table" class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Category</th>
-                        <th>Actions</th>
+                        <th class="w-25">Id</th>
+                        <th class="w-50">Category</th>
+                        <th class="w-25">Actions</th>
                     </tr>
                 </thead>
 
@@ -59,4 +59,21 @@
             </table>
         </div>
     </div>
+@endsection
+
+@section('scripts')
+{{--    todo - find why its not loading --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#category-table').DataTable({
+                processing: false,
+                serverSide: false,
+                info: true
+            });
+
+            $('#category-table_wrapper').css('width','100%')
+        } );
+    </script>
 @endsection

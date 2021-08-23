@@ -31,7 +31,7 @@ class PostController extends Controller
      */
     public function index()
     {
-//        return view('panel.posts.create');
+        return view('panel.posts.index', ['posts' => $this->postService->getUserPosts(auth()->id())]);
     }
 
     /**
