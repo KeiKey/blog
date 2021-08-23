@@ -4,7 +4,6 @@
     @include('partials.create_form',
              [
                  'action' => 'panel.posts.store',
-                 'method' => 'post',
                  'title' => 'Create a new post',
                  'items' =>
                             [

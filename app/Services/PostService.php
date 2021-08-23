@@ -6,7 +6,6 @@ use App\Models\Post\Post;
 
 class PostService
 {
-
     public function create($request)
     {
         if ($request->hasFile('thumbnail')) {

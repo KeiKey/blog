@@ -6,3 +6,25 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+// Awesome
+@import "node_modules/font-awesome/scss/font-awesome";
+
+.btn-success{
+
+}
+
+.btn-warning{
+    color: white;
+    background-color: orange;
+    border-color: orange;
+    &:hover {
+        color: white;
+        background-color: #d08d12;
+        border-color: #d08d12;
+    }
+}
+
+.btn-danger{
+
+}

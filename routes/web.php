@@ -67,6 +67,14 @@ Route::middleware('auth')
                 ->uses('Admin\PostController@index')
                 ->name('panel.admin.posts.index');
 
+            Route::get('/posts/create')
+                ->uses('Admin\PostController@create')
+                ->name('panel.admin.posts.create');
+
+            Route::post('/posts/create')
+                ->uses('Admin\PostController@store')
+                ->name('panel.admin.posts.store');
+
             Route::get('/posts/{post}')
                 ->uses('Admin\PostController@show')
                 ->name('panel.admin.posts.show');
@@ -83,12 +91,32 @@ Route::middleware('auth')
                 ->uses('Admin\PostController@update')
                 ->name('panel.admin.posts.update');
 
-            Route::get('/posts/create')
-                ->uses('Admin\PostController@create')
-                ->name('panel.admin.posts.create');
 
-            Route::post('/posts/')
-                ->uses('Admin\PostController@store')
-                ->name('panel.admin.posts.store');
+
+            Route::get('/categories/')
+                ->uses('Admin\CategoryController@index')
+                ->name('panel.admin.categories.index');
+
+            Route::get('/categories/create')
+                ->uses('Admin\CategoryController@create')
+                ->name('panel.admin.categories.create');
+
+            Route::post('/categories/create')
+                ->uses('Admin\CategoryController@store')
+                ->name('panel.admin.categories.store');
+
+            Route::delete('/categories/{category}')
+                ->uses('Admin\CategoryController@destroy')
+                ->name('panel.admin.categories.destroy');
+
+            Route::get('/categories/{category}/edit')
+                ->uses('Admin\CategoryController@edit')
+                ->name('panel.admin.categories.edit');
+
+            Route::post('/categories/{category}/edit')
+                ->uses('Admin\CategoryController@update')
+                ->name('panel.admin.categories.update');
+
+            //todo - hard delete a category
         });
     });
