@@ -5,7 +5,9 @@ namespace App\Models\Post;
 use App\Models\Category\Category;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 trait RelationshipTrait
 {
@@ -22,10 +24,10 @@ trait RelationshipTrait
     /**
      * Get the categories for the post.
      *
-     * @return HasMany
+     * @return BelongsTo
      */
-    public function category(): HasMany
+    public function category(): BelongsTo
     {
-        return $this->hasMany(Category::class);
+        return $this->belongsTo(Category::class);
     }
 }

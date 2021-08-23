@@ -6,7 +6,6 @@ use App\Models\Post\Post;
 use App\Services\PostService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -26,7 +25,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('posts.index');
+        return view('posts.index', ['posts' => $this->postService->all()]);
     }
 
     /**
@@ -37,6 +36,6 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('posts.show');
+        return view('posts.show', ['post' => $post]);
     }
 }

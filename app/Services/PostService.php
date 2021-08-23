@@ -8,16 +8,17 @@ class PostService
 {
     public function create($request)
     {
+        $directory = str_replace(' ', '_', $request->title);
         if ($request->hasFile('thumbnail')) {
             $extension = $request->thumbnail->extension();
             $thumbnail_name = time().".".$extension;
-            $request->thumbnail->move(public_path('images/thumbnails/'.$request->title), $thumbnail_name);
+            $request->thumbnail->move(public_path('images/thumbnails/'.$directory), $thumbnail_name);
         }
 
         if ($request->hasFile('bg_image')) {
             $extension = $request->bg_image->extension();
             $bg_image_name = time().".".$extension;
-            $request->bg_image->move(public_path('images/bg_images/'.$request->title), $bg_image_name);
+            $request->bg_image->move(public_path('images/bg_images/'.$directory), $bg_image_name);
         }
 
         $post = Post::create([
@@ -30,5 +31,14 @@ class PostService
         ]);
 
         return redirect()->route('panel.posts.show', $post->id);
+    }
+
+    public function all($disabled = false)
+    {
+        if ($disabled) {
+            return Post::withTrashed();
+        }
+
+        return Post::all();
     }
 }

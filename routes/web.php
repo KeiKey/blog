@@ -26,8 +26,8 @@ Route::get('/posts')
     ->uses('PostController@index')
     ->name('posts.index');
 
-Route::get('/posts/{id}')
-    ->uses('PostController@index')
+Route::get('/posts/{post}')
+    ->uses('PostController@show')
     ->name('posts.show');
 
 Route::middleware('auth')

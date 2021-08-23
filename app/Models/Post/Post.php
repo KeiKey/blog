@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed id
  * @property mixed title
  * @property mixed content
+ * @property mixed category_id
  * @property mixed thumbnail
  * @property mixed bg_image
  */

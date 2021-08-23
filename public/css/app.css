@@ -13997,3 +13997,26 @@ a.text-dark:focus {
   border-color: #d08d12;
 }
 
+.single-post-category {
+  border: 1px solid #7f7f7f;
+  background-color: #7f7f7f;
+  color: white;
+}
+
+.single-post-header {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  min-height: 40vh;
+}
+
+.single-post-title {
+  font-size: 40px;
+  font-weight: 900;
+}
+
+.single-post-info {
+  font-size: 19px;
+  color: #7f7f7f;
+}
+

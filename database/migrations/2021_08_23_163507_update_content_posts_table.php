@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUniqueToNameCategoriesTable extends Migration
+class UpdateContentPostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUniqueToNameCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->string('name')->unique()->change();
+        Schema::table('posts', function (Blueprint $table) {
+            $table->text('content')->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddUniqueToNameCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            //
+        Schema::table('posts', function (Blueprint $table) {
+            $table->string('name')->unique();
         });
     }
 }
