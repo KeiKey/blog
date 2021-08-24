@@ -10,7 +10,7 @@ class CategoryService
     public function create($request): RedirectResponse
     {
         $category = Category::create([
-            'name' => $request->name,
+            'name' => ucwords($request->name),
         ]);
 
         return redirect()->route('panel.admin.categories.show', $category->id);

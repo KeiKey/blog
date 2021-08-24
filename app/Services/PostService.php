@@ -22,8 +22,8 @@ class PostService
         }
 
         $post = Post::create([
-            'title' => $request->title,
-            'content' => $request->content,
+            'title' => ucwords($request->title),
+            'content' => ucwords($request->content),
             'category_id' => (int)$request->category ?? null,
             'thumbnail' => $thumbnail_name ?? null,
             'bg_image' => $bg_image_name ?? null,
