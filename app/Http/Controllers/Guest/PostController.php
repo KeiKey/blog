@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Guest;
 
 use App\Models\Post\Post;
 use App\Services\PostService;
@@ -8,14 +8,12 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 
-abstract class PostController extends Controller
+abstract class PostController extends \App\Http\Controllers\PostController
 {
-    protected $postService;
-
     public function __construct(
         PostService $postService
     ) {
-        $this->postService = $postService;
+        parent::__construct($postService);
     }
 
     /**
@@ -23,7 +21,10 @@ abstract class PostController extends Controller
      *
      * @return Application|Factory|View
      */
-    abstract public function index();
+    public function index()
+    {
+        return view('posts.index', ['posts' => $this->postService->all()]);
+    }
 
     /**
      * Display the specified resource.
@@ -31,5 +32,8 @@ abstract class PostController extends Controller
      * @param Post $post
      * @return Application|Factory|View
      */
-    abstract public function show(Post $post);
+    public function show(Post $post)
+    {
+        return view('posts.show', ['post' => $post]);
+    }
 }

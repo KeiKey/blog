@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class PostController extends Controller
+class PostController extends Post
 {
     private $postService;
 
