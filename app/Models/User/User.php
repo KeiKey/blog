@@ -7,6 +7,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @property mixed id
+ * @property mixed name
+ * @property mixed surname
+ * @property mixed email
+ * @property mixed role
+ * @property mixed email_verified_at
+ */
 class User extends Authenticatable
 {
     use Notifiable,
@@ -20,7 +28,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'surname',
+        'email',
+        'password',
+        'role'
     ];
 
     /**

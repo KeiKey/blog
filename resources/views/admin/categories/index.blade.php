@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="row mt-3">
-            <table id="category-table" class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered datatable-custom">
                 <thead>
                     <tr>
                         <th class="w-25">Id</th>
@@ -62,18 +62,13 @@
 @endsection
 
 @section('scripts')
-{{--    todo - find why its not loading --}}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-
     <script>
-        $(document).ready(function() {
-            $('#category-table').DataTable({
-                processing: false,
-                serverSide: false,
-                info: true
-            });
-
-            $('#category-table_wrapper').css('width','100%')
-        } );
+        // $(document).ready(function() {
+        //     $('.datatable-custom').DataTable({
+        //         processing: false,
+        //         serverSide: false,
+        //         info: true
+        //     });
+        // });
     </script>
 @endsection

@@ -26,9 +26,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        dd('hello from here');
-        return view('shares.index');
-//        return $this->postService;
+        return view('admin.posts.index');
     }
 
     /**

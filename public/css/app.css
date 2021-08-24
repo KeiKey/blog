@@ -14020,3 +14020,23 @@ a.text-dark:focus {
   color: #7f7f7f;
 }
 
+.dataTables_wrapper {
+  width: 100%;
+}
+
+.dataTables_wrapper .dataTables_length > label {
+  display: inline-flex;
+}
+
+.dataTables_wrapper .dataTables_filter {
+  text-align: end;
+}
+
+.dataTables_wrapper .dataTables_filter > label {
+  display: inline-flex;
+}
+
+.dataTables_wrapper .pagination {
+  justify-content: flex-end;
+}
+

@@ -21,6 +21,7 @@
 </head>
 <body>
     <div id="app">
+{{--        <nav class="navbar navbar-expand-md @if(auth()->user()->isAdmin()) navbar-dark bg-dark @else navbar-light bg-white @endif shadow-sm">--}}
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -33,7 +34,29 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        @guest
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('posts.index') }}">{{ __('Posts') }}</a>
+                            </li>
+                        @else
+                            @if(auth()->user()->isUser())
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('panel.posts.index') }}">{{ __('Your posts') }}</a>
+                                </li>
+                            @else
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('panel.admin.categories.index') }}">{{ __('Categories') }}</a>
+                                </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('panel.admin.posts.index') }}">{{ __('Posts') }}</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('panel.admin.users.index') }}">{{ __('Users') }}</a>
+                                </li>
+                            @endif
+                        @endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->

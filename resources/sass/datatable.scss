@@ -1,0 +1,18 @@
+.dataTables_wrapper {
+    width: 100%;
+
+    .dataTables_length > label {
+        display: inline-flex;
+    }
+
+    .dataTables_filter {
+        text-align: end;
+        > label {
+            display: inline-flex;
+        }
+    }
+
+    .pagination {
+        justify-content: flex-end;
+    }
+}
