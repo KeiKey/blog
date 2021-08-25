@@ -27,6 +27,7 @@
         "vue-template-compiler": "^2.6.14"
     },
     "dependencies": {
-        "dropzone": "^5.9.2"
+        "dropzone": "^5.9.2",
+        "toastr": "^2.1.4"
     }
 }

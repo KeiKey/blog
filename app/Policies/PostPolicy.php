@@ -11,27 +11,27 @@ class PostPolicy
 {
     use HandlesAuthorization;
 
-    public function access(User $user, Post $post): bool
+    public function accessPost(User $user, Post $post): bool
     {
         return $user->role === Role::ADMIN || $user->id === $post->userId();
     }
 
-    public function create(User $user): bool
+    public function createPost(User $user): bool
     {
         return $user->role === Role::USER;
     }
 
-    public function disable(User $user, Post $post): bool
+    public function disablePost(User $user, Post $post): bool
     {
         return $user->role === Role::ADMIN || $user->id === $post->userId();
     }
 
-    public function enable(User $user, Post $post): bool
+    public function enablePost(User $user, Post $post): bool
     {
         return $user->role === Role::ADMIN || $user->id === $post->userId();
     }
 
-    public function delete(User $user, Post $post): bool
+    public function deletePost(User $user, Post $post): bool
     {
         return $user->id === $post->userId();
     }

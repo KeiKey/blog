@@ -38,6 +38,10 @@ Route::middleware('auth')
             ->uses('Panel\PostController@index')
             ->name('panel.posts.index');
 
+        Route::put('/posts/disable/{post}')
+            ->uses('Panel\PostController@disable')
+            ->name('panel.posts.disable');
+
         Route::get('/posts/create')
             ->uses('Panel\PostController@create')
             ->name('panel.posts.create');
@@ -58,7 +62,7 @@ Route::middleware('auth')
             ->uses('Panel\PostController@edit')
             ->name('panel.posts.edit');
 
-        Route::post('/posts/{post}/edit')
+        Route::put('/posts/{post}/edit')
             ->uses('Panel\PostController@update')
             ->name('panel.posts.update');
 
@@ -70,29 +74,13 @@ Route::middleware('auth')
                     ->uses('Admin\PostController@index')
                     ->name('panel.admin.posts.index');
 
-                Route::get('/posts/create')
-                    ->uses('Admin\PostController@create')
-                    ->name('panel.admin.posts.create');
-
-                Route::post('/posts/create')
-                    ->uses('Admin\PostController@store')
-                    ->name('panel.admin.posts.store');
+                Route::post('/posts/disable/{post}')
+                    ->uses('Admin\PostController@disable')
+                    ->name('panel.admin.posts.disable');
 
                 Route::get('/posts/{post}')
                     ->uses('Admin\PostController@show')
                     ->name('panel.admin.posts.show');
-
-                Route::delete('/posts/{post}')
-                    ->uses('Admin\PostController@destroy')
-                    ->name('panel.admin.posts.destroy');
-
-                Route::get('/posts/{post}/edit')
-                    ->uses('Admin\PostController@edit')
-                    ->name('panel.admin.posts.edit');
-
-                Route::post('/posts/{post}/edit')
-                    ->uses('Admin\PostController@update')
-                    ->name('panel.admin.posts.update');
 
 
                 Route::get('/categories/')

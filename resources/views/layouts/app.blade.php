@@ -95,10 +95,58 @@
         </nav>
 
         <main class="py-4">
+{{--            todo - use message fashing      --}}
+            <div class="container">
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if (session('no_access'))
+                    <div class="alert alert-warning">
+                        {{ session('no_access') }}
+                    </div>
+                @endif
+
+                @if (session('no_fail'))
+                    <div class="alert alert-danger">
+                        {{ session('no_fail') }}
+                    </div>
+                @endif
+            </div>
+
             @yield('content')
         </main>
     </div>
 
 @yield('scripts')
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script>
+        console.log('here3');
+        $(document).ready(function() {
+            toastr.info("tessst")
+        });
+{{--        @if(Session::has('message'))--}}
+{{--        var type="{{Session::get('alert-type','info')}}"--}}
+
+{{--        switch(type){--}}
+{{--            case 'info':--}}
+{{--                toastr.info("{{ Session::get('message') }}");--}}
+{{--                break;--}}
+{{--            case 'success':--}}
+{{--                toastr.success("{{ Session::get('message') }}");--}}
+{{--                break;--}}
+{{--            case 'warning':--}}
+{{--                toastr.warning("{{ Session::get('message') }}");--}}
+{{--                break;--}}
+{{--            case 'error':--}}
+{{--                toastr.error("{{ Session::get('message') }}");--}}
+{{--                break;--}}
+//         }
+{{--        @endif--}}
+
+    </script>
 </body>
 </html>

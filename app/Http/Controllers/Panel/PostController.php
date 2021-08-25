@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostStoreRequest;
 use App\Models\Category\Category;
 use App\Models\Post\Post;
+use App\Models\User\User;
 use App\Services\PostService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -59,22 +60,28 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param Post $post
-     * @return Application|Factory|View
+     * @return Application|Factory|RedirectResponse|View|void
      */
     public function show(Post $post)
     {
-        return view('panel.posts.show',['post' => $post]);
+//        dd(toastr()->error('An error has occurred please try again later.'));
+
+
+        if (auth()->user()->can('accessPost', $post))
+            return view('panel.posts.show',['post' => $post]);
+
+        return redirect()->route('panel.posts.index')->with('no_access', 'Not Authorized!');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Post $post
      * @return Application|Factory|View
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        return view('panel.posts.show');
+        return view('panel.posts.edit', ['post' => $post, 'categories' => Category::all()]);
     }
 
     /**
@@ -82,21 +89,30 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post): Response
     {
-        return view('panel.posts.show');
+        return redirect()->route('panel.posts.show', $post->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        return view('panel.posts.show');
+        return $this->postService;
+    }
+
+    /**
+     * @param Post $post
+     * @return RedirectResponse
+     */
+    public function disable(Post $post): RedirectResponse
+    {
+        return $this->postService->disablePost($post, User::findOrFail(auth()->id()));
     }
 }

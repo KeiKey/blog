@@ -13,6 +13,6 @@ class CategoryService
             'name' => ucwords($request->name),
         ]);
 
-        return redirect()->route('panel.admin.categories.show', $category->id);
+        return redirect()->route('panel.admin.categories.index', $category->id)->with('success', 'You created the category '.$category->name .'!');
     }
 }

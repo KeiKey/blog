@@ -23,22 +23,16 @@
                             <td>{{ $category->id }}</td>
                             <td>{{ $category->name }}</td>
                             <td>
-                                <form class="d-inline"
-                                      action="{{ route('panel.admin.categories.edit', ['category' => $category->id]) }}"
-                                      method="POST">
-                                    @csrf
-
-                                    <a class="btn btn-primary btn-success">
-                                        <i class="fa fa-edit" aria-hidden="false"></i> Edit
-                                    </a>
-                                </form>
+                                <a type="submit" class="btn btn-primary btn-sm" href="{{ route('panel.admin.categories.edit', ['post' => $post->id]) }}">
+                                    <i class="fa fa-eye"></i> {{ __('Edit') }}
+                                </a>
 
                                 <form class="d-inline"
                                       action="{{ route('panel.admin.categories.destroy', ['category' => $category->id]) }}"
                                       method="POST">
                                     @csrf
 
-                                    <a class="btn btn-primary btn-warning">
+                                    <a class="btn btn-primary btn-warning btn-sm">
                                         <i class="fa fa-ban"></i> Disable
                                     </a>
                                 </form>
@@ -47,8 +41,9 @@
                                       action="{{ route('panel.admin.categories.destroy', ['category' => $category->id]) }}"
                                       method="POST">
                                     @csrf
+                                    @method('DELETE')
 
-                                    <a class="btn btn-primary btn-danger">
+                                    <a class="btn btn-primary btn-danger btn-sm">
                                         <i class="fa fa-trash"></i> Delete
                                     </a>
                                 </form>

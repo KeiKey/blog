@@ -10,12 +10,12 @@ class CategoryPolicy
 {
     use HandlesAuthorization;
 
-    public function access(User $user): bool
+    public function accessCategory(User $user): bool
     {
         return $user->role === Role::ADMIN;
     }
 
-    public function create(User $user): bool
+    public function createCategory(User $user): bool
     {
         return $user->role === Role::ADMIN;
     }

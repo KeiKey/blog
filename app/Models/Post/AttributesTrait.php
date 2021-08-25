@@ -6,6 +6,6 @@ trait AttributesTrait
 {
     public function userId()
     {
-        return $this->user()->id;
+        return $this->user->id;
     }
 }

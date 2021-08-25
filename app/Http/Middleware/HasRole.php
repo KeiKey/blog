@@ -20,7 +20,7 @@ class HasRole
         if (in_array($request->user()->role, $roles)) {
             return $next($request);
         }
-
-        return abort(403);
+//        Session::flash('message', 'This is a message!');
+        return redirect()->back()->with('no_access', 'Not Authorized!');
     }
 }

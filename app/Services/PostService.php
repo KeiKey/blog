@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Post\Post;
+use App\Models\User\User;
 
 class PostService
 {
@@ -30,7 +31,7 @@ class PostService
             'user_id' => auth()->id()
         ]);
 
-        return redirect()->route('panel.posts.show', $post->id);
+        return redirect()->route('panel.posts.show', $post->id)->with('success', 'You created the post!');
     }
 
     public function all($disabled = false)
@@ -50,5 +51,15 @@ class PostService
         }
 
         return Post::all()->where('user_id',$id);
+    }
+
+    public function disablePost(Post $post, User $user)
+    {
+//        dd($user,$post);
+        if ($user->can('disablePost', $post)) {
+            Post::findOrFail($post)->delete();
+            dd('here');
+        }
+        return redirect()->route('panel.posts.show', $post->id);
     }
 }
