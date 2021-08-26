@@ -34,7 +34,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new category.
      *
      * @return View
      */
@@ -44,47 +44,79 @@ class CategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created category in storage.
      *
      * @param CategoryStoreRequest $request
      * @return RedirectResponse
      */
     public function store(CategoryStoreRequest $request): RedirectResponse
     {
-        return $this->categoryService->create($request);
+        $handler = $this->categoryService->createCategory($request);
+
+        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the Category resource.
      *
-     * @param  int  $id
-     * @return Response
+     * @param Category $category
+     * @return Application|Factory|View
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
-        return $this->categoryService;
+        return view('admin.categories.edit', ['category' => $category]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified category in storage.
      *
-     * @param Request $request
-     * @param  int  $id
-     * @return Response
+     * @param Category $category
+     * @param CategoryStoreRequest $request
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Category $category, CategoryStoreRequest $request): RedirectResponse
     {
-        return $this->categoryService;
+        $handler = $this->categoryService->updateCategory($category, $request);
+
+        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(Category $category): RedirectResponse
     {
-        return $this->categoryService;
+        $handler = $this->categoryService->deleteCategory($category);
+
+        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
+    }
+
+    /**
+     * Disable a category.
+     *
+     * @param Category $category
+     * @return RedirectResponse
+     */
+    public function disable(Category $category): RedirectResponse
+    {
+        $handler = $this->categoryService->disableCategory($category);
+
+        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
+    }
+
+    /**
+     * Enable a category.
+     *
+     * @param Category $category
+     * @return RedirectResponse
+     */
+    public function enable(Category $category): RedirectResponse
+    {
+        $handler = $this->categoryService->enableCategory($category);
+
+        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
     }
 }

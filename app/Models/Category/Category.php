@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property mixed id
  * @property mixed name
+ * @property mixed state
  */
 class Category extends Model
 {
@@ -20,7 +21,7 @@ class Category extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'state'];
 
     /**
      * The attributes that aren't mass assignable.

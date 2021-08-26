@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 use App\Enums\Role;
+use App\Enums\State;
 
 trait AttributesTrait
 {
@@ -24,5 +25,15 @@ trait AttributesTrait
     public function isUser(): bool
     {
         return $this->role === Role::USER;
+    }
+
+    /**
+     * Determine if the user is active
+     *
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->state === State::ACTIVE;
     }
 }

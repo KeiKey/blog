@@ -151,20 +151,20 @@
                     @enderror
                 </div>
             </div>
-        @else
-            <div class="form-group row">
-                <label for="category" class="col-md-4 col-form-label text-md-right">Category</label>
-                <div class="col-md-8">
-                    <input id="category"
-                           type="text"
-                           class="form-control"
-                           name="category"
-                           value="{{ $entity->category->name ?? old('category') }}"
-                           required
-                           autocomplete="title"
-                           @if(isset($view_only)) disabled @endif>
-                </div>
-            </div>
+{{--        @else--}}
+{{--            <div class="form-group row">--}}
+{{--                <label for="category" class="col-md-4 col-form-label text-md-right">Category</label>--}}
+{{--                <div class="col-md-8">--}}
+{{--                    <input id="category"--}}
+{{--                           type="text"--}}
+{{--                           class="form-control"--}}
+{{--                           name="category"--}}
+{{--                           value="{{ $entity->category->name ?? old('category') }}"--}}
+{{--                           required--}}
+{{--                           autocomplete="title"--}}
+{{--                           @if(isset($view_only)) disabled @endif>--}}
+{{--                </div>--}}
+{{--            </div>--}}
         @endisset
 
         @isset($items['thumbnail'])

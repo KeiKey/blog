@@ -6,6 +6,7 @@
             <div class="col-6">
                 <h2>{{ __('Users') }}</h2>
             </div>
+
             <div class="col-6 text-right">
                 <a type="submit" class="btn btn-primary btn-sm" href="{{ route('panel.admin.users.create') }}">
                     <i class="fa fa-plus"></i> {{ __('Create a new user') }}
@@ -50,7 +51,7 @@
                             @endif
 
 
-                            @if($user->role !== \App\Enums\Role::ADMIN && $user->state === \App\Enums\State::DISABLED)
+                            @if($user->isUser() && !$user->isActive())
                                 <form class="d-inline"
                                       action="{{ route('panel.admin.users.enable', ['user' => $user->id]) }}"
                                       method="POST">
@@ -62,7 +63,7 @@
                                 </form>
                             @endif
 
-                            @if($user->role !== \App\Enums\Role::ADMIN && $user->state === \App\Enums\State::ACTIVE)
+                            @if($user->isUser() && $user->isActive())
                                 <form class="d-inline"
                                       action="{{ route('panel.admin.users.disable', ['user' => $user->id]) }}"
                                       method="POST">

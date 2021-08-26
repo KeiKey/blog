@@ -30,7 +30,7 @@
                             <td>{{ $post->category->name }}</td>
                             <td>{{ $post->state }}</td>
                             <td>
-                                <a type="submit" class="btn btn-primary btn-success btn-sm" href="{{ route('panel.admin.posts.show', ['post' => $post->id]) }}">
+                                <a type="submit" class="btn btn-success btn-sm" href="{{ route('panel.admin.posts.show', ['post' => $post->id]) }}">
                                     <i class="fa fa-eye"></i> {{ __('Show') }}
                                 </a>
 
@@ -40,7 +40,7 @@
                                           method="POST">
                                         @csrf
 
-                                        <button type="submit" class="btn btn-primary btn-warning btn-sm">
+                                        <button type="submit" class="btn btn-warning btn-sm">
                                             <i class="fa fa-ban"></i> {{ __('Disable') }}
                                         </button>
                                     </form>

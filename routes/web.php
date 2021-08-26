@@ -66,7 +66,6 @@ Route::middleware('auth')
             ->uses('Panel\PostController@update')
             ->name('panel.posts.update');
 
-        //todo- middleware with the role admin
         Route::prefix('admin')
             ->middleware('role:' . Role::ADMIN)
             ->group(function () {
@@ -107,9 +106,17 @@ Route::middleware('auth')
                     ->uses('Admin\CategoryController@edit')
                     ->name('panel.admin.categories.edit');
 
-                Route::post('/categories/{category}/edit')
+                Route::put('/categories/{category}/edit')
                     ->uses('Admin\CategoryController@update')
                     ->name('panel.admin.categories.update');
+
+                Route::post('/categories/{category}/disable')
+                    ->uses('Admin\CategoryController@disable')
+                    ->name('panel.admin.categories.disable');
+
+                Route::post('/categories/{category}/enable')
+                    ->uses('Admin\CategoryController@enable')
+                    ->name('panel.admin.categories.enable');
 
 
                 Route::get('/users/')
