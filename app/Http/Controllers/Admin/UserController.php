@@ -23,7 +23,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of users.
      *
      * @return Application|Factory|View
      */
@@ -33,7 +33,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new user.
      *
      * @return Application|Factory|View
      */
@@ -43,14 +43,14 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a user in storage.
      *
      * @param UserStoreRequest $request
      * @return RedirectResponse
      */
     public function store(UserStoreRequest $request): RedirectResponse
     {
-        $handler = $this->userService->create($request);
+        $handler = $this->userService->createUser($request);
 
         return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
     }
@@ -64,7 +64,7 @@ class UserController extends Controller
      */
     public function promote(User $user, Request $request): RedirectResponse
     {
-        $handler = $this->userService->promote($request->user(), $user);
+        $handler = $this->userService->promoteUser($request->user(), $user);
 
         return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
     }
@@ -78,7 +78,7 @@ class UserController extends Controller
      */
     public function disable(User $user, Request $request): RedirectResponse
     {
-        $handler = $this->userService->disable($request->user(), $user);
+        $handler = $this->userService->disableUser($request->user(), $user);
 
         return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
     }
@@ -92,7 +92,7 @@ class UserController extends Controller
      */
     public function enable(User $user, Request $request): RedirectResponse
     {
-        $handler = $this->userService->enable($request->user(), $user);
+        $handler = $this->userService->enableUser($request->user(), $user);
 
         return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
     }

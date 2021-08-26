@@ -11,14 +11,20 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    //todo improve the message response with dependency injection + naming of functions
+    private $response;
+
+    public function __construct()
+    {
+        $this->response = ['no_access', 'Not Authorized!'];
+    }
+
     /**
      * Create a new user.
      *
      * @param $request
      * @return string[]
      */
-    public function create($request): array
+    public function createUser($request): array
     {
         $user = User::create([
             'name' => ucwords($request->name),
@@ -27,8 +33,9 @@ class UserService
             'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
+        $this->response = ['success', 'You created the user '.$user->name .'!'];
 
-        return ['success', 'You created the user '.$user->name .'!'];
+        return $this->response;
     }
 
     /**
@@ -38,16 +45,14 @@ class UserService
      * @param User $userEdit
      * @return string[]
      */
-    public function promote(User $user, User $userEdit): array
+    public function promoteUser(User $user, User $userEdit): array
     {
-        $message = ['no_access', 'Not Authorized!'];
-
         if ($user->can('promoteUser', $userEdit)) {
             $userEdit->update(['role' => Role::ADMIN, 'disabled_by' => null]);
-            $message = ['success', 'You promoted the user: '. $userEdit->name.'!'];
+            $this->response = ['success', 'You promoted the user: '. $userEdit->name.'!'];
         }
 
-        return $message;
+        return $this->response;
     }
 
     /**
@@ -57,16 +62,14 @@ class UserService
      * @param User $userEdit
      * @return string[]
      */
-    public function disable(User $user, User $userEdit): array
+    public function disableUser(User $user, User $userEdit): array
     {
-        $message = ['no_access', 'Not Authorized!'];
-
         if ($user->can('disableUser', $userEdit)) {
             $userEdit->update(['state' => State::DISABLED, 'disabled_by' => $user->id]);
-            $message = ['success', 'You disabled the user: '. $userEdit->name.'!'];
+            $this->response = ['success', 'You disabled the user: '. $userEdit->name.'!'];
         }
 
-        return $message;
+        return $this->response;
     }
 
     /**
@@ -76,15 +79,13 @@ class UserService
      * @param User $userEdit
      * @return string[]
      */
-    public function enable(User $user, User $userEdit): array
+    public function enableUser(User $user, User $userEdit): array
     {
-        $message = ['no_access', 'Not Authorized!'];
-
         if ($user->can('enablesUser', $userEdit)) {
             $userEdit->update(['state' => State::ACTIVE]);
-            $message = ['success', 'You enabled the user: '. $userEdit->name.'!'];
+            $this->response = ['success', 'You enabled the user: '. $userEdit->name.'!'];
         }
 
-        return $message;
+        return $this->response;
     }
 }
