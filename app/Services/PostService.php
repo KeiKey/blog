@@ -2,12 +2,27 @@
 
 namespace App\Services;
 
+use App\Enums\State;
 use App\Models\Post\Post;
 use App\Models\User\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 
 class PostService
 {
-    public function create($request)
+    private $response;
+
+    public function __construct()
+    {
+        $this->response = ['no_access', 'Not Authorized!'];
+    }
+
+    /**
+     * @param $request
+     * @return RedirectResponse
+     */
+    public function create($request): RedirectResponse
     {
         $directory = str_replace(' ', '_', $request->title);
         if ($request->hasFile('thumbnail')) {
@@ -34,6 +49,10 @@ class PostService
         return redirect()->route('panel.posts.show', $post->id)->with('success', 'You created the post!');
     }
 
+    /**
+     * @param false $disabled
+     * @return Post|Post[]|Builder|Collection|\Illuminate\Database\Query\Builder
+     */
     public function all($disabled = false)
     {
         if ($disabled) {
@@ -53,13 +72,39 @@ class PostService
         return Post::all()->where('user_id',$id);
     }
 
-    public function disablePost(Post $post, User $user)
+    /**
+     * Disable a post
+     *
+     * @param Post $post
+     * @param User $user
+     * @return string[]
+     */
+    public function disablePost(User $user, Post $post): array
     {
-//        dd($user,$post);
-        if ($user->can('disablePost', $post)) {
-            Post::findOrFail($post)->delete();
-            dd('here');
+        //todo - fix the policy for the disablePost
+//        if ($user->can('disablePost', $post)) {
+        if ($user->isAdmin() || $user->id === $post->user_id) {
+            $post->update(['state' => State::DISABLED, 'disabled_by' => $user->id]);
+            $this->response = ['success', 'You disabled the post: '. $post->title.'!'];
         }
-        return redirect()->route('panel.posts.show', $post->id);
+
+        return $this->response;
+    }
+
+    /**
+     * @param Post $post
+     * @param User $user
+     * @return string[]
+     */
+    public function enablePost(User $user, Post $post): array
+    {
+        //todo - fix the policy for the enablePost
+//        if ($user->can('enablePost', $post)) {
+        if ($post->disabled_by === $user->id) {
+            $post->update(['state' => State::ACTIVE, 'disabled_by' => null]);
+            $this->response = ['success', 'You enabled the post: '. $post->title.'!'];
+        }
+
+        return $this->response;
     }
 }

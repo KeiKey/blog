@@ -33,22 +33,47 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified post.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Post $post
+     * @param Request $request
+     * @return Application|Factory|RedirectResponse|View
      */
-    public function show(Post $post)
+    public function show(Post $post, Request $request)
     {
-        return $this->postService;
+        //todo - fix the permission for the access of post
+//        if ($request->user()->can('accessPost', $post))
+        if ($request->user()->isAdmin() || $request->user() === $post->user_id)
+            return view('admin.posts.show', ['post' => $post]);
+
+        return redirect()->route('admin.posts.index')->with('no_access', 'Not Authorized!');
     }
 
     /**
+     * Disable a post.
+     *
      * @param Post $post
+     * @param Request $request
      * @return RedirectResponse
      */
-    public function disable(Post $post): RedirectResponse
+    public function disable(Post $post, Request $request): RedirectResponse
     {
-        return $this->postService->disablePost($post, User::findOrFail(auth()->id()));
+        $handler = $this->postService->disablePost($request->user(), $post);
+
+        return redirect()->route('panel.admin.posts.index')->with($handler[0], $handler[1]);
+    }
+
+    /**
+     * Enable a post.
+     *
+     * @param Post $post
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function enable(Post $post, Request $request): RedirectResponse
+    {
+        $handler = $this->postService->enablePost($request->user(), $post);
+
+        return redirect()->route('panel.admin.posts.index')->with($handler[0], $handler[1]);
     }
 }

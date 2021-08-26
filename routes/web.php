@@ -78,6 +78,10 @@ Route::middleware('auth')
                     ->uses('Admin\PostController@disable')
                     ->name('panel.admin.posts.disable');
 
+                Route::post('/posts/enable/{post}')
+                    ->uses('Admin\PostController@enable')
+                    ->name('panel.admin.posts.enable');
+
                 Route::get('/posts/{post}')
                     ->uses('Admin\PostController@show')
                     ->name('panel.admin.posts.show');

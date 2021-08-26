@@ -2,10 +2,18 @@
 
 namespace App\Models\Post;
 
+use App\Enums\State;
+
 trait AttributesTrait
 {
-    public function userId()
+
+    /**
+     * Determine if the post is active
+     *
+     * @return bool
+     */
+    public function isActive(): bool
     {
-        return $this->user->id;
+        return $this->state === State::ACTIVE;
     }
 }

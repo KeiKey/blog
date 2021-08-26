@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
+    //todo improve the message response with dependency injection + naming of functions
     /**
      * Create a new user.
      *

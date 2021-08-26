@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed category_id
  * @property mixed thumbnail
  * @property mixed bg_image
+ * @property mixed user_id
+ * @property mixed state
+ * @property mixed disabled_by
  */
 class Post extends Model
 {
@@ -30,7 +33,9 @@ class Post extends Model
         'category_id',
         'thumbnail',
         'bg_image',
-        'user_id'
+        'user_id',
+        'state',
+        'disabled_by'
     ];
 
     /**

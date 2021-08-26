@@ -27,13 +27,12 @@ class UserPolicy
 
     public function disableUser(User $user, User $userEdit): bool
     {
-
         return $user->isAdmin() && $userEdit->isUser();
     }
 
     public function accessPost(User $user, Post $post): bool
     {
-        return $user->isAdmin() || $user->id === $post->userId();
+        return $user->isAdmin() || $user->id === $post->user_id;
     }
 
     public function createPost(User $user): bool
@@ -43,16 +42,20 @@ class UserPolicy
 
     public function disablePost(User $user, Post $post): bool
     {
-        return $user->isAdmin() || $user->id === $post->userId();
+        return $user->isAdmin() || $user->id === $post->user_id;
     }
 
     public function enablePost(User $user, Post $post): bool
     {
-        return $user->isAdmin() || $user->id === $post->userId();
+        if ($user->isAdmin()) {
+            return $post->disabled_by === $user->id;
+        }
+
+        return $user->id === $post->id;
     }
 
     public function deletePost(User $user, Post $post): bool
     {
-        return $user->id === $post->userId();
+        return $user->id === $post->user_id;
     }
 }
