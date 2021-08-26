@@ -6,113 +6,140 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostStoreRequest;
 use App\Models\Category\Category;
 use App\Models\Post\Post;
-use App\Models\User\User;
+use App\Policies\UserPolicy;
 use App\Services\PostService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
     private $postService;
 
+    private $userPolicy;
+
     public function __construct(
-        PostService $postService
+        PostService $postService,
+        UserPolicy $userPolicy
     ) {
         $this->postService = $postService;
+        $this->userPolicy = $userPolicy;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the posts.
      *
-     * @return Application|Factory|View
+     * @return Application|Factory|RedirectResponse|View
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('panel.posts.index', ['posts' => $this->postService->getUserPosts(auth()->id())]);
+        if ($request->user()->isUser()) {
+            return view('panel.posts.index', ['posts' => $this->postService->getUserPosts(auth()->id())]);
+        }
+
+        return redirect()->back()->with('no_access', 'Admin is not allowed to have posts!');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new post.
      *
-     * @return Application|Factory|View
+     * @return Application|Factory|RedirectResponse|View
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('panel.posts.create', ['categories' => Category::all()]);
+        if ($this->userPolicy->createPost($request->user())) {
+            return view('panel.posts.create', ['categories' => Category::all()]);
+        }
+
+        return redirect()->back()->with('no_access', 'Admin is not allowed to create posts!');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created post in storage.
      *
      * @param PostStoreRequest $request
      * @return RedirectResponse
      */
     public function store(PostStoreRequest $request): RedirectResponse
     {
-        return $this->postService->create($request);
+        $handler = $this->postService->createPost($request->user());
+
+        return redirect()->route('panel.posts.show', $handler['id'])->with($handler['status'], $handler['message']);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified post.
      *
      * @param Post $post
-     * @return Application|Factory|RedirectResponse|View|void
+     * @param Request $request
+     * @return Application|Factory|RedirectResponse|View
      */
-    public function show(Post $post)
+    public function show(Post $post, Request $request)
     {
-//        dd(toastr()->error('An error has occurred please try again later.'));
-
-
-        if (auth()->user()->can('accessPost', $post))
-            return view('panel.posts.show',['post' => $post]);
+        if ($this->userPolicy->accessPost($request->user(), $post)) {
+            return view('panel.posts.show', ['post' => $post]);
+        }
 
         return redirect()->route('panel.posts.index')->with('no_access', 'Not Authorized!');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the post resource.
      *
      * @param Post $post
-     * @return Application|Factory|View
+     * @param Request $request
+     * @return Application|Factory|RedirectResponse|View
      */
-    public function edit(Post $post)
+    public function edit(Post $post, Request $request)
     {
-        return view('panel.posts.edit', ['post' => $post, 'categories' => Category::all()]);
+        if ($this->userPolicy->createPost($request->user())) {
+            return view('panel.posts.edit', ['post' => $post, 'categories' => Category::all()]);
+        }
+
+        return redirect()->back()->with('no_access', 'Admin is not allowed to create posts!');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified post in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Post $post): Response
-    {
-        return redirect()->route('panel.posts.show', $post->id);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Post $post)
-    {
-        return $this->postService;
-    }
-
-    /**
      * @param Post $post
+     * @param PostStoreRequest $request
      * @return RedirectResponse
      */
-    public function disable(Post $post): RedirectResponse
+    public function update(Post $post, PostStoreRequest $request): RedirectResponse
     {
-        return $this->postService->disablePost($post, User::findOrFail(auth()->id()));
+        $handler = $this->postService->updatePost($request->user(), $post);
+
+        return redirect()->route('panel.posts.show', $handler['id'])->with($handler['status'], $handler['message']);
+    }
+
+    /**
+     * Remove the specified post from storage.
+     *
+     * @param Post $post
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function destroy(Post $post, Request $request): RedirectResponse
+    {
+        $handler = $this->postService->deletePost($request->user(), $post);
+
+        return redirect()->route('panel.posts.index')->with($handler['status'], $handler['message']);
+    }
+
+    /**
+     * Disable a post.
+     *
+     * @param Post $post
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function disable(Post $post, Request $request): RedirectResponse
+    {
+        $handler = $this->postService->disablePost($request->user(), $post);
+
+        return redirect()->route('panel.posts.index')->with($handler['status'], $handler['message']);
     }
 }

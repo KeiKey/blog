@@ -27,7 +27,7 @@
                             <td>{{ $post->id }}</td>
                             <td>{{ $post->title }}</td>
                             <td>{{ substr($post->content , 0, 40)}} ...</td>
-                            <td>{{ $post->category->name }}</td>
+                            <td>{{ $post->category->name ?? '-' }}</td>
                             <td>
                                 <a type="submit" class="btn btn-primary btn-success btn-sm" href="{{ route('panel.posts.show', ['post' => $post->id]) }}">
                                     <i class="fa fa-eye"></i> {{ __('Show') }}

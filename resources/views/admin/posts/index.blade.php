@@ -27,7 +27,7 @@
                             <td>{{ $post->id }}</td>
                             <td>{{ $post->title }}</td>
                             <td>{{ substr($post->content , 0, 40)}} ...</td>
-                            <td>{{ $post->category->name }}</td>
+                            <td>{{ $post->category->name ?? '-' }}</td>
                             <td>{{ $post->state }}</td>
                             <td>
                                 <a type="submit" class="btn btn-success btn-sm" href="{{ route('panel.admin.posts.show', ['post' => $post->id]) }}">

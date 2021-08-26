@@ -34,7 +34,7 @@ Route::get('/posts/{post}')
 Route::middleware('auth')
     ->prefix('panel')
     ->group(function () {
-        Route::get('/posts/')
+        Route::get('/posts')
             ->uses('Panel\PostController@index')
             ->name('panel.posts.index');
 

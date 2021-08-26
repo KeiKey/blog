@@ -13,7 +13,10 @@ class UserService
 
     public function __construct()
     {
-        $this->response = ['no_access', 'Not Authorized!'];
+        $this->response = [
+            'status' => 'no_access',
+            'message' => 'Not Authorized!'
+        ];
     }
 
     /**
@@ -31,7 +34,9 @@ class UserService
             'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
-        $this->response = ['success', 'You created the user '.$user->name .'!'];
+
+        $this->response['status'] = ['success'];
+        $this->response['message'] = ['You created the user '.$user->name .'!'];
 
         return $this->response;
     }
@@ -47,7 +52,9 @@ class UserService
     {
         if ($user->can('promoteUser', $userEdit)) {
             $userEdit->update(['role' => Role::ADMIN, 'disabled_by' => null]);
-            $this->response = ['success', 'You promoted the user: '. $userEdit->name.'!'];
+
+            $this->response['status'] = ['success'];
+            $this->response['message'] = ['You promoted the user '.$userEdit->name .'!'];
         }
 
         return $this->response;
@@ -64,7 +71,9 @@ class UserService
     {
         if ($user->can('disableUser', $userEdit)) {
             $userEdit->update(['state' => State::DISABLED, 'disabled_by' => $user->id]);
-            $this->response = ['success', 'You disabled the user: '. $userEdit->name.'!'];
+
+            $this->response['status'] = ['success'];
+            $this->response['message'] = ['You disabled the user '.$userEdit->name .'!'];
         }
 
         return $this->response;
@@ -81,7 +90,9 @@ class UserService
     {
         if ($user->can('enablesUser', $userEdit)) {
             $userEdit->update(['state' => State::ACTIVE]);
-            $this->response = ['success', 'You enabled the user: '. $userEdit->name.'!'];
+
+            $this->response['status'] = ['success'];
+            $this->response['message'] = ['You enabled the user '.$userEdit->name .'!'];
         }
 
         return $this->response;

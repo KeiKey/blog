@@ -11,7 +11,10 @@ class CategoryService
 
     public function __construct()
     {
-        $this->response = ['no_access', 'Not Authorized!'];
+        $this->response = [
+            'status' => 'no_access',
+            'message' => 'Not Authorized!'
+        ];
     }
 
     /**
@@ -23,7 +26,9 @@ class CategoryService
         $category = Category::create([
             'name' => ucwords($request->name),
         ]);
-        $this->response = ['success', 'You created the category: '. $category->name.'!'];
+
+        $this->response['status'] = ['success'];
+        $this->response['message'] = ['You created the category '. $category->name .'!'];
 
         return $this->response;
     }
@@ -36,7 +41,9 @@ class CategoryService
     public function updateCategory(Category $category, $request): array
     {
         $category->update(['name' => ucwords($request->name)]);
-        $this->response = ['success', 'You update the category: '. $category->name.'!'];
+
+        $this->response['status'] = ['success'];
+        $this->response['message'] = ['You update the category '. $category->name .'!'];
 
         return $this->response;
     }
@@ -50,9 +57,12 @@ class CategoryService
         try {
             $category->delete();
         } catch (\Exception $e) {
-            $this->response = ['fail', 'Something went wrong!'];
+            $this->response['status'] = ['fail'];
+            $this->response['message'] = ['Something went wrong!'];
         }
-        $this->response = ['success', 'You deleted the category: '. $category->name.'!'];
+
+        $this->response['status'] = ['success'];
+        $this->response['message'] = ['You deleted the category '. $category->name .'!'];
 
         return $this->response;
     }
@@ -64,7 +74,9 @@ class CategoryService
     public function disableCategory(Category $category): array
     {
         $category->update(['state' => State::DISABLED]);
-        $this->response = ['success', 'You disabled the post: '. $category->name.'!'];
+
+        $this->response['status'] = ['success'];
+        $this->response['message'] = ['You disabled the category '. $category->name .'!'];
 
         return $this->response;
     }
@@ -76,7 +88,9 @@ class CategoryService
     public function enableCategory(Category $category): array
     {
         $category->update(['state' => State::ACTIVE]);
-        $this->response = ['success', 'You enabled the post: '. $category->name.'!'];
+
+        $this->response['status'] = ['success'];
+        $this->response['message'] = ['You enabled the category '. $category->name .'!'];
 
         return $this->response;
     }

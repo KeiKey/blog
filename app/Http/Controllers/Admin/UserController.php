@@ -52,7 +52,7 @@ class UserController extends Controller
     {
         $handler = $this->userService->createUser($request);
 
-        return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.users.index')->with($handler['status'], $handler['message']);
     }
 
     /**
@@ -66,7 +66,7 @@ class UserController extends Controller
     {
         $handler = $this->userService->promoteUser($request->user(), $user);
 
-        return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.users.index')->with($handler['status'], $handler['message']);
     }
 
     /**
@@ -80,7 +80,7 @@ class UserController extends Controller
     {
         $handler = $this->userService->disableUser($request->user(), $user);
 
-        return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.users.index')->with($handler['status'], $handler['message']);
     }
 
     /**
@@ -94,6 +94,6 @@ class UserController extends Controller
     {
         $handler = $this->userService->enableUser($request->user(), $user);
 
-        return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.users.index')->with($handler['status'], $handler['message']);
     }
 }

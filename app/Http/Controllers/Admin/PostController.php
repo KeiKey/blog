@@ -37,7 +37,7 @@ class PostController extends Controller
     }
 
     /**
-     * Display the Post post.
+     * Display the specified post.
      *
      * @param Post $post
      * @param Request $request
@@ -53,7 +53,7 @@ class PostController extends Controller
     }
 
     /**
-     * Disable a post.
+     * Disable the specified post.
      *
      * @param Post $post
      * @param Request $request
@@ -63,7 +63,7 @@ class PostController extends Controller
     {
         $handler = $this->postService->disablePost($request->user(), $post);
 
-        return redirect()->route('panel.admin.posts.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.posts.index')->with($handler['status'], $handler['message']);
     }
 
     /**
@@ -77,6 +77,6 @@ class PostController extends Controller
     {
         $handler = $this->postService->enablePost($request->user(), $post);
 
-        return redirect()->route('panel.admin.posts.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.posts.index')->with($handler['status'], $handler['message']);
     }
 }

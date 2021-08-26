@@ -28,7 +28,6 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        toastr()->info('Are you the 6 fingered man?');
         return view('admin.categories.index', ['categories' => Category::all()]);
     }
 
@@ -52,7 +51,7 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->createCategory($request);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
     }
 
     /**
@@ -77,7 +76,7 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->updateCategory($category, $request);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
     }
 
     /**
@@ -90,7 +89,7 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->deleteCategory($category);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
     }
 
     /**
@@ -103,7 +102,7 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->disableCategory($category);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
     }
 
     /**
@@ -116,6 +115,6 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->enableCategory($category);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler[0], $handler[1]);
+        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
     }
 }
