@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\Role;
 use App\Enums\State;
+use App\Models\Post\Post;
 use App\Models\User\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
@@ -14,9 +15,9 @@ class UserService
      * Create a new user.
      *
      * @param $request
-     * @return RedirectResponse
+     * @return string[]
      */
-    public function create($request): RedirectResponse
+    public function create($request): array
     {
         $user = User::create([
             'name' => ucwords($request->name),
@@ -26,7 +27,7 @@ class UserService
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('panel.admin.users.index')->with('success', 'You created the user '.$user->name .'!');
+        return ['success', 'You created the user '.$user->name .'!'];
     }
 
     /**

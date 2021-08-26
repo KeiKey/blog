@@ -120,18 +120,6 @@ Route::middleware('auth')
                     ->uses('Admin\UserController@store')
                     ->name('panel.admin.users.store');
 
-                Route::delete('/users/{user}')
-                    ->uses('Admin\UserController@destroy')
-                    ->name('panel.admin.users.destroy');
-
-                Route::get('/users/{user}/edit')
-                    ->uses('Admin\UserController@edit')
-                    ->name('panel.admin.users.edit');
-
-                Route::post('/users/{user}/edit')
-                    ->uses('Admin\UserController@update')
-                    ->name('panel.admin.users.update');
-
                 Route::post('/users/{user}/disable')
                     ->uses('Admin\UserController@disable')
                     ->name('panel.admin.users.disable');

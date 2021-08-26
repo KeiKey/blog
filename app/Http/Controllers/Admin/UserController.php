@@ -50,32 +50,9 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request): RedirectResponse
     {
-        return $this->userService->create($request);
-    }
+        $handler = $this->userService->create($request);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param User $user
-     * @return UserService
-     */
-    public function update(Request $request, User $user): UserService
-    {
-        //todo - profile panel
-        return $this->userService;
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param User $user
-     * @return UserService
-     */
-    public function destroy(User $user): UserService
-    {
-        //todo - profile panel
-        return $this->userService;
+        return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
     }
 
     /**
