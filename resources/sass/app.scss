@@ -10,11 +10,7 @@
 // Awesome
 @import "node_modules/font-awesome/scss/font-awesome";
 
-@import "~toastr";
-
-.btn-success {
-
-}
+@import "node_modules/sweetalert2/src/sweetalert2.scss";
 
 .btn-warning {
     color: white;
@@ -25,10 +21,6 @@
         background-color: #d08d12;
         border-color: #d08d12;
     }
-}
-
-.btn-danger {
-
 }
 
 .single-post-category {
@@ -54,6 +46,4 @@
     color: #7f7f7f;
 }
 
-//.datatable-custom {
-//}
 @import "datatable";

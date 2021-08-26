@@ -9,8 +9,6 @@ use App\Services\CategoryService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
@@ -24,12 +22,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of categories.
      *
      * @return Application|Factory|View
      */
     public function index()
     {
+        toastr()->info('Are you the 6 fingered man?');
         return view('admin.categories.index', ['categories' => Category::all()]);
     }
 
@@ -82,9 +81,9 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified category from storage.
      *
-     * @param  int  $id
+     * @param Category $category
      * @return RedirectResponse
      */
     public function destroy(Category $category): RedirectResponse

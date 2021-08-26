@@ -55224,498 +55224,4777 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ "./node_modules/toastr/toastr.js":
-/*!***************************************!*\
-  !*** ./node_modules/toastr/toastr.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./node_modules/sweetalert2/src/SweetAlert.js":
+/*!****************************************************!*\
+  !*** ./node_modules/sweetalert2/src/SweetAlert.js ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
- * Toastr
- * Copyright 2012-2015
- * Authors: John Papa, Hans Fjällemark, and Tim Ferrell.
- * All Rights Reserved.
- * Use, reproduction, distribution, and modification of this code is subject to the terms and
- * conditions of the MIT license, available at http://www.opensource.org/licenses/mit-license.php
- *
- * ARIA Support: Greta Krafsig
- *
- * Project: https://github.com/CodeSeven/toastr
- */
-/* global define */
-(function (define) {
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")], __WEBPACK_AMD_DEFINE_RESULT__ = (function ($) {
-        return (function () {
-            var $container;
-            var listener;
-            var toastId = 0;
-            var toastType = {
-                error: 'error',
-                info: 'info',
-                success: 'success',
-                warning: 'warning'
-            };
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/DismissReason.js */ "./node_modules/sweetalert2/src/utils/DismissReason.js");
+/* harmony import */ var _staticMethods_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./staticMethods.js */ "./node_modules/sweetalert2/src/staticMethods.js");
+/* harmony import */ var _instanceMethods_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./instanceMethods.js */ "./node_modules/sweetalert2/src/instanceMethods.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
 
-            var toastr = {
-                clear: clear,
-                remove: remove,
-                error: error,
-                getContainer: getContainer,
-                info: info,
-                options: {},
-                subscribe: subscribe,
-                success: success,
-                version: '2.1.4',
-                warning: warning
-            };
 
-            var previousToast;
 
-            return toastr;
 
-            ////////////////
 
-            function error(message, title, optionsOverride) {
-                return notify({
-                    type: toastType.error,
-                    iconClass: getOptions().iconClasses.error,
-                    message: message,
-                    optionsOverride: optionsOverride,
-                    title: title
-                });
-            }
+let currentInstance
 
-            function getContainer(options, create) {
-                if (!options) { options = getOptions(); }
-                $container = $('#' + options.containerId);
-                if ($container.length) {
-                    return $container;
-                }
-                if (create) {
-                    $container = createContainer(options);
-                }
-                return $container;
-            }
+class SweetAlert {
+  constructor (...args) {
+    // Prevent run in Node env
+    if (typeof window === 'undefined') {
+      return
+    }
 
-            function info(message, title, optionsOverride) {
-                return notify({
-                    type: toastType.info,
-                    iconClass: getOptions().iconClasses.info,
-                    message: message,
-                    optionsOverride: optionsOverride,
-                    title: title
-                });
-            }
+    currentInstance = this
 
-            function subscribe(callback) {
-                listener = callback;
-            }
+    const outerParams = Object.freeze(this.constructor.argsToParams(args))
 
-            function success(message, title, optionsOverride) {
-                return notify({
-                    type: toastType.success,
-                    iconClass: getOptions().iconClasses.success,
-                    message: message,
-                    optionsOverride: optionsOverride,
-                    title: title
-                });
-            }
+    Object.defineProperties(this, {
+      params: {
+        value: outerParams,
+        writable: false,
+        enumerable: true,
+        configurable: true
+      }
+    })
 
-            function warning(message, title, optionsOverride) {
-                return notify({
-                    type: toastType.warning,
-                    iconClass: getOptions().iconClasses.warning,
-                    message: message,
-                    optionsOverride: optionsOverride,
-                    title: title
-                });
-            }
+    const promise = this._main(this.params)
+    _privateProps_js__WEBPACK_IMPORTED_MODULE_3__["default"].promise.set(this, promise)
+  }
 
-            function clear($toastElement, clearOptions) {
-                var options = getOptions();
-                if (!$container) { getContainer(options); }
-                if (!clearToast($toastElement, options, clearOptions)) {
-                    clearContainer(options);
-                }
-            }
+  // `catch` cannot be the name of a module export, so we define our thenable methods here instead
+  then (onFulfilled) {
+    const promise = _privateProps_js__WEBPACK_IMPORTED_MODULE_3__["default"].promise.get(this)
+    return promise.then(onFulfilled)
+  }
 
-            function remove($toastElement) {
-                var options = getOptions();
-                if (!$container) { getContainer(options); }
-                if ($toastElement && $(':focus', $toastElement).length === 0) {
-                    removeToast($toastElement);
-                    return;
-                }
-                if ($container.children().length) {
-                    $container.remove();
-                }
-            }
+  finally (onFinally) {
+    const promise = _privateProps_js__WEBPACK_IMPORTED_MODULE_3__["default"].promise.get(this)
+    return promise.finally(onFinally)
+  }
+}
 
-            // internal functions
+// Assign instance methods from src/instanceMethods/*.js to prototype
+Object.assign(SweetAlert.prototype, _instanceMethods_js__WEBPACK_IMPORTED_MODULE_2__)
 
-            function clearContainer (options) {
-                var toastsToClear = $container.children();
-                for (var i = toastsToClear.length - 1; i >= 0; i--) {
-                    clearToast($(toastsToClear[i]), options);
-                }
-            }
+// Assign static methods from src/staticMethods/*.js to constructor
+Object.assign(SweetAlert, _staticMethods_js__WEBPACK_IMPORTED_MODULE_1__)
 
-            function clearToast ($toastElement, options, clearOptions) {
-                var force = clearOptions && clearOptions.force ? clearOptions.force : false;
-                if ($toastElement && (force || $(':focus', $toastElement).length === 0)) {
-                    $toastElement[options.hideMethod]({
-                        duration: options.hideDuration,
-                        easing: options.hideEasing,
-                        complete: function () { removeToast($toastElement); }
-                    });
-                    return true;
-                }
-                return false;
-            }
+// Proxy to instance methods to constructor, for now, for backwards compatibility
+Object.keys(_instanceMethods_js__WEBPACK_IMPORTED_MODULE_2__).forEach(key => {
+  SweetAlert[key] = function (...args) {
+    if (currentInstance) {
+      return currentInstance[key](...args)
+    }
+  }
+})
 
-            function createContainer(options) {
-                $container = $('<div/>')
-                    .attr('id', options.containerId)
-                    .addClass(options.positionClass);
+SweetAlert.DismissReason = _utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_0__["DismissReason"]
 
-                $container.appendTo($(options.target));
-                return $container;
-            }
+SweetAlert.version = '11.1.4'
 
-            function getDefaults() {
-                return {
-                    tapToDismiss: true,
-                    toastClass: 'toast',
-                    containerId: 'toast-container',
-                    debug: false,
-
-                    showMethod: 'fadeIn', //fadeIn, slideDown, and show are built into jQuery
-                    showDuration: 300,
-                    showEasing: 'swing', //swing and linear are built into jQuery
-                    onShown: undefined,
-                    hideMethod: 'fadeOut',
-                    hideDuration: 1000,
-                    hideEasing: 'swing',
-                    onHidden: undefined,
-                    closeMethod: false,
-                    closeDuration: false,
-                    closeEasing: false,
-                    closeOnHover: true,
-
-                    extendedTimeOut: 1000,
-                    iconClasses: {
-                        error: 'toast-error',
-                        info: 'toast-info',
-                        success: 'toast-success',
-                        warning: 'toast-warning'
-                    },
-                    iconClass: 'toast-info',
-                    positionClass: 'toast-top-right',
-                    timeOut: 5000, // Set timeOut and extendedTimeOut to 0 to make it sticky
-                    titleClass: 'toast-title',
-                    messageClass: 'toast-message',
-                    escapeHtml: false,
-                    target: 'body',
-                    closeHtml: '<button type="button">&times;</button>',
-                    closeClass: 'toast-close-button',
-                    newestOnTop: true,
-                    preventDuplicates: false,
-                    progressBar: false,
-                    progressClass: 'toast-progress',
-                    rtl: false
-                };
-            }
-
-            function publish(args) {
-                if (!listener) { return; }
-                listener(args);
-            }
-
-            function notify(map) {
-                var options = getOptions();
-                var iconClass = map.iconClass || options.iconClass;
-
-                if (typeof (map.optionsOverride) !== 'undefined') {
-                    options = $.extend(options, map.optionsOverride);
-                    iconClass = map.optionsOverride.iconClass || iconClass;
-                }
-
-                if (shouldExit(options, map)) { return; }
-
-                toastId++;
-
-                $container = getContainer(options, true);
-
-                var intervalId = null;
-                var $toastElement = $('<div/>');
-                var $titleElement = $('<div/>');
-                var $messageElement = $('<div/>');
-                var $progressElement = $('<div/>');
-                var $closeElement = $(options.closeHtml);
-                var progressBar = {
-                    intervalId: null,
-                    hideEta: null,
-                    maxHideTime: null
-                };
-                var response = {
-                    toastId: toastId,
-                    state: 'visible',
-                    startTime: new Date(),
-                    options: options,
-                    map: map
-                };
-
-                personalizeToast();
-
-                displayToast();
-
-                handleEvents();
-
-                publish(response);
-
-                if (options.debug && console) {
-                    console.log(response);
-                }
-
-                return $toastElement;
-
-                function escapeHtml(source) {
-                    if (source == null) {
-                        source = '';
-                    }
-
-                    return source
-                        .replace(/&/g, '&amp;')
-                        .replace(/"/g, '&quot;')
-                        .replace(/'/g, '&#39;')
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;');
-                }
-
-                function personalizeToast() {
-                    setIcon();
-                    setTitle();
-                    setMessage();
-                    setCloseButton();
-                    setProgressBar();
-                    setRTL();
-                    setSequence();
-                    setAria();
-                }
-
-                function setAria() {
-                    var ariaValue = '';
-                    switch (map.iconClass) {
-                        case 'toast-success':
-                        case 'toast-info':
-                            ariaValue =  'polite';
-                            break;
-                        default:
-                            ariaValue = 'assertive';
-                    }
-                    $toastElement.attr('aria-live', ariaValue);
-                }
-
-                function handleEvents() {
-                    if (options.closeOnHover) {
-                        $toastElement.hover(stickAround, delayedHideToast);
-                    }
-
-                    if (!options.onclick && options.tapToDismiss) {
-                        $toastElement.click(hideToast);
-                    }
-
-                    if (options.closeButton && $closeElement) {
-                        $closeElement.click(function (event) {
-                            if (event.stopPropagation) {
-                                event.stopPropagation();
-                            } else if (event.cancelBubble !== undefined && event.cancelBubble !== true) {
-                                event.cancelBubble = true;
-                            }
-
-                            if (options.onCloseClick) {
-                                options.onCloseClick(event);
-                            }
-
-                            hideToast(true);
-                        });
-                    }
-
-                    if (options.onclick) {
-                        $toastElement.click(function (event) {
-                            options.onclick(event);
-                            hideToast();
-                        });
-                    }
-                }
-
-                function displayToast() {
-                    $toastElement.hide();
-
-                    $toastElement[options.showMethod](
-                        {duration: options.showDuration, easing: options.showEasing, complete: options.onShown}
-                    );
-
-                    if (options.timeOut > 0) {
-                        intervalId = setTimeout(hideToast, options.timeOut);
-                        progressBar.maxHideTime = parseFloat(options.timeOut);
-                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
-                        if (options.progressBar) {
-                            progressBar.intervalId = setInterval(updateProgress, 10);
-                        }
-                    }
-                }
-
-                function setIcon() {
-                    if (map.iconClass) {
-                        $toastElement.addClass(options.toastClass).addClass(iconClass);
-                    }
-                }
-
-                function setSequence() {
-                    if (options.newestOnTop) {
-                        $container.prepend($toastElement);
-                    } else {
-                        $container.append($toastElement);
-                    }
-                }
-
-                function setTitle() {
-                    if (map.title) {
-                        var suffix = map.title;
-                        if (options.escapeHtml) {
-                            suffix = escapeHtml(map.title);
-                        }
-                        $titleElement.append(suffix).addClass(options.titleClass);
-                        $toastElement.append($titleElement);
-                    }
-                }
-
-                function setMessage() {
-                    if (map.message) {
-                        var suffix = map.message;
-                        if (options.escapeHtml) {
-                            suffix = escapeHtml(map.message);
-                        }
-                        $messageElement.append(suffix).addClass(options.messageClass);
-                        $toastElement.append($messageElement);
-                    }
-                }
-
-                function setCloseButton() {
-                    if (options.closeButton) {
-                        $closeElement.addClass(options.closeClass).attr('role', 'button');
-                        $toastElement.prepend($closeElement);
-                    }
-                }
-
-                function setProgressBar() {
-                    if (options.progressBar) {
-                        $progressElement.addClass(options.progressClass);
-                        $toastElement.prepend($progressElement);
-                    }
-                }
-
-                function setRTL() {
-                    if (options.rtl) {
-                        $toastElement.addClass('rtl');
-                    }
-                }
-
-                function shouldExit(options, map) {
-                    if (options.preventDuplicates) {
-                        if (map.message === previousToast) {
-                            return true;
-                        } else {
-                            previousToast = map.message;
-                        }
-                    }
-                    return false;
-                }
-
-                function hideToast(override) {
-                    var method = override && options.closeMethod !== false ? options.closeMethod : options.hideMethod;
-                    var duration = override && options.closeDuration !== false ?
-                        options.closeDuration : options.hideDuration;
-                    var easing = override && options.closeEasing !== false ? options.closeEasing : options.hideEasing;
-                    if ($(':focus', $toastElement).length && !override) {
-                        return;
-                    }
-                    clearTimeout(progressBar.intervalId);
-                    return $toastElement[method]({
-                        duration: duration,
-                        easing: easing,
-                        complete: function () {
-                            removeToast($toastElement);
-                            clearTimeout(intervalId);
-                            if (options.onHidden && response.state !== 'hidden') {
-                                options.onHidden();
-                            }
-                            response.state = 'hidden';
-                            response.endTime = new Date();
-                            publish(response);
-                        }
-                    });
-                }
-
-                function delayedHideToast() {
-                    if (options.timeOut > 0 || options.extendedTimeOut > 0) {
-                        intervalId = setTimeout(hideToast, options.extendedTimeOut);
-                        progressBar.maxHideTime = parseFloat(options.extendedTimeOut);
-                        progressBar.hideEta = new Date().getTime() + progressBar.maxHideTime;
-                    }
-                }
-
-                function stickAround() {
-                    clearTimeout(intervalId);
-                    progressBar.hideEta = 0;
-                    $toastElement.stop(true, true)[options.showMethod](
-                        {duration: options.showDuration, easing: options.showEasing}
-                    );
-                }
-
-                function updateProgress() {
-                    var percentage = ((progressBar.hideEta - (new Date().getTime())) / progressBar.maxHideTime) * 100;
-                    $progressElement.width(percentage + '%');
-                }
-            }
-
-            function getOptions() {
-                return $.extend({}, getDefaults(), toastr.options);
-            }
-
-            function removeToast($toastElement) {
-                if (!$container) { $container = getContainer(); }
-                if ($toastElement.is(':visible')) {
-                    return;
-                }
-                $toastElement.remove();
-                $toastElement = null;
-                if ($container.children().length === 0) {
-                    $container.remove();
-                    previousToast = undefined;
-                }
-            }
-
-        })();
-    }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-}(__webpack_require__(/*! !webpack amd define */ "./node_modules/webpack/buildin/amd-define.js")));
+/* harmony default export */ __webpack_exports__["default"] = (SweetAlert);
 
 
 /***/ }),
 
-/***/ "./node_modules/webpack/buildin/amd-define.js":
-/*!***************************************!*\
-  !*** (webpack)/buildin/amd-define.js ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ "./node_modules/sweetalert2/src/constants.js":
+/*!***************************************************!*\
+  !*** ./node_modules/sweetalert2/src/constants.js ***!
+  \***************************************************/
+/*! exports provided: RESTORE_FOCUS_TIMEOUT */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-module.exports = function() {
-	throw new Error("define cannot be used indirect");
-};
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RESTORE_FOCUS_TIMEOUT", function() { return RESTORE_FOCUS_TIMEOUT; });
+const RESTORE_FOCUS_TIMEOUT = 100
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/globalState.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/sweetalert2/src/globalState.js ***!
+  \*****************************************************/
+/*! exports provided: default, restoreActiveElement */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "restoreActiveElement", function() { return restoreActiveElement; });
+/* harmony import */ var _constants_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants.js */ "./node_modules/sweetalert2/src/constants.js");
+
+
+const globalState = {}
+
+/* harmony default export */ __webpack_exports__["default"] = (globalState);
+
+const focusPreviousActiveElement = () => {
+  if (globalState.previousActiveElement && globalState.previousActiveElement.focus) {
+    globalState.previousActiveElement.focus()
+    globalState.previousActiveElement = null
+  } else if (document.body) {
+    document.body.focus()
+  }
+}
+
+// Restore previous active (focused) element
+const restoreActiveElement = (returnFocus) => {
+  return new Promise(resolve => {
+    if (!returnFocus) {
+      return resolve()
+    }
+    const x = window.scrollX
+    const y = window.scrollY
+
+    globalState.restoreFocusTimeout = setTimeout(() => {
+      focusPreviousActiveElement()
+      resolve()
+    }, _constants_js__WEBPACK_IMPORTED_MODULE_0__["RESTORE_FOCUS_TIMEOUT"]) // issues/900
+
+    window.scrollTo(x, y)
+  })
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods.js ***!
+  \*********************************************************/
+/*! exports provided: hideLoading, disableLoading, getInput, close, closePopup, closeModal, closeToast, enableButtons, disableButtons, enableInput, disableInput, showValidationMessage, resetValidationMessage, getProgressSteps, _main, update, _destroy */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _instanceMethods_hideLoading_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./instanceMethods/hideLoading.js */ "./node_modules/sweetalert2/src/instanceMethods/hideLoading.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hideLoading", function() { return _instanceMethods_hideLoading_js__WEBPACK_IMPORTED_MODULE_0__["hideLoading"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "disableLoading", function() { return _instanceMethods_hideLoading_js__WEBPACK_IMPORTED_MODULE_0__["disableLoading"]; });
+
+/* harmony import */ var _instanceMethods_getInput_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./instanceMethods/getInput.js */ "./node_modules/sweetalert2/src/instanceMethods/getInput.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getInput", function() { return _instanceMethods_getInput_js__WEBPACK_IMPORTED_MODULE_1__["getInput"]; });
+
+/* harmony import */ var _instanceMethods_close_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./instanceMethods/close.js */ "./node_modules/sweetalert2/src/instanceMethods/close.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "close", function() { return _instanceMethods_close_js__WEBPACK_IMPORTED_MODULE_2__["close"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "closePopup", function() { return _instanceMethods_close_js__WEBPACK_IMPORTED_MODULE_2__["closePopup"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "closeModal", function() { return _instanceMethods_close_js__WEBPACK_IMPORTED_MODULE_2__["closeModal"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "closeToast", function() { return _instanceMethods_close_js__WEBPACK_IMPORTED_MODULE_2__["closeToast"]; });
+
+/* harmony import */ var _instanceMethods_enable_disable_elements_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./instanceMethods/enable-disable-elements.js */ "./node_modules/sweetalert2/src/instanceMethods/enable-disable-elements.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "enableButtons", function() { return _instanceMethods_enable_disable_elements_js__WEBPACK_IMPORTED_MODULE_3__["enableButtons"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "disableButtons", function() { return _instanceMethods_enable_disable_elements_js__WEBPACK_IMPORTED_MODULE_3__["disableButtons"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "enableInput", function() { return _instanceMethods_enable_disable_elements_js__WEBPACK_IMPORTED_MODULE_3__["enableInput"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "disableInput", function() { return _instanceMethods_enable_disable_elements_js__WEBPACK_IMPORTED_MODULE_3__["disableInput"]; });
+
+/* harmony import */ var _instanceMethods_validation_message_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./instanceMethods/validation-message.js */ "./node_modules/sweetalert2/src/instanceMethods/validation-message.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "showValidationMessage", function() { return _instanceMethods_validation_message_js__WEBPACK_IMPORTED_MODULE_4__["showValidationMessage"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "resetValidationMessage", function() { return _instanceMethods_validation_message_js__WEBPACK_IMPORTED_MODULE_4__["resetValidationMessage"]; });
+
+/* harmony import */ var _instanceMethods_progress_steps_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./instanceMethods/progress-steps.js */ "./node_modules/sweetalert2/src/instanceMethods/progress-steps.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getProgressSteps", function() { return _instanceMethods_progress_steps_js__WEBPACK_IMPORTED_MODULE_5__["getProgressSteps"]; });
+
+/* harmony import */ var _instanceMethods_main_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./instanceMethods/_main.js */ "./node_modules/sweetalert2/src/instanceMethods/_main.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_main", function() { return _instanceMethods_main_js__WEBPACK_IMPORTED_MODULE_6__["_main"]; });
+
+/* harmony import */ var _instanceMethods_update_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./instanceMethods/update.js */ "./node_modules/sweetalert2/src/instanceMethods/update.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "update", function() { return _instanceMethods_update_js__WEBPACK_IMPORTED_MODULE_7__["update"]; });
+
+/* harmony import */ var _instanceMethods_destroy_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./instanceMethods/_destroy.js */ "./node_modules/sweetalert2/src/instanceMethods/_destroy.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "_destroy", function() { return _instanceMethods_destroy_js__WEBPACK_IMPORTED_MODULE_8__["_destroy"]; });
+
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/_destroy.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/_destroy.js ***!
+  \******************************************************************/
+/*! exports provided: _destroy */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_destroy", function() { return _destroy; });
+/* harmony import */ var _globalState_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../globalState.js */ "./node_modules/sweetalert2/src/globalState.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+/* harmony import */ var _privateMethods_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../privateMethods.js */ "./node_modules/sweetalert2/src/privateMethods.js");
+
+
+
+
+function _destroy () {
+  const domCache = _privateProps_js__WEBPACK_IMPORTED_MODULE_1__["default"].domCache.get(this)
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_1__["default"].innerParams.get(this)
+
+  if (!innerParams) {
+    return // This instance has already been destroyed
+  }
+
+  // Check if there is another Swal closing
+  if (domCache.popup && _globalState_js__WEBPACK_IMPORTED_MODULE_0__["default"].swalCloseEventFinishedCallback) {
+    _globalState_js__WEBPACK_IMPORTED_MODULE_0__["default"].swalCloseEventFinishedCallback()
+    delete _globalState_js__WEBPACK_IMPORTED_MODULE_0__["default"].swalCloseEventFinishedCallback
+  }
+
+  // Check if there is a swal disposal defer timer
+  if (_globalState_js__WEBPACK_IMPORTED_MODULE_0__["default"].deferDisposalTimer) {
+    clearTimeout(_globalState_js__WEBPACK_IMPORTED_MODULE_0__["default"].deferDisposalTimer)
+    delete _globalState_js__WEBPACK_IMPORTED_MODULE_0__["default"].deferDisposalTimer
+  }
+
+  if (typeof innerParams.didDestroy === 'function') {
+    innerParams.didDestroy()
+  }
+
+  disposeSwal(this)
+}
+
+const disposeSwal = (instance) => {
+  // Unset this.params so GC will dispose it (#1569)
+  delete instance.params
+  // Unset globalState props so GC will dispose globalState (#1569)
+  delete _globalState_js__WEBPACK_IMPORTED_MODULE_0__["default"].keydownHandler
+  delete _globalState_js__WEBPACK_IMPORTED_MODULE_0__["default"].keydownTarget
+  // Unset WeakMaps so GC will be able to dispose them (#1569)
+  unsetWeakMaps(_privateProps_js__WEBPACK_IMPORTED_MODULE_1__["default"])
+  unsetWeakMaps(_privateMethods_js__WEBPACK_IMPORTED_MODULE_2__["default"])
+  // Unset currentInstance
+  delete _globalState_js__WEBPACK_IMPORTED_MODULE_0__["default"].currentInstance
+}
+
+const unsetWeakMaps = (obj) => {
+  for (const i in obj) {
+    obj[i] = new WeakMap()
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/_main.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/_main.js ***!
+  \***************************************************************/
+/*! exports provided: _main */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_main", function() { return _main; });
+/* harmony import */ var _utils_params_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/params.js */ "./node_modules/sweetalert2/src/utils/params.js");
+/* harmony import */ var _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _utils_Timer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/Timer.js */ "./node_modules/sweetalert2/src/utils/Timer.js");
+/* harmony import */ var _utils_utils_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _utils_setParameters_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/setParameters.js */ "./node_modules/sweetalert2/src/utils/setParameters.js");
+/* harmony import */ var _utils_getTemplateParams_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/getTemplateParams.js */ "./node_modules/sweetalert2/src/utils/getTemplateParams.js");
+/* harmony import */ var _globalState_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../globalState.js */ "./node_modules/sweetalert2/src/globalState.js");
+/* harmony import */ var _utils_openPopup_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/openPopup.js */ "./node_modules/sweetalert2/src/utils/openPopup.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+/* harmony import */ var _privateMethods_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../privateMethods.js */ "./node_modules/sweetalert2/src/privateMethods.js");
+/* harmony import */ var _utils_dom_inputUtils_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../utils/dom/inputUtils.js */ "./node_modules/sweetalert2/src/utils/dom/inputUtils.js");
+/* harmony import */ var _buttons_handlers_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./buttons-handlers.js */ "./node_modules/sweetalert2/src/instanceMethods/buttons-handlers.js");
+/* harmony import */ var _keydown_handler_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./keydown-handler.js */ "./node_modules/sweetalert2/src/instanceMethods/keydown-handler.js");
+/* harmony import */ var _popup_click_handler_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./popup-click-handler.js */ "./node_modules/sweetalert2/src/instanceMethods/popup-click-handler.js");
+/* harmony import */ var _utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../utils/DismissReason.js */ "./node_modules/sweetalert2/src/utils/DismissReason.js");
+/* harmony import */ var _utils_aria_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../utils/aria.js */ "./node_modules/sweetalert2/src/utils/aria.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function _main (userParams, mixinParams = {}) {
+  Object(_utils_params_js__WEBPACK_IMPORTED_MODULE_0__["showWarningsForParams"])(Object.assign({}, mixinParams, userParams))
+
+  if (_globalState_js__WEBPACK_IMPORTED_MODULE_6__["default"].currentInstance) {
+    _globalState_js__WEBPACK_IMPORTED_MODULE_6__["default"].currentInstance._destroy()
+    if (_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["isModal"]()) {
+      Object(_utils_aria_js__WEBPACK_IMPORTED_MODULE_15__["unsetAriaHidden"])()
+    }
+  }
+  _globalState_js__WEBPACK_IMPORTED_MODULE_6__["default"].currentInstance = this
+
+  const innerParams = prepareParams(userParams, mixinParams)
+  Object(_utils_setParameters_js__WEBPACK_IMPORTED_MODULE_4__["default"])(innerParams)
+  Object.freeze(innerParams)
+
+  // clear the previous timer
+  if (_globalState_js__WEBPACK_IMPORTED_MODULE_6__["default"].timeout) {
+    _globalState_js__WEBPACK_IMPORTED_MODULE_6__["default"].timeout.stop()
+    delete _globalState_js__WEBPACK_IMPORTED_MODULE_6__["default"].timeout
+  }
+
+  // clear the restore focus timeout
+  clearTimeout(_globalState_js__WEBPACK_IMPORTED_MODULE_6__["default"].restoreFocusTimeout)
+
+  const domCache = populateDomCache(this)
+
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["render"](this, innerParams)
+
+  _privateProps_js__WEBPACK_IMPORTED_MODULE_8__["default"].innerParams.set(this, innerParams)
+
+  return swalPromise(this, domCache, innerParams)
+}
+
+const prepareParams = (userParams, mixinParams) => {
+  const templateParams = Object(_utils_getTemplateParams_js__WEBPACK_IMPORTED_MODULE_5__["getTemplateParams"])(userParams)
+  const params = Object.assign({}, _utils_params_js__WEBPACK_IMPORTED_MODULE_0__["default"], mixinParams, templateParams, userParams) // precedence is described in #2131
+  params.showClass = Object.assign({}, _utils_params_js__WEBPACK_IMPORTED_MODULE_0__["default"].showClass, params.showClass)
+  params.hideClass = Object.assign({}, _utils_params_js__WEBPACK_IMPORTED_MODULE_0__["default"].hideClass, params.hideClass)
+  return params
+}
+
+const swalPromise = (instance, domCache, innerParams) => {
+  return new Promise((resolve) => {
+    // functions to handle all closings/dismissals
+    const dismissWith = (dismiss) => {
+      instance.closePopup({ isDismissed: true, dismiss })
+    }
+
+    _privateMethods_js__WEBPACK_IMPORTED_MODULE_9__["default"].swalPromiseResolve.set(instance, resolve)
+
+    domCache.confirmButton.onclick = () => Object(_buttons_handlers_js__WEBPACK_IMPORTED_MODULE_11__["handleConfirmButtonClick"])(instance)
+    domCache.denyButton.onclick = () => Object(_buttons_handlers_js__WEBPACK_IMPORTED_MODULE_11__["handleDenyButtonClick"])(instance)
+    domCache.cancelButton.onclick = () => Object(_buttons_handlers_js__WEBPACK_IMPORTED_MODULE_11__["handleCancelButtonClick"])(instance, dismissWith)
+
+    domCache.closeButton.onclick = () => dismissWith(_utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_14__["DismissReason"].close)
+
+    Object(_popup_click_handler_js__WEBPACK_IMPORTED_MODULE_13__["handlePopupClick"])(instance, domCache, dismissWith)
+
+    Object(_keydown_handler_js__WEBPACK_IMPORTED_MODULE_12__["addKeydownHandler"])(instance, _globalState_js__WEBPACK_IMPORTED_MODULE_6__["default"], innerParams, dismissWith)
+
+    Object(_utils_dom_inputUtils_js__WEBPACK_IMPORTED_MODULE_10__["handleInputOptionsAndValue"])(instance, innerParams)
+
+    Object(_utils_openPopup_js__WEBPACK_IMPORTED_MODULE_7__["openPopup"])(innerParams)
+
+    setupTimer(_globalState_js__WEBPACK_IMPORTED_MODULE_6__["default"], innerParams, dismissWith)
+
+    initFocus(domCache, innerParams)
+
+    // Scroll container to top on open (#1247, #1946)
+    setTimeout(() => {
+      domCache.container.scrollTop = 0
+    })
+  })
+}
+
+const populateDomCache = (instance) => {
+  const domCache = {
+    popup: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getPopup"](),
+    container: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getContainer"](),
+    actions: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getActions"](),
+    confirmButton: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getConfirmButton"](),
+    denyButton: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getDenyButton"](),
+    cancelButton: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getCancelButton"](),
+    loader: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getLoader"](),
+    closeButton: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getCloseButton"](),
+    validationMessage: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getValidationMessage"](),
+    progressSteps: _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getProgressSteps"]()
+  }
+  _privateProps_js__WEBPACK_IMPORTED_MODULE_8__["default"].domCache.set(instance, domCache)
+
+  return domCache
+}
+
+const setupTimer = (globalState, innerParams, dismissWith) => {
+  const timerProgressBar = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getTimerProgressBar"]()
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["hide"](timerProgressBar)
+  if (innerParams.timer) {
+    globalState.timeout = new _utils_Timer_js__WEBPACK_IMPORTED_MODULE_2__["default"](() => {
+      dismissWith('timer')
+      delete globalState.timeout
+    }, innerParams.timer)
+    if (innerParams.timerProgressBar) {
+      _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["show"](timerProgressBar)
+      setTimeout(() => {
+        if (globalState.timeout && globalState.timeout.running) { // timer can be already stopped or unset at this point
+          _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["animateTimerProgressBar"](innerParams.timer)
+        }
+      })
+    }
+  }
+}
+
+const initFocus = (domCache, innerParams) => {
+  if (innerParams.toast) {
+    return
+  }
+
+  if (!Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_3__["callIfFunction"])(innerParams.allowEnterKey)) {
+    return blurActiveElement()
+  }
+
+  if (!focusButton(domCache, innerParams)) {
+    Object(_keydown_handler_js__WEBPACK_IMPORTED_MODULE_12__["setFocus"])(innerParams, -1, 1)
+  }
+}
+
+const focusButton = (domCache, innerParams) => {
+  if (innerParams.focusDeny && _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["isVisible"](domCache.denyButton)) {
+    domCache.denyButton.focus()
+    return true
+  }
+
+  if (innerParams.focusCancel && _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["isVisible"](domCache.cancelButton)) {
+    domCache.cancelButton.focus()
+    return true
+  }
+
+  if (innerParams.focusConfirm && _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["isVisible"](domCache.confirmButton)) {
+    domCache.confirmButton.focus()
+    return true
+  }
+
+  return false
+}
+
+const blurActiveElement = () => {
+  if (document.activeElement && typeof document.activeElement.blur === 'function') {
+    document.activeElement.blur()
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/buttons-handlers.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/buttons-handlers.js ***!
+  \**************************************************************************/
+/*! exports provided: handleConfirmButtonClick, handleDenyButtonClick, handleCancelButtonClick */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleConfirmButtonClick", function() { return handleConfirmButtonClick; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleDenyButtonClick", function() { return handleDenyButtonClick; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleCancelButtonClick", function() { return handleCancelButtonClick; });
+/* harmony import */ var _utils_dom_domUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/dom/domUtils.js */ "./node_modules/sweetalert2/src/utils/dom/domUtils.js");
+/* harmony import */ var _utils_dom_inputUtils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/dom/inputUtils.js */ "./node_modules/sweetalert2/src/utils/dom/inputUtils.js");
+/* harmony import */ var _utils_dom_getters_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/dom/getters.js */ "./node_modules/sweetalert2/src/utils/dom/getters.js");
+/* harmony import */ var _utils_utils_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _staticMethods_showLoading_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../staticMethods/showLoading.js */ "./node_modules/sweetalert2/src/staticMethods/showLoading.js");
+/* harmony import */ var _utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/DismissReason.js */ "./node_modules/sweetalert2/src/utils/DismissReason.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+
+
+
+
+
+
+const handleConfirmButtonClick = (instance) => {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_6__["default"].innerParams.get(instance)
+  instance.disableButtons()
+  if (innerParams.input) {
+    handleConfirmOrDenyWithInput(instance, 'confirm')
+  } else {
+    confirm(instance, true)
+  }
+}
+
+const handleDenyButtonClick = (instance) => {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_6__["default"].innerParams.get(instance)
+  instance.disableButtons()
+  if (innerParams.returnInputValueOnDeny) {
+    handleConfirmOrDenyWithInput(instance, 'deny')
+  } else {
+    deny(instance, false)
+  }
+}
+
+const handleCancelButtonClick = (instance, dismissWith) => {
+  instance.disableButtons()
+  dismissWith(_utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_5__["DismissReason"].cancel)
+}
+
+const handleConfirmOrDenyWithInput = (instance, type /* 'confirm' | 'deny' */) => {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_6__["default"].innerParams.get(instance)
+  const inputValue = Object(_utils_dom_inputUtils_js__WEBPACK_IMPORTED_MODULE_1__["getInputValue"])(instance, innerParams)
+  if (innerParams.inputValidator) {
+    handleInputValidator(instance, inputValue, type)
+  } else if (!instance.getInput().checkValidity()) {
+    instance.enableButtons()
+    instance.showValidationMessage(innerParams.validationMessage)
+  } else if (type === 'deny') {
+    deny(instance, inputValue)
+  } else {
+    confirm(instance, inputValue)
+  }
+}
+
+const handleInputValidator = (instance, inputValue, type /* 'confirm' | 'deny' */) => {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_6__["default"].innerParams.get(instance)
+  instance.disableInput()
+  const validationPromise = Promise.resolve().then(() => Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_3__["asPromise"])(
+    innerParams.inputValidator(inputValue, innerParams.validationMessage))
+  )
+  validationPromise.then(
+    (validationMessage) => {
+      instance.enableButtons()
+      instance.enableInput()
+      if (validationMessage) {
+        instance.showValidationMessage(validationMessage)
+      } else if (type === 'deny') {
+        deny(instance, inputValue)
+      } else {
+        confirm(instance, inputValue)
+      }
+    }
+  )
+}
+
+const deny = (instance, value) => {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_6__["default"].innerParams.get(instance || undefined)
+
+  if (innerParams.showLoaderOnDeny) {
+    Object(_staticMethods_showLoading_js__WEBPACK_IMPORTED_MODULE_4__["showLoading"])(Object(_utils_dom_getters_js__WEBPACK_IMPORTED_MODULE_2__["getDenyButton"])())
+  }
+
+  if (innerParams.preDeny) {
+    const preDenyPromise = Promise.resolve().then(() => Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_3__["asPromise"])(
+      innerParams.preDeny(value, innerParams.validationMessage))
+    )
+    preDenyPromise.then(
+      (preDenyValue) => {
+        if (preDenyValue === false) {
+          instance.hideLoading()
+        } else {
+          instance.closePopup({ isDenied: true, value: typeof preDenyValue === 'undefined' ? value : preDenyValue })
+        }
+      }
+    )
+  } else {
+    instance.closePopup({ isDenied: true, value })
+  }
+}
+
+const succeedWith = (instance, value) => {
+  instance.closePopup({ isConfirmed: true, value })
+}
+
+const confirm = (instance, value) => {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_6__["default"].innerParams.get(instance || undefined)
+
+  if (innerParams.showLoaderOnConfirm) {
+    Object(_staticMethods_showLoading_js__WEBPACK_IMPORTED_MODULE_4__["showLoading"])() // TODO: make showLoading an *instance* method
+  }
+
+  if (innerParams.preConfirm) {
+    instance.resetValidationMessage()
+    const preConfirmPromise = Promise.resolve().then(() => Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_3__["asPromise"])(
+      innerParams.preConfirm(value, innerParams.validationMessage))
+    )
+    preConfirmPromise.then(
+      (preConfirmValue) => {
+        if (Object(_utils_dom_domUtils_js__WEBPACK_IMPORTED_MODULE_0__["isVisible"])(Object(_utils_dom_getters_js__WEBPACK_IMPORTED_MODULE_2__["getValidationMessage"])()) || preConfirmValue === false) {
+          instance.hideLoading()
+        } else {
+          succeedWith(instance, typeof preConfirmValue === 'undefined' ? value : preConfirmValue)
+        }
+      }
+    )
+  } else {
+    succeedWith(instance, value)
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/close.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/close.js ***!
+  \***************************************************************/
+/*! exports provided: close, closePopup, closeModal, closeToast */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "close", function() { return close; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "closePopup", function() { return close; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "closeModal", function() { return close; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "closeToast", function() { return close; });
+/* harmony import */ var _utils_scrollbarFix_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/scrollbarFix.js */ "./node_modules/sweetalert2/src/utils/scrollbarFix.js");
+/* harmony import */ var _utils_iosFix_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/iosFix.js */ "./node_modules/sweetalert2/src/utils/iosFix.js");
+/* harmony import */ var _utils_aria_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/aria.js */ "./node_modules/sweetalert2/src/utils/aria.js");
+/* harmony import */ var _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _utils_classes_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _globalState_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../globalState.js */ "./node_modules/sweetalert2/src/globalState.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+/* harmony import */ var _privateMethods_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../privateMethods.js */ "./node_modules/sweetalert2/src/privateMethods.js");
+
+
+
+
+
+
+
+
+
+/*
+ * Instance method to close sweetAlert
+ */
+
+function removePopupAndResetState (instance, container, returnFocus, didClose) {
+  if (_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["isToast"]()) {
+    triggerDidCloseAndDispose(instance, didClose)
+  } else {
+    Object(_globalState_js__WEBPACK_IMPORTED_MODULE_5__["restoreActiveElement"])(returnFocus).then(() => triggerDidCloseAndDispose(instance, didClose))
+    _globalState_js__WEBPACK_IMPORTED_MODULE_5__["default"].keydownTarget.removeEventListener('keydown', _globalState_js__WEBPACK_IMPORTED_MODULE_5__["default"].keydownHandler, { capture: _globalState_js__WEBPACK_IMPORTED_MODULE_5__["default"].keydownListenerCapture })
+    _globalState_js__WEBPACK_IMPORTED_MODULE_5__["default"].keydownHandlerAdded = false
+  }
+
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+  // workaround for #2088
+  // for some reason removing the container in Safari will scroll the document to bottom
+  if (isSafari) {
+    container.setAttribute('style', 'display:none !important')
+    container.removeAttribute('class')
+    container.innerHTML = ''
+  } else {
+    container.remove()
+  }
+
+  if (_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["isModal"]()) {
+    Object(_utils_scrollbarFix_js__WEBPACK_IMPORTED_MODULE_0__["undoScrollbar"])()
+    Object(_utils_iosFix_js__WEBPACK_IMPORTED_MODULE_1__["undoIOSfix"])()
+    Object(_utils_aria_js__WEBPACK_IMPORTED_MODULE_2__["unsetAriaHidden"])()
+  }
+
+  removeBodyClasses()
+}
+
+function removeBodyClasses () {
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["removeClass"](
+    [document.documentElement, document.body],
+    [
+      _utils_classes_js__WEBPACK_IMPORTED_MODULE_4__["swalClasses"].shown,
+      _utils_classes_js__WEBPACK_IMPORTED_MODULE_4__["swalClasses"]['height-auto'],
+      _utils_classes_js__WEBPACK_IMPORTED_MODULE_4__["swalClasses"]['no-backdrop'],
+      _utils_classes_js__WEBPACK_IMPORTED_MODULE_4__["swalClasses"]['toast-shown'],
+    ]
+  )
+}
+
+function close (resolveValue) {
+  const popup = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["getPopup"]()
+
+  if (!popup) {
+    return
+  }
+
+  resolveValue = prepareResolveValue(resolveValue)
+
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_6__["default"].innerParams.get(this)
+  if (!innerParams || _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["hasClass"](popup, innerParams.hideClass.popup)) {
+    return
+  }
+  const swalPromiseResolve = _privateMethods_js__WEBPACK_IMPORTED_MODULE_7__["default"].swalPromiseResolve.get(this)
+
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["removeClass"](popup, innerParams.showClass.popup)
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["addClass"](popup, innerParams.hideClass.popup)
+
+  const backdrop = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["getContainer"]()
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["removeClass"](backdrop, innerParams.showClass.backdrop)
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["addClass"](backdrop, innerParams.hideClass.backdrop)
+
+  handlePopupAnimation(this, popup, innerParams)
+
+  // Resolve Swal promise
+  swalPromiseResolve(resolveValue)
+}
+
+const prepareResolveValue = (resolveValue) => {
+  // When user calls Swal.close()
+  if (typeof resolveValue === 'undefined') {
+    return {
+      isConfirmed: false,
+      isDenied: false,
+      isDismissed: true,
+    }
+  }
+
+  return Object.assign({
+    isConfirmed: false,
+    isDenied: false,
+    isDismissed: false,
+  }, resolveValue)
+}
+
+const handlePopupAnimation = (instance, popup, innerParams) => {
+  const container = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["getContainer"]()
+  // If animation is supported, animate
+  const animationIsSupported = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["animationEndEvent"] && _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["hasCssAnimation"](popup)
+
+  if (typeof innerParams.willClose === 'function') {
+    innerParams.willClose(popup)
+  }
+
+  if (animationIsSupported) {
+    animatePopup(instance, popup, container, innerParams.returnFocus, innerParams.didClose)
+  } else {
+    // Otherwise, remove immediately
+    removePopupAndResetState(instance, container, innerParams.returnFocus, innerParams.didClose)
+  }
+}
+
+const animatePopup = (instance, popup, container, returnFocus, didClose) => {
+  _globalState_js__WEBPACK_IMPORTED_MODULE_5__["default"].swalCloseEventFinishedCallback = removePopupAndResetState.bind(null, instance, container, returnFocus, didClose)
+  popup.addEventListener(_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_3__["animationEndEvent"], function (e) {
+    if (e.target === popup) {
+      _globalState_js__WEBPACK_IMPORTED_MODULE_5__["default"].swalCloseEventFinishedCallback()
+      delete _globalState_js__WEBPACK_IMPORTED_MODULE_5__["default"].swalCloseEventFinishedCallback
+    }
+  })
+}
+
+const triggerDidCloseAndDispose = (instance, didClose) => {
+  setTimeout(() => {
+    if (typeof didClose === 'function') {
+      didClose.bind(instance.params)()
+    }
+    instance._destroy()
+  })
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/enable-disable-elements.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/enable-disable-elements.js ***!
+  \*********************************************************************************/
+/*! exports provided: enableButtons, disableButtons, enableInput, disableInput */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "enableButtons", function() { return enableButtons; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "disableButtons", function() { return disableButtons; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "enableInput", function() { return enableInput; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "disableInput", function() { return disableInput; });
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+function setButtonsDisabled (instance, buttons, disabled) {
+  const domCache = _privateProps_js__WEBPACK_IMPORTED_MODULE_0__["default"].domCache.get(instance)
+  buttons.forEach(button => {
+    domCache[button].disabled = disabled
+  })
+}
+
+function setInputDisabled (input, disabled) {
+  if (!input) {
+    return false
+  }
+  if (input.type === 'radio') {
+    const radiosContainer = input.parentNode.parentNode
+    const radios = radiosContainer.querySelectorAll('input')
+    for (let i = 0; i < radios.length; i++) {
+      radios[i].disabled = disabled
+    }
+  } else {
+    input.disabled = disabled
+  }
+}
+
+function enableButtons () {
+  setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], false)
+}
+
+function disableButtons () {
+  setButtonsDisabled(this, ['confirmButton', 'denyButton', 'cancelButton'], true)
+}
+
+function enableInput () {
+  return setInputDisabled(this.getInput(), false)
+}
+
+function disableInput () {
+  return setInputDisabled(this.getInput(), true)
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/getInput.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/getInput.js ***!
+  \******************************************************************/
+/*! exports provided: getInput */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getInput", function() { return getInput; });
+/* harmony import */ var _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+
+// Get input element by specified type or, if type isn't specified, by params.input
+function getInput (instance) {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_1__["default"].innerParams.get(instance || this)
+  const domCache = _privateProps_js__WEBPACK_IMPORTED_MODULE_1__["default"].domCache.get(instance || this)
+  if (!domCache) {
+    return null
+  }
+  return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getInput"](domCache.popup, innerParams.input)
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/hideLoading.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/hideLoading.js ***!
+  \*********************************************************************/
+/*! exports provided: hideLoading, disableLoading */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hideLoading", function() { return hideLoading; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "disableLoading", function() { return hideLoading; });
+/* harmony import */ var _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+
+
+/**
+ * Hides loader and shows back the button which was hidden by .showLoading()
+ */
+function hideLoading () {
+  // do nothing if popup is closed
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_2__["default"].innerParams.get(this)
+  if (!innerParams) {
+    return
+  }
+  const domCache = _privateProps_js__WEBPACK_IMPORTED_MODULE_2__["default"].domCache.get(this)
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hide"](domCache.loader)
+  if (_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["isToast"]()) {
+    if (innerParams.icon) {
+      _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["show"](_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getIcon"]())
+    }
+  } else {
+    showRelatedButton(domCache)
+  }
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["removeClass"]([domCache.popup, domCache.actions], _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].loading)
+  domCache.popup.removeAttribute('aria-busy')
+  domCache.popup.removeAttribute('data-loading')
+  domCache.confirmButton.disabled = false
+  domCache.denyButton.disabled = false
+  domCache.cancelButton.disabled = false
+}
+
+const showRelatedButton = (domCache) => {
+  const buttonToReplace = domCache.popup.getElementsByClassName(domCache.loader.getAttribute('data-button-to-replace'))
+  if (buttonToReplace.length) {
+    _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["show"](buttonToReplace[0], 'inline-block')
+  } else if (_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["allButtonsAreHidden"]()) {
+    _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hide"](domCache.actions)
+  }
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/keydown-handler.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/keydown-handler.js ***!
+  \*************************************************************************/
+/*! exports provided: addKeydownHandler, setFocus */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addKeydownHandler", function() { return addKeydownHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setFocus", function() { return setFocus; });
+/* harmony import */ var _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/DismissReason.js */ "./node_modules/sweetalert2/src/utils/DismissReason.js");
+/* harmony import */ var _utils_utils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../staticMethods/dom.js */ "./node_modules/sweetalert2/src/staticMethods/dom.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+
+
+
+
+const addKeydownHandler = (instance, globalState, innerParams, dismissWith) => {
+  if (globalState.keydownTarget && globalState.keydownHandlerAdded) {
+    globalState.keydownTarget.removeEventListener('keydown', globalState.keydownHandler, { capture: globalState.keydownListenerCapture })
+    globalState.keydownHandlerAdded = false
+  }
+
+  if (!innerParams.toast) {
+    globalState.keydownHandler = (e) => keydownHandler(instance, e, dismissWith)
+    globalState.keydownTarget = innerParams.keydownListenerCapture ? window : _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]()
+    globalState.keydownListenerCapture = innerParams.keydownListenerCapture
+    globalState.keydownTarget.addEventListener('keydown', globalState.keydownHandler, { capture: globalState.keydownListenerCapture })
+    globalState.keydownHandlerAdded = true
+  }
+}
+
+// Focus handling
+const setFocus = (innerParams, index, increment) => {
+  const focusableElements = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getFocusableElements"]()
+  // search for visible elements and select the next possible match
+  if (focusableElements.length) {
+    index = index + increment
+
+    // rollover to first item
+    if (index === focusableElements.length) {
+      index = 0
+
+      // go to last item
+    } else if (index === -1) {
+      index = focusableElements.length - 1
+    }
+
+    return focusableElements[index].focus()
+  }
+  // no visible focusable elements, focus the popup
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]().focus()
+}
+
+const arrowKeysNextButton = [
+  'ArrowRight', 'ArrowDown',
+]
+
+const arrowKeysPreviousButton = [
+  'ArrowLeft', 'ArrowUp',
+]
+
+const keydownHandler = (instance, e, dismissWith) => {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_4__["default"].innerParams.get(instance)
+
+  if (!innerParams) {
+    return // This instance has already been destroyed
+  }
+
+  if (innerParams.stopKeydownPropagation) {
+    e.stopPropagation()
+  }
+
+  // ENTER
+  if (e.key === 'Enter') {
+    handleEnter(instance, e, innerParams)
+
+  // TAB
+  } else if (e.key === 'Tab') {
+    handleTab(e, innerParams)
+
+  // ARROWS - switch focus between buttons
+  } else if ([...arrowKeysNextButton, ...arrowKeysPreviousButton].includes(e.key)) {
+    handleArrows(e.key)
+
+  // ESC
+  } else if (e.key === 'Escape') {
+    handleEsc(e, innerParams, dismissWith)
+  }
+}
+
+const handleEnter = (instance, e, innerParams) => {
+  // #720 #721
+  if (e.isComposing) {
+    return
+  }
+
+  if (e.target && instance.getInput() && e.target.outerHTML === instance.getInput().outerHTML) {
+    if (['textarea', 'file'].includes(innerParams.input)) {
+      return // do not submit
+    }
+
+    Object(_staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_3__["clickConfirm"])()
+    e.preventDefault()
+  }
+}
+
+const handleTab = (e, innerParams) => {
+  const targetElement = e.target
+
+  const focusableElements = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getFocusableElements"]()
+  let btnIndex = -1
+  for (let i = 0; i < focusableElements.length; i++) {
+    if (targetElement === focusableElements[i]) {
+      btnIndex = i
+      break
+    }
+  }
+
+  if (!e.shiftKey) {
+    // Cycle to the next button
+    setFocus(innerParams, btnIndex, 1)
+  } else {
+    // Cycle to the prev button
+    setFocus(innerParams, btnIndex, -1)
+  }
+  e.stopPropagation()
+  e.preventDefault()
+}
+
+const handleArrows = (key) => {
+  const confirmButton = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getConfirmButton"]()
+  const denyButton = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getDenyButton"]()
+  const cancelButton = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getCancelButton"]()
+  if (![confirmButton, denyButton, cancelButton].includes(document.activeElement)) {
+    return
+  }
+  const sibling = arrowKeysNextButton.includes(key) ? 'nextElementSibling' : 'previousElementSibling'
+  const buttonToFocus = document.activeElement[sibling]
+  if (buttonToFocus) {
+    buttonToFocus.focus()
+  }
+}
+
+const handleEsc = (e, innerParams, dismissWith) => {
+  if (Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_2__["callIfFunction"])(innerParams.allowEscapeKey)) {
+    e.preventDefault()
+    dismissWith(_utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_1__["DismissReason"].esc)
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/popup-click-handler.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/popup-click-handler.js ***!
+  \*****************************************************************************/
+/*! exports provided: handlePopupClick */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handlePopupClick", function() { return handlePopupClick; });
+/* harmony import */ var _utils_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/DismissReason.js */ "./node_modules/sweetalert2/src/utils/DismissReason.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+
+
+const handlePopupClick = (instance, domCache, dismissWith) => {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_2__["default"].innerParams.get(instance)
+  if (innerParams.toast) {
+    handleToastClick(instance, domCache, dismissWith)
+  } else {
+    // Ignore click events that had mousedown on the popup but mouseup on the container
+    // This can happen when the user drags a slider
+    handleModalMousedown(domCache)
+
+    // Ignore click events that had mousedown on the container but mouseup on the popup
+    handleContainerMousedown(domCache)
+
+    handleModalClick(instance, domCache, dismissWith)
+  }
+}
+
+const handleToastClick = (instance, domCache, dismissWith) => {
+  // Closing toast by internal click
+  domCache.popup.onclick = () => {
+    const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_2__["default"].innerParams.get(instance)
+    if (
+      innerParams.showConfirmButton ||
+      innerParams.showDenyButton ||
+      innerParams.showCancelButton ||
+      innerParams.showCloseButton ||
+      innerParams.timer ||
+      innerParams.input
+    ) {
+      return
+    }
+    dismissWith(_utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_1__["DismissReason"].close)
+  }
+}
+
+let ignoreOutsideClick = false
+
+const handleModalMousedown = (domCache) => {
+  domCache.popup.onmousedown = () => {
+    domCache.container.onmouseup = function (e) {
+      domCache.container.onmouseup = undefined
+      // We only check if the mouseup target is the container because usually it doesn't
+      // have any other direct children aside of the popup
+      if (e.target === domCache.container) {
+        ignoreOutsideClick = true
+      }
+    }
+  }
+}
+
+const handleContainerMousedown = (domCache) => {
+  domCache.container.onmousedown = () => {
+    domCache.popup.onmouseup = function (e) {
+      domCache.popup.onmouseup = undefined
+      // We also need to check if the mouseup target is a child of the popup
+      if (e.target === domCache.popup || domCache.popup.contains(e.target)) {
+        ignoreOutsideClick = true
+      }
+    }
+  }
+}
+
+const handleModalClick = (instance, domCache, dismissWith) => {
+  domCache.container.onclick = (e) => {
+    const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_2__["default"].innerParams.get(instance)
+    if (ignoreOutsideClick) {
+      ignoreOutsideClick = false
+      return
+    }
+    if (e.target === domCache.container && Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_0__["callIfFunction"])(innerParams.allowOutsideClick)) {
+      dismissWith(_utils_DismissReason_js__WEBPACK_IMPORTED_MODULE_1__["DismissReason"].backdrop)
+    }
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/progress-steps.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/progress-steps.js ***!
+  \************************************************************************/
+/*! exports provided: getProgressSteps */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getProgressSteps", function() { return getProgressSteps; });
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+function getProgressSteps () {
+  const domCache = _privateProps_js__WEBPACK_IMPORTED_MODULE_0__["default"].domCache.get(this)
+  return domCache.progressSteps
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/update.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/update.js ***!
+  \****************************************************************/
+/*! exports provided: update */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "update", function() { return update; });
+/* harmony import */ var _src_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../src/utils/dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _src_utils_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../src/utils/utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _sweetalert2_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sweetalert2.js */ "./node_modules/sweetalert2/src/sweetalert2.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+
+
+
+/**
+ * Updates popup parameters.
+ */
+function update (params) {
+  const popup = _src_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]()
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_3__["default"].innerParams.get(this)
+
+  if (!popup || _src_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hasClass"](popup, innerParams.hideClass.popup)) {
+    return Object(_src_utils_utils_js__WEBPACK_IMPORTED_MODULE_1__["warn"])(`You're trying to update the closed or closing popup, that won't work. Use the update() method in preConfirm parameter or show a new popup.`)
+  }
+
+  const validUpdatableParams = {}
+
+  // assign valid params from `params` to `defaults`
+  Object.keys(params).forEach(param => {
+    if (_sweetalert2_js__WEBPACK_IMPORTED_MODULE_2__["default"].isUpdatableParameter(param)) {
+      validUpdatableParams[param] = params[param]
+    } else {
+      Object(_src_utils_utils_js__WEBPACK_IMPORTED_MODULE_1__["warn"])(`Invalid parameter to update: "${param}". Updatable params are listed here: https://github.com/sweetalert2/sweetalert2/blob/master/src/utils/params.js\n\nIf you think this parameter should be updatable, request it here: https://github.com/sweetalert2/sweetalert2/issues/new?template=02_feature_request.md`)
+    }
+  })
+
+  const updatedParams = Object.assign({}, innerParams, validUpdatableParams)
+
+  _src_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["render"](this, updatedParams)
+
+  _privateProps_js__WEBPACK_IMPORTED_MODULE_3__["default"].innerParams.set(this, updatedParams)
+  Object.defineProperties(this, {
+    params: {
+      value: Object.assign({}, this.params, params),
+      writable: false,
+      enumerable: true
+    }
+  })
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/instanceMethods/validation-message.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/instanceMethods/validation-message.js ***!
+  \****************************************************************************/
+/*! exports provided: showValidationMessage, resetValidationMessage */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showValidationMessage", function() { return showValidationMessage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resetValidationMessage", function() { return resetValidationMessage; });
+/* harmony import */ var _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+
+
+// Show block with validation message
+function showValidationMessage (error) {
+  const domCache = _privateProps_js__WEBPACK_IMPORTED_MODULE_2__["default"].domCache.get(this)
+  const params = _privateProps_js__WEBPACK_IMPORTED_MODULE_2__["default"].innerParams.get(this)
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["setInnerHtml"](domCache.validationMessage, error)
+  domCache.validationMessage.className = _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"]['validation-message']
+  if (params.customClass && params.customClass.validationMessage) {
+    _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["addClass"](domCache.validationMessage, params.customClass.validationMessage)
+  }
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["show"](domCache.validationMessage)
+
+  const input = this.getInput()
+  if (input) {
+    input.setAttribute('aria-invalid', true)
+    input.setAttribute('aria-describedby', _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"]['validation-message'])
+    _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["focusInput"](input)
+    _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["addClass"](input, _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].inputerror)
+  }
+}
+
+// Hide block with validation message
+function resetValidationMessage () {
+  const domCache = _privateProps_js__WEBPACK_IMPORTED_MODULE_2__["default"].domCache.get(this)
+  if (domCache.validationMessage) {
+    _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hide"](domCache.validationMessage)
+  }
+
+  const input = this.getInput()
+  if (input) {
+    input.removeAttribute('aria-invalid')
+    input.removeAttribute('aria-describedby')
+    _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["removeClass"](input, _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].inputerror)
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/privateMethods.js":
+/*!********************************************************!*\
+  !*** ./node_modules/sweetalert2/src/privateMethods.js ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * This module containts `WeakMap`s for each effectively-"private  property" that a `Swal` has.
+ * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
+ * This is the approach that Babel will probably take to implement private methods/fields
+ *   https://github.com/tc39/proposal-private-methods
+ *   https://github.com/babel/babel/pull/7555
+ * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
+ *   then we can use that language feature.
+ */
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  swalPromiseResolve: new WeakMap()
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/privateProps.js":
+/*!******************************************************!*\
+  !*** ./node_modules/sweetalert2/src/privateProps.js ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * This module containts `WeakMap`s for each effectively-"private  property" that a `Swal` has.
+ * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
+ * This is the approach that Babel will probably take to implement private methods/fields
+ *   https://github.com/tc39/proposal-private-methods
+ *   https://github.com/babel/babel/pull/7555
+ * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
+ *   then we can use that language feature.
+ */
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  promise: new WeakMap(),
+  innerParams: new WeakMap(),
+  domCache: new WeakMap()
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/staticMethods.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/sweetalert2/src/staticMethods.js ***!
+  \*******************************************************/
+/*! exports provided: argsToParams, getContainer, getPopup, getTitle, getHtmlContainer, getImage, getIcon, getInputLabel, getCloseButton, getActions, getConfirmButton, getDenyButton, getCancelButton, getLoader, getFooter, getTimerProgressBar, getFocusableElements, getValidationMessage, isLoading, isVisible, clickConfirm, clickDeny, clickCancel, fire, mixin, showLoading, enableLoading, getTimerLeft, stopTimer, resumeTimer, toggleTimer, increaseTimer, isTimerRunning, bindClickHandler, isValidParameter, isUpdatableParameter, isDeprecatedParameter */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _staticMethods_argsToParams_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./staticMethods/argsToParams.js */ "./node_modules/sweetalert2/src/staticMethods/argsToParams.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "argsToParams", function() { return _staticMethods_argsToParams_js__WEBPACK_IMPORTED_MODULE_0__["argsToParams"]; });
+
+/* harmony import */ var _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./staticMethods/dom.js */ "./node_modules/sweetalert2/src/staticMethods/dom.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getContainer", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getContainer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getPopup", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getPopup"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getTitle", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getTitle"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getHtmlContainer", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getHtmlContainer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getImage", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getImage"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getIcon", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getIcon"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getInputLabel", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getInputLabel"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getCloseButton", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getCloseButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getActions", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getActions"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getConfirmButton", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getConfirmButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getDenyButton", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getDenyButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getCancelButton", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getCancelButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getLoader", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getLoader"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getFooter", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getFooter"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getTimerProgressBar", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getTimerProgressBar"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getFocusableElements", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getFocusableElements"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getValidationMessage", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["getValidationMessage"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isLoading", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["isLoading"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isVisible", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["isVisible"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clickConfirm", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["clickConfirm"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clickDeny", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["clickDeny"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "clickCancel", function() { return _staticMethods_dom_js__WEBPACK_IMPORTED_MODULE_1__["clickCancel"]; });
+
+/* harmony import */ var _staticMethods_fire_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./staticMethods/fire.js */ "./node_modules/sweetalert2/src/staticMethods/fire.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "fire", function() { return _staticMethods_fire_js__WEBPACK_IMPORTED_MODULE_2__["fire"]; });
+
+/* harmony import */ var _staticMethods_mixin_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./staticMethods/mixin.js */ "./node_modules/sweetalert2/src/staticMethods/mixin.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "mixin", function() { return _staticMethods_mixin_js__WEBPACK_IMPORTED_MODULE_3__["mixin"]; });
+
+/* harmony import */ var _staticMethods_showLoading_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./staticMethods/showLoading.js */ "./node_modules/sweetalert2/src/staticMethods/showLoading.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "showLoading", function() { return _staticMethods_showLoading_js__WEBPACK_IMPORTED_MODULE_4__["showLoading"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "enableLoading", function() { return _staticMethods_showLoading_js__WEBPACK_IMPORTED_MODULE_4__["enableLoading"]; });
+
+/* harmony import */ var _staticMethods_timer_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./staticMethods/timer.js */ "./node_modules/sweetalert2/src/staticMethods/timer.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getTimerLeft", function() { return _staticMethods_timer_js__WEBPACK_IMPORTED_MODULE_5__["getTimerLeft"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stopTimer", function() { return _staticMethods_timer_js__WEBPACK_IMPORTED_MODULE_5__["stopTimer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "resumeTimer", function() { return _staticMethods_timer_js__WEBPACK_IMPORTED_MODULE_5__["resumeTimer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "toggleTimer", function() { return _staticMethods_timer_js__WEBPACK_IMPORTED_MODULE_5__["toggleTimer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "increaseTimer", function() { return _staticMethods_timer_js__WEBPACK_IMPORTED_MODULE_5__["increaseTimer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isTimerRunning", function() { return _staticMethods_timer_js__WEBPACK_IMPORTED_MODULE_5__["isTimerRunning"]; });
+
+/* harmony import */ var _staticMethods_bindClickHandler_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./staticMethods/bindClickHandler.js */ "./node_modules/sweetalert2/src/staticMethods/bindClickHandler.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "bindClickHandler", function() { return _staticMethods_bindClickHandler_js__WEBPACK_IMPORTED_MODULE_6__["bindClickHandler"]; });
+
+/* harmony import */ var _utils_params_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./utils/params.js */ "./node_modules/sweetalert2/src/utils/params.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isValidParameter", function() { return _utils_params_js__WEBPACK_IMPORTED_MODULE_7__["isValidParameter"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isUpdatableParameter", function() { return _utils_params_js__WEBPACK_IMPORTED_MODULE_7__["isUpdatableParameter"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isDeprecatedParameter", function() { return _utils_params_js__WEBPACK_IMPORTED_MODULE_7__["isDeprecatedParameter"]; });
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/staticMethods/argsToParams.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/staticMethods/argsToParams.js ***!
+  \********************************************************************/
+/*! exports provided: argsToParams */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "argsToParams", function() { return argsToParams; });
+/* harmony import */ var _utils_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+
+
+const isJqueryElement = (elem) => typeof elem === 'object' && elem.jquery
+const isElement = (elem) => elem instanceof Element || isJqueryElement(elem)
+
+const argsToParams = (args) => {
+  const params = {}
+  if (typeof args[0] === 'object' && !isElement(args[0])) {
+    Object.assign(params, args[0])
+  } else {
+    ['title', 'html', 'icon'].forEach((name, index) => {
+      const arg = args[index]
+      if (typeof arg === 'string' || isElement(arg)) {
+        params[name] = arg
+      } else if (arg !== undefined) {
+        Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_0__["error"])(`Unexpected type of ${name}! Expected "string" or "Element", got ${typeof arg}`)
+      }
+    })
+  }
+  return params
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/staticMethods/bindClickHandler.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/staticMethods/bindClickHandler.js ***!
+  \************************************************************************/
+/*! exports provided: bindClickHandler */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindClickHandler", function() { return bindClickHandler; });
+let bodyClickListenerAdded = false
+const clickHandlers = {}
+
+function bindClickHandler (attr = 'data-swal-template') {
+  clickHandlers[attr] = this
+
+  if (!bodyClickListenerAdded) {
+    document.body.addEventListener('click', bodyClickListener)
+    bodyClickListenerAdded = true
+  }
+}
+
+const bodyClickListener = (event) => {
+  // TODO: replace with event.composedPath()
+  for (let el = event.target; el && el !== document; el = el.parentNode) {
+    for (const attr in clickHandlers) {
+      const template = el.getAttribute(attr)
+      if (template) {
+        clickHandlers[attr].fire({ template })
+        return
+      }
+    }
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/staticMethods/dom.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/sweetalert2/src/staticMethods/dom.js ***!
+  \***********************************************************/
+/*! exports provided: getContainer, getPopup, getTitle, getHtmlContainer, getImage, getIcon, getInputLabel, getCloseButton, getActions, getConfirmButton, getDenyButton, getCancelButton, getLoader, getFooter, getTimerProgressBar, getFocusableElements, getValidationMessage, isLoading, isVisible, clickConfirm, clickDeny, clickCancel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isVisible", function() { return isVisible; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clickConfirm", function() { return clickConfirm; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clickDeny", function() { return clickDeny; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clickCancel", function() { return clickCancel; });
+/* harmony import */ var _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _utils_dom_domUtils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/dom/domUtils.js */ "./node_modules/sweetalert2/src/utils/dom/domUtils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getContainer", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getContainer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getPopup", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getTitle", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getTitle"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getHtmlContainer", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getHtmlContainer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getImage", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getImage"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getIcon", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getIcon"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getInputLabel", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getInputLabel"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getCloseButton", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getCloseButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getActions", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getActions"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getConfirmButton", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getConfirmButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getDenyButton", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getDenyButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getCancelButton", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getCancelButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getLoader", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getLoader"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getFooter", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getFooter"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getTimerProgressBar", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getTimerProgressBar"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getFocusableElements", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getFocusableElements"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getValidationMessage", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getValidationMessage"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isLoading", function() { return _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["isLoading"]; });
+
+
+
+
+
+
+/*
+ * Global function to determine if SweetAlert2 popup is shown
+ */
+const isVisible = () => {
+  return _utils_dom_domUtils_js__WEBPACK_IMPORTED_MODULE_1__["isVisible"](_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]())
+}
+
+/*
+ * Global function to click 'Confirm' button
+ */
+const clickConfirm = () => _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getConfirmButton"]() && _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getConfirmButton"]().click()
+
+/*
+ * Global function to click 'Deny' button
+ */
+const clickDeny = () => _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getDenyButton"]() && _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getDenyButton"]().click()
+
+/*
+ * Global function to click 'Cancel' button
+ */
+const clickCancel = () => _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getCancelButton"]() && _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getCancelButton"]().click()
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/staticMethods/fire.js":
+/*!************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/staticMethods/fire.js ***!
+  \************************************************************/
+/*! exports provided: fire */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fire", function() { return fire; });
+function fire (...args) {
+  const Swal = this
+  return new Swal(...args)
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/staticMethods/mixin.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/staticMethods/mixin.js ***!
+  \*************************************************************/
+/*! exports provided: mixin */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mixin", function() { return mixin; });
+/**
+ * Returns an extended version of `Swal` containing `params` as defaults.
+ * Useful for reusing Swal configuration.
+ *
+ * For example:
+ *
+ * Before:
+ * const textPromptOptions = { input: 'text', showCancelButton: true }
+ * const {value: firstName} = await Swal.fire({ ...textPromptOptions, title: 'What is your first name?' })
+ * const {value: lastName} = await Swal.fire({ ...textPromptOptions, title: 'What is your last name?' })
+ *
+ * After:
+ * const TextPrompt = Swal.mixin({ input: 'text', showCancelButton: true })
+ * const {value: firstName} = await TextPrompt('What is your first name?')
+ * const {value: lastName} = await TextPrompt('What is your last name?')
+ *
+ * @param mixinParams
+ */
+function mixin (mixinParams) {
+  class MixinSwal extends this {
+    _main (params, priorityMixinParams) {
+      return super._main(params, Object.assign({}, mixinParams, priorityMixinParams))
+    }
+  }
+
+  return MixinSwal
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/staticMethods/showLoading.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/staticMethods/showLoading.js ***!
+  \*******************************************************************/
+/*! exports provided: showLoading, enableLoading */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showLoading", function() { return showLoading; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "enableLoading", function() { return showLoading; });
+/* harmony import */ var _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _sweetalert2_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../sweetalert2.js */ "./node_modules/sweetalert2/src/sweetalert2.js");
+/* harmony import */ var _utils_classes_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+
+
+
+
+/**
+ * Shows loader (spinner), this is useful with AJAX requests.
+ * By default the loader be shown instead of the "Confirm" button.
+ */
+const showLoading = (buttonToReplace) => {
+  let popup = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]()
+  if (!popup) {
+    _sweetalert2_js__WEBPACK_IMPORTED_MODULE_1__["default"].fire()
+  }
+  popup = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]()
+  const loader = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getLoader"]()
+
+  if (_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["isToast"]()) {
+    _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hide"](_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getIcon"]())
+  } else {
+    replaceButton(popup, buttonToReplace)
+  }
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["show"](loader)
+
+  popup.setAttribute('data-loading', true)
+  popup.setAttribute('aria-busy', true)
+  popup.focus()
+}
+
+const replaceButton = (popup, buttonToReplace) => {
+  const actions = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getActions"]()
+  const loader = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getLoader"]()
+
+  if (!buttonToReplace && _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["isVisible"](_utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getConfirmButton"]())) {
+    buttonToReplace = _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getConfirmButton"]()
+  }
+
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["show"](actions)
+  if (buttonToReplace) {
+    _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hide"](buttonToReplace)
+    loader.setAttribute('data-button-to-replace', buttonToReplace.className)
+  }
+  loader.parentNode.insertBefore(loader, buttonToReplace)
+  _utils_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["addClass"]([popup, actions], _utils_classes_js__WEBPACK_IMPORTED_MODULE_2__["swalClasses"].loading)
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/staticMethods/timer.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/staticMethods/timer.js ***!
+  \*************************************************************/
+/*! exports provided: getTimerLeft, stopTimer, resumeTimer, toggleTimer, increaseTimer, isTimerRunning */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTimerLeft", function() { return getTimerLeft; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stopTimer", function() { return stopTimer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resumeTimer", function() { return resumeTimer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleTimer", function() { return toggleTimer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "increaseTimer", function() { return increaseTimer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isTimerRunning", function() { return isTimerRunning; });
+/* harmony import */ var _utils_dom_domUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/dom/domUtils.js */ "./node_modules/sweetalert2/src/utils/dom/domUtils.js");
+/* harmony import */ var _globalState_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../globalState.js */ "./node_modules/sweetalert2/src/globalState.js");
+
+
+
+/**
+ * If `timer` parameter is set, returns number of milliseconds of timer remained.
+ * Otherwise, returns undefined.
+ */
+const getTimerLeft = () => {
+  return _globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout && _globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout.getTimerLeft()
+}
+
+/**
+ * Stop timer. Returns number of milliseconds of timer remained.
+ * If `timer` parameter isn't set, returns undefined.
+ */
+const stopTimer = () => {
+  if (_globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout) {
+    Object(_utils_dom_domUtils_js__WEBPACK_IMPORTED_MODULE_0__["stopTimerProgressBar"])()
+    return _globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout.stop()
+  }
+}
+
+/**
+ * Resume timer. Returns number of milliseconds of timer remained.
+ * If `timer` parameter isn't set, returns undefined.
+ */
+const resumeTimer = () => {
+  if (_globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout) {
+    const remaining = _globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout.start()
+    Object(_utils_dom_domUtils_js__WEBPACK_IMPORTED_MODULE_0__["animateTimerProgressBar"])(remaining)
+    return remaining
+  }
+}
+
+/**
+ * Resume timer. Returns number of milliseconds of timer remained.
+ * If `timer` parameter isn't set, returns undefined.
+ */
+const toggleTimer = () => {
+  const timer = _globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout
+  return timer && (timer.running ? stopTimer() : resumeTimer())
+}
+
+/**
+ * Increase timer. Returns number of milliseconds of an updated timer.
+ * If `timer` parameter isn't set, returns undefined.
+ */
+const increaseTimer = (n) => {
+  if (_globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout) {
+    const remaining = _globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout.increase(n)
+    Object(_utils_dom_domUtils_js__WEBPACK_IMPORTED_MODULE_0__["animateTimerProgressBar"])(remaining, true)
+    return remaining
+  }
+}
+
+/**
+ * Check if timer is running. Returns true if timer is running
+ * or false if timer is paused or stopped.
+ * If `timer` parameter isn't set, returns undefined
+ */
+const isTimerRunning = () => {
+  return _globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout && _globalState_js__WEBPACK_IMPORTED_MODULE_1__["default"].timeout.isRunning()
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/sweetalert2.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/sweetalert2/src/sweetalert2.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SweetAlert_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SweetAlert.js */ "./node_modules/sweetalert2/src/SweetAlert.js");
+
+
+const Swal = _SweetAlert_js__WEBPACK_IMPORTED_MODULE_0__["default"]
+Swal.default = Swal
+
+/* harmony default export */ __webpack_exports__["default"] = (Swal);
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/DismissReason.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/DismissReason.js ***!
+  \*************************************************************/
+/*! exports provided: DismissReason */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DismissReason", function() { return DismissReason; });
+const DismissReason = Object.freeze({
+  cancel: 'cancel',
+  backdrop: 'backdrop',
+  close: 'close',
+  esc: 'esc',
+  timer: 'timer'
+})
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/Timer.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/Timer.js ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Timer; });
+class Timer {
+  constructor (callback, delay) {
+    this.callback = callback
+    this.remaining = delay
+    this.running = false
+
+    this.start()
+  }
+
+  start () {
+    if (!this.running) {
+      this.running = true
+      this.started = new Date()
+      this.id = setTimeout(this.callback, this.remaining)
+    }
+    return this.remaining
+  }
+
+  stop () {
+    if (this.running) {
+      this.running = false
+      clearTimeout(this.id)
+      this.remaining -= new Date() - this.started
+    }
+    return this.remaining
+  }
+
+  increase (n) {
+    const running = this.running
+    if (running) {
+      this.stop()
+    }
+    this.remaining += n
+    if (running) {
+      this.start()
+    }
+    return this.remaining
+  }
+
+  getTimerLeft () {
+    if (this.running) {
+      this.stop()
+      this.start()
+    }
+    return this.remaining
+  }
+
+  isRunning () {
+    return this.running
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/aria.js":
+/*!****************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/aria.js ***!
+  \****************************************************/
+/*! exports provided: setAriaHidden, unsetAriaHidden */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setAriaHidden", function() { return setAriaHidden; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unsetAriaHidden", function() { return unsetAriaHidden; });
+/* harmony import */ var _dom_getters_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom/getters.js */ "./node_modules/sweetalert2/src/utils/dom/getters.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+
+
+
+// From https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
+// Adding aria-hidden="true" to elements outside of the active modal dialog ensures that
+// elements not within the active modal dialog will not be surfaced if a user opens a screen
+// reader’s list of elements (headings, form controls, landmarks, etc.) in the document.
+
+const setAriaHidden = () => {
+  const bodyChildren = Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["toArray"])(document.body.children)
+  bodyChildren.forEach(el => {
+    if (el === Object(_dom_getters_js__WEBPACK_IMPORTED_MODULE_0__["getContainer"])() || el.contains(Object(_dom_getters_js__WEBPACK_IMPORTED_MODULE_0__["getContainer"])())) {
+      return
+    }
+
+    if (el.hasAttribute('aria-hidden')) {
+      el.setAttribute('data-previous-aria-hidden', el.getAttribute('aria-hidden'))
+    }
+    el.setAttribute('aria-hidden', 'true')
+  })
+}
+
+const unsetAriaHidden = () => {
+  const bodyChildren = Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["toArray"])(document.body.children)
+  bodyChildren.forEach(el => {
+    if (el.hasAttribute('data-previous-aria-hidden')) {
+      el.setAttribute('aria-hidden', el.getAttribute('data-previous-aria-hidden'))
+      el.removeAttribute('data-previous-aria-hidden')
+    } else {
+      el.removeAttribute('aria-hidden')
+    }
+  })
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/classes.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/classes.js ***!
+  \*******************************************************/
+/*! exports provided: swalPrefix, prefix, swalClasses, iconTypes */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "swalPrefix", function() { return swalPrefix; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "prefix", function() { return prefix; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "swalClasses", function() { return swalClasses; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iconTypes", function() { return iconTypes; });
+const swalPrefix = 'swal2-'
+
+const prefix = (items) => {
+  const result = {}
+  for (const i in items) {
+    result[items[i]] = swalPrefix + items[i]
+  }
+  return result
+}
+
+const swalClasses = prefix([
+  'container',
+  'shown',
+  'height-auto',
+  'iosfix',
+  'popup',
+  'modal',
+  'no-backdrop',
+  'no-transition',
+  'toast',
+  'toast-shown',
+  'show',
+  'hide',
+  'close',
+  'title',
+  'html-container',
+  'actions',
+  'confirm',
+  'deny',
+  'cancel',
+  'default-outline',
+  'footer',
+  'icon',
+  'icon-content',
+  'image',
+  'input',
+  'file',
+  'range',
+  'select',
+  'radio',
+  'checkbox',
+  'label',
+  'textarea',
+  'inputerror',
+  'input-label',
+  'validation-message',
+  'progress-steps',
+  'active-progress-step',
+  'progress-step',
+  'progress-step-line',
+  'loader',
+  'loading',
+  'styled',
+  'top',
+  'top-start',
+  'top-end',
+  'top-left',
+  'top-right',
+  'center',
+  'center-start',
+  'center-end',
+  'center-left',
+  'center-right',
+  'bottom',
+  'bottom-start',
+  'bottom-end',
+  'bottom-left',
+  'bottom-right',
+  'grow-row',
+  'grow-column',
+  'grow-fullscreen',
+  'rtl',
+  'timer-progress-bar',
+  'timer-progress-bar-container',
+  'scrollbar-measure',
+  'icon-success',
+  'icon-warning',
+  'icon-info',
+  'icon-question',
+  'icon-error',
+])
+
+const iconTypes = prefix([
+  'success',
+  'warning',
+  'info',
+  'question',
+  'error'
+])
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/defaultInputValidators.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/defaultInputValidators.js ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  email: (string, validationMessage) => {
+    return /^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,24}$/.test(string)
+      ? Promise.resolve()
+      : Promise.resolve(validationMessage || 'Invalid email address')
+  },
+  url: (string, validationMessage) => {
+    // taken from https://stackoverflow.com/a/3809435 with a small change from #1306 and #2013
+    return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&/=]*)$/.test(string)
+      ? Promise.resolve()
+      : Promise.resolve(validationMessage || 'Invalid URL')
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/animationEndEvent.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/animationEndEvent.js ***!
+  \*********************************************************************/
+/*! exports provided: animationEndEvent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animationEndEvent", function() { return animationEndEvent; });
+/* harmony import */ var _isNodeEnv_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../isNodeEnv.js */ "./node_modules/sweetalert2/src/utils/isNodeEnv.js");
+
+
+const animationEndEvent = (() => {
+  // Prevent run in Node env
+  /* istanbul ignore if */
+  if (Object(_isNodeEnv_js__WEBPACK_IMPORTED_MODULE_0__["isNodeEnv"])()) {
+    return false
+  }
+
+  const testEl = document.createElement('div')
+  const transEndEventNames = {
+    WebkitAnimation: 'webkitAnimationEnd',
+    OAnimation: 'oAnimationEnd oanimationend',
+    animation: 'animationend'
+  }
+  for (const i in transEndEventNames) {
+    if (Object.prototype.hasOwnProperty.call(transEndEventNames, i) && typeof testEl.style[i] !== 'undefined') {
+      return transEndEventNames[i]
+    }
+  }
+
+  return false
+})()
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/domUtils.js":
+/*!************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/domUtils.js ***!
+  \************************************************************/
+/*! exports provided: states, setInnerHtml, hasClass, applyCustomClass, getInput, focusInput, toggleClass, addClass, removeClass, getChildByClass, applyNumericalStyle, show, hide, setStyle, toggle, isVisible, allButtonsAreHidden, isScrollable, hasCssAnimation, animateTimerProgressBar, stopTimerProgressBar */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "states", function() { return states; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setInnerHtml", function() { return setInnerHtml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hasClass", function() { return hasClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "applyCustomClass", function() { return applyCustomClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getInput", function() { return getInput; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "focusInput", function() { return focusInput; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleClass", function() { return toggleClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addClass", function() { return addClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeClass", function() { return removeClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getChildByClass", function() { return getChildByClass; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "applyNumericalStyle", function() { return applyNumericalStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "show", function() { return show; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hide", function() { return hide; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setStyle", function() { return setStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggle", function() { return toggle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isVisible", function() { return isVisible; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "allButtonsAreHidden", function() { return allButtonsAreHidden; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isScrollable", function() { return isScrollable; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hasCssAnimation", function() { return hasCssAnimation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animateTimerProgressBar", function() { return animateTimerProgressBar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stopTimerProgressBar", function() { return stopTimerProgressBar; });
+/* harmony import */ var _getters_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getters.js */ "./node_modules/sweetalert2/src/utils/dom/getters.js");
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+
+
+
+
+// Remember state in cases where opening and handling a modal will fiddle with it.
+const states = {
+  previousBodyPadding: null
+}
+
+const setInnerHtml = (elem, html) => { // #1926
+  elem.textContent = ''
+  if (html) {
+    const parser = new DOMParser()
+    const parsed = parser.parseFromString(html, `text/html`)
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["toArray"])(parsed.querySelector('head').childNodes).forEach((child) => {
+      elem.appendChild(child)
+    })
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["toArray"])(parsed.querySelector('body').childNodes).forEach((child) => {
+      elem.appendChild(child)
+    })
+  }
+}
+
+const hasClass = (elem, className) => {
+  if (!className) {
+    return false
+  }
+  const classList = className.split(/\s+/)
+  for (let i = 0; i < classList.length; i++) {
+    if (!elem.classList.contains(classList[i])) {
+      return false
+    }
+  }
+  return true
+}
+
+const removeCustomClasses = (elem, params) => {
+  Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["toArray"])(elem.classList).forEach(className => {
+    if (
+      !Object.values(_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"]).includes(className) &&
+      !Object.values(_classes_js__WEBPACK_IMPORTED_MODULE_1__["iconTypes"]).includes(className) &&
+      !Object.values(params.showClass).includes(className)
+    ) {
+      elem.classList.remove(className)
+    }
+  })
+}
+
+const applyCustomClass = (elem, params, className) => {
+  removeCustomClasses(elem, params)
+
+  if (params.customClass && params.customClass[className]) {
+    if (typeof params.customClass[className] !== 'string' && !params.customClass[className].forEach) {
+      return Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["warn"])(`Invalid type of customClass.${className}! Expected string or iterable object, got "${typeof params.customClass[className]}"`)
+    }
+
+    addClass(elem, params.customClass[className])
+  }
+}
+
+const getInput = (popup, inputType) => {
+  if (!inputType) {
+    return null
+  }
+  switch (inputType) {
+    case 'select':
+    case 'textarea':
+    case 'file':
+      return getChildByClass(popup, _classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"][inputType])
+    case 'checkbox':
+      return popup.querySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].checkbox} input`)
+    case 'radio':
+      return popup.querySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].radio} input:checked`) ||
+        popup.querySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].radio} input:first-child`)
+    case 'range':
+      return popup.querySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].range} input`)
+    default:
+      return getChildByClass(popup, _classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].input)
+  }
+}
+
+const focusInput = (input) => {
+  input.focus()
+
+  // place cursor at end of text in text input
+  if (input.type !== 'file') {
+    // http://stackoverflow.com/a/2345915
+    const val = input.value
+    input.value = ''
+    input.value = val
+  }
+}
+
+const toggleClass = (target, classList, condition) => {
+  if (!target || !classList) {
+    return
+  }
+  if (typeof classList === 'string') {
+    classList = classList.split(/\s+/).filter(Boolean)
+  }
+  classList.forEach((className) => {
+    if (target.forEach) {
+      target.forEach((elem) => {
+        condition ? elem.classList.add(className) : elem.classList.remove(className)
+      })
+    } else {
+      condition ? target.classList.add(className) : target.classList.remove(className)
+    }
+  })
+}
+
+const addClass = (target, classList) => {
+  toggleClass(target, classList, true)
+}
+
+const removeClass = (target, classList) => {
+  toggleClass(target, classList, false)
+}
+
+const getChildByClass = (elem, className) => {
+  for (let i = 0; i < elem.childNodes.length; i++) {
+    if (hasClass(elem.childNodes[i], className)) {
+      return elem.childNodes[i]
+    }
+  }
+}
+
+const applyNumericalStyle = (elem, property, value) => {
+  if (value === `${parseInt(value)}`) {
+    value = parseInt(value)
+  }
+  if (value || parseInt(value) === 0) {
+    elem.style[property] = (typeof value === 'number') ? `${value}px` : value
+  } else {
+    elem.style.removeProperty(property)
+  }
+}
+
+const show = (elem, display = 'flex') => {
+  elem.style.display = display
+}
+
+const hide = (elem) => {
+  elem.style.display = 'none'
+}
+
+const setStyle = (parent, selector, property, value) => {
+  const el = parent.querySelector(selector)
+  if (el) {
+    el.style[property] = value
+  }
+}
+
+const toggle = (elem, condition, display) => {
+  condition ? show(elem, display) : hide(elem)
+}
+
+// borrowed from jquery $(elem).is(':visible') implementation
+const isVisible = (elem) => !!(elem && (elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length))
+
+const allButtonsAreHidden = () => !isVisible(Object(_getters_js__WEBPACK_IMPORTED_MODULE_0__["getConfirmButton"])()) && !isVisible(Object(_getters_js__WEBPACK_IMPORTED_MODULE_0__["getDenyButton"])()) && !isVisible(Object(_getters_js__WEBPACK_IMPORTED_MODULE_0__["getCancelButton"])())
+
+const isScrollable = (elem) => !!(elem.scrollHeight > elem.clientHeight)
+
+// borrowed from https://stackoverflow.com/a/46352119
+const hasCssAnimation = (elem) => {
+  const style = window.getComputedStyle(elem)
+
+  const animDuration = parseFloat(style.getPropertyValue('animation-duration') || '0')
+  const transDuration = parseFloat(style.getPropertyValue('transition-duration') || '0')
+
+  return animDuration > 0 || transDuration > 0
+}
+
+const animateTimerProgressBar = (timer, reset = false) => {
+  const timerProgressBar = Object(_getters_js__WEBPACK_IMPORTED_MODULE_0__["getTimerProgressBar"])()
+  if (isVisible(timerProgressBar)) {
+    if (reset) {
+      timerProgressBar.style.transition = 'none'
+      timerProgressBar.style.width = '100%'
+    }
+    setTimeout(() => {
+      timerProgressBar.style.transition = `width ${timer / 1000}s linear`
+      timerProgressBar.style.width = '0%'
+    }, 10)
+  }
+}
+
+const stopTimerProgressBar = () => {
+  const timerProgressBar = Object(_getters_js__WEBPACK_IMPORTED_MODULE_0__["getTimerProgressBar"])()
+  const timerProgressBarWidth = parseInt(window.getComputedStyle(timerProgressBar).width)
+  timerProgressBar.style.removeProperty('transition')
+  timerProgressBar.style.width = '100%'
+  const timerProgressBarFullWidth = parseInt(window.getComputedStyle(timerProgressBar).width)
+  const timerProgressBarPercent = parseInt(timerProgressBarWidth / timerProgressBarFullWidth * 100)
+  timerProgressBar.style.removeProperty('transition')
+  timerProgressBar.style.width = `${timerProgressBarPercent}%`
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/getters.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/getters.js ***!
+  \***********************************************************/
+/*! exports provided: getContainer, elementBySelector, getPopup, getIcon, getTitle, getHtmlContainer, getImage, getProgressSteps, getValidationMessage, getConfirmButton, getDenyButton, getInputLabel, getLoader, getCancelButton, getActions, getFooter, getTimerProgressBar, getCloseButton, getFocusableElements, isModal, isToast, isLoading */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getContainer", function() { return getContainer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "elementBySelector", function() { return elementBySelector; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPopup", function() { return getPopup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getIcon", function() { return getIcon; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTitle", function() { return getTitle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getHtmlContainer", function() { return getHtmlContainer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getImage", function() { return getImage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getProgressSteps", function() { return getProgressSteps; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getValidationMessage", function() { return getValidationMessage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getConfirmButton", function() { return getConfirmButton; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDenyButton", function() { return getDenyButton; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getInputLabel", function() { return getInputLabel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLoader", function() { return getLoader; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCancelButton", function() { return getCancelButton; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getActions", function() { return getActions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getFooter", function() { return getFooter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTimerProgressBar", function() { return getTimerProgressBar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCloseButton", function() { return getCloseButton; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getFocusableElements", function() { return getFocusableElements; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isModal", function() { return isModal; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isToast", function() { return isToast; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLoading", function() { return isLoading; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _domUtils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./domUtils.js */ "./node_modules/sweetalert2/src/utils/dom/domUtils.js");
+
+
+
+
+const getContainer = () => document.body.querySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].container}`)
+
+const elementBySelector = (selectorString) => {
+  const container = getContainer()
+  return container ? container.querySelector(selectorString) : null
+}
+
+const elementByClass = (className) => {
+  return elementBySelector(`.${className}`)
+}
+
+const getPopup = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].popup)
+
+const getIcon = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].icon)
+
+const getTitle = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].title)
+
+const getHtmlContainer = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['html-container'])
+
+const getImage = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].image)
+
+const getProgressSteps = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['progress-steps'])
+
+const getValidationMessage = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['validation-message'])
+
+const getConfirmButton = () => elementBySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].actions} .${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].confirm}`)
+
+const getDenyButton = () => elementBySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].actions} .${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].deny}`)
+
+const getInputLabel = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['input-label'])
+
+const getLoader = () => elementBySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].loader}`)
+
+const getCancelButton = () => elementBySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].actions} .${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].cancel}`)
+
+const getActions = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].actions)
+
+const getFooter = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].footer)
+
+const getTimerProgressBar = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['timer-progress-bar'])
+
+const getCloseButton = () => elementByClass(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].close)
+
+// https://github.com/jkup/focusable/blob/master/index.js
+const focusable = `
+  a[href],
+  area[href],
+  input:not([disabled]),
+  select:not([disabled]),
+  textarea:not([disabled]),
+  button:not([disabled]),
+  iframe,
+  object,
+  embed,
+  [tabindex="0"],
+  [contenteditable],
+  audio[controls],
+  video[controls],
+  summary
+`
+
+const getFocusableElements = () => {
+  const focusableElementsWithTabindex = Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["toArray"])(
+    getPopup().querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])')
+  )
+  // sort according to tabindex
+    .sort((a, b) => {
+      a = parseInt(a.getAttribute('tabindex'))
+      b = parseInt(b.getAttribute('tabindex'))
+      if (a > b) {
+        return 1
+      } else if (a < b) {
+        return -1
+      }
+      return 0
+    })
+
+  const otherFocusableElements = Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["toArray"])(
+    getPopup().querySelectorAll(focusable)
+  ).filter(el => el.getAttribute('tabindex') !== '-1')
+
+  return Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["uniqueArray"])(focusableElementsWithTabindex.concat(otherFocusableElements)).filter(el => Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["isVisible"])(el))
+}
+
+const isModal = () => {
+  return !isToast() && !document.body.classList.contains(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['no-backdrop'])
+}
+
+const isToast = () => {
+  return document.body.classList.contains(_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['toast-shown'])
+}
+
+const isLoading = () => {
+  return getPopup().hasAttribute('data-loading')
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/index.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/index.js ***!
+  \*********************************************************/
+/*! exports provided: states, setInnerHtml, hasClass, applyCustomClass, getInput, focusInput, toggleClass, addClass, removeClass, getChildByClass, applyNumericalStyle, show, hide, setStyle, toggle, isVisible, allButtonsAreHidden, isScrollable, hasCssAnimation, animateTimerProgressBar, stopTimerProgressBar, init, getContainer, elementBySelector, getPopup, getIcon, getTitle, getHtmlContainer, getImage, getProgressSteps, getValidationMessage, getConfirmButton, getDenyButton, getInputLabel, getLoader, getCancelButton, getActions, getFooter, getTimerProgressBar, getCloseButton, getFocusableElements, isModal, isToast, isLoading, parseHtmlToContainer, animationEndEvent, measureScrollbar, render */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _domUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./domUtils.js */ "./node_modules/sweetalert2/src/utils/dom/domUtils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "states", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["states"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "setInnerHtml", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["setInnerHtml"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hasClass", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["hasClass"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "applyCustomClass", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["applyCustomClass"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getInput", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["getInput"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "focusInput", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["focusInput"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "toggleClass", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["toggleClass"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "addClass", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["addClass"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeClass", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["removeClass"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getChildByClass", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["getChildByClass"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "applyNumericalStyle", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["applyNumericalStyle"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "show", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["show"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hide", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["hide"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "setStyle", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["setStyle"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "toggle", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["toggle"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isVisible", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["isVisible"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "allButtonsAreHidden", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["allButtonsAreHidden"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isScrollable", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["isScrollable"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hasCssAnimation", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["hasCssAnimation"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "animateTimerProgressBar", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["animateTimerProgressBar"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stopTimerProgressBar", function() { return _domUtils_js__WEBPACK_IMPORTED_MODULE_0__["stopTimerProgressBar"]; });
+
+/* harmony import */ var _init_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./init.js */ "./node_modules/sweetalert2/src/utils/dom/init.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "init", function() { return _init_js__WEBPACK_IMPORTED_MODULE_1__["init"]; });
+
+/* harmony import */ var _getters_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getters.js */ "./node_modules/sweetalert2/src/utils/dom/getters.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getContainer", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getContainer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "elementBySelector", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["elementBySelector"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getPopup", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getPopup"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getIcon", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getIcon"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getTitle", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getTitle"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getHtmlContainer", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getHtmlContainer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getImage", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getImage"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getProgressSteps", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getProgressSteps"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getValidationMessage", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getValidationMessage"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getConfirmButton", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getConfirmButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getDenyButton", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getDenyButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getInputLabel", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getInputLabel"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getLoader", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getLoader"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getCancelButton", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getCancelButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getActions", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getActions"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getFooter", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getFooter"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getTimerProgressBar", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getTimerProgressBar"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getCloseButton", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getCloseButton"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getFocusableElements", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["getFocusableElements"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isModal", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["isModal"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isToast", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["isToast"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isLoading", function() { return _getters_js__WEBPACK_IMPORTED_MODULE_2__["isLoading"]; });
+
+/* harmony import */ var _parseHtmlToContainer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./parseHtmlToContainer.js */ "./node_modules/sweetalert2/src/utils/dom/parseHtmlToContainer.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "parseHtmlToContainer", function() { return _parseHtmlToContainer_js__WEBPACK_IMPORTED_MODULE_3__["parseHtmlToContainer"]; });
+
+/* harmony import */ var _animationEndEvent_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./animationEndEvent.js */ "./node_modules/sweetalert2/src/utils/dom/animationEndEvent.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "animationEndEvent", function() { return _animationEndEvent_js__WEBPACK_IMPORTED_MODULE_4__["animationEndEvent"]; });
+
+/* harmony import */ var _measureScrollbar_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./measureScrollbar.js */ "./node_modules/sweetalert2/src/utils/dom/measureScrollbar.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "measureScrollbar", function() { return _measureScrollbar_js__WEBPACK_IMPORTED_MODULE_5__["measureScrollbar"]; });
+
+/* harmony import */ var _renderers_render_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./renderers/render.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/render.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _renderers_render_js__WEBPACK_IMPORTED_MODULE_6__["render"]; });
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/init.js":
+/*!********************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/init.js ***!
+  \********************************************************/
+/*! exports provided: init */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "init", function() { return init; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _getters_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./getters.js */ "./node_modules/sweetalert2/src/utils/dom/getters.js");
+/* harmony import */ var _domUtils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./domUtils.js */ "./node_modules/sweetalert2/src/utils/dom/domUtils.js");
+/* harmony import */ var _isNodeEnv_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../isNodeEnv.js */ "./node_modules/sweetalert2/src/utils/isNodeEnv.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _sweetalert2_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../sweetalert2.js */ "./node_modules/sweetalert2/src/sweetalert2.js");
+
+
+
+
+
+
+
+const sweetHTML = `
+ <div aria-labelledby="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].title}" aria-describedby="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['html-container']}" class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].popup}" tabindex="-1">
+   <button type="button" class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].close}"></button>
+   <ul class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['progress-steps']}"></ul>
+   <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].icon}"></div>
+   <img class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].image}" />
+   <h2 class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].title}" id="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].title}"></h2>
+   <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['html-container']}" id="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['html-container']}"></div>
+   <input class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].input}" />
+   <input type="file" class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].file}" />
+   <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].range}">
+     <input type="range" />
+     <output></output>
+   </div>
+   <select class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].select}"></select>
+   <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].radio}"></div>
+   <label for="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].checkbox}" class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].checkbox}">
+     <input type="checkbox" />
+     <span class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].label}"></span>
+   </label>
+   <textarea class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].textarea}"></textarea>
+   <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['validation-message']}" id="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['validation-message']}"></div>
+   <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].actions}">
+     <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].loader}"></div>
+     <button type="button" class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].confirm}"></button>
+     <button type="button" class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].deny}"></button>
+     <button type="button" class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].cancel}"></button>
+   </div>
+   <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].footer}"></div>
+   <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['timer-progress-bar-container']}">
+     <div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['timer-progress-bar']}"></div>
+   </div>
+ </div>
+`.replace(/(^|\n)\s*/g, '')
+
+const resetOldContainer = () => {
+  const oldContainer = Object(_getters_js__WEBPACK_IMPORTED_MODULE_1__["getContainer"])()
+  if (!oldContainer) {
+    return false
+  }
+
+  oldContainer.remove()
+  Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["removeClass"])(
+    [document.documentElement, document.body],
+    [
+      _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['no-backdrop'],
+      _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['toast-shown'],
+      _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['has-column']
+    ]
+  )
+
+  return true
+}
+
+const resetValidationMessage = () => {
+  if (_sweetalert2_js__WEBPACK_IMPORTED_MODULE_5__["default"].isVisible()) {
+    _sweetalert2_js__WEBPACK_IMPORTED_MODULE_5__["default"].resetValidationMessage()
+  }
+}
+
+const addInputChangeListeners = () => {
+  const popup = Object(_getters_js__WEBPACK_IMPORTED_MODULE_1__["getPopup"])()
+
+  const input = Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["getChildByClass"])(popup, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].input)
+  const file = Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["getChildByClass"])(popup, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].file)
+  const range = popup.querySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].range} input`)
+  const rangeOutput = popup.querySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].range} output`)
+  const select = Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["getChildByClass"])(popup, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].select)
+  const checkbox = popup.querySelector(`.${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].checkbox} input`)
+  const textarea = Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["getChildByClass"])(popup, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].textarea)
+
+  input.oninput = resetValidationMessage
+  file.onchange = resetValidationMessage
+  select.onchange = resetValidationMessage
+  checkbox.onchange = resetValidationMessage
+  textarea.oninput = resetValidationMessage
+
+  range.oninput = () => {
+    resetValidationMessage()
+    rangeOutput.value = range.value
+  }
+
+  range.onchange = () => {
+    resetValidationMessage()
+    range.nextSibling.value = range.value
+  }
+}
+
+const getTarget = (target) => typeof target === 'string' ? document.querySelector(target) : target
+
+const setupAccessibility = (params) => {
+  const popup = Object(_getters_js__WEBPACK_IMPORTED_MODULE_1__["getPopup"])()
+
+  popup.setAttribute('role', params.toast ? 'alert' : 'dialog')
+  popup.setAttribute('aria-live', params.toast ? 'polite' : 'assertive')
+  if (!params.toast) {
+    popup.setAttribute('aria-modal', 'true')
+  }
+}
+
+const setupRTL = (targetElement) => {
+  if (window.getComputedStyle(targetElement).direction === 'rtl') {
+    Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["addClass"])(Object(_getters_js__WEBPACK_IMPORTED_MODULE_1__["getContainer"])(), _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].rtl)
+  }
+}
+
+/*
+ * Add modal + backdrop to DOM
+ */
+const init = (params) => {
+  // Clean up the old popup container if it exists
+  const oldContainerExisted = resetOldContainer()
+
+  /* istanbul ignore if */
+  if (Object(_isNodeEnv_js__WEBPACK_IMPORTED_MODULE_3__["isNodeEnv"])()) {
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_4__["error"])('SweetAlert2 requires document to initialize')
+    return
+  }
+
+  const container = document.createElement('div')
+  container.className = _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].container
+  if (oldContainerExisted) {
+    Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["addClass"])(container, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['no-transition'])
+  }
+  Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["setInnerHtml"])(container, sweetHTML)
+
+  const targetElement = getTarget(params.target)
+  targetElement.appendChild(container)
+
+  setupAccessibility(params)
+  setupRTL(targetElement)
+  addInputChangeListeners()
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/inputUtils.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/inputUtils.js ***!
+  \**************************************************************/
+/*! exports provided: handleInputOptionsAndValue, getInputValue */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "handleInputOptionsAndValue", function() { return handleInputOptionsAndValue; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getInputValue", function() { return getInputValue; });
+/* harmony import */ var _index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _domUtils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./domUtils.js */ "./node_modules/sweetalert2/src/utils/dom/domUtils.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _staticMethods_showLoading_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../staticMethods/showLoading.js */ "./node_modules/sweetalert2/src/staticMethods/showLoading.js");
+
+
+
+
+
+
+const handleInputOptionsAndValue = (instance, params) => {
+  if (params.input === 'select' || params.input === 'radio') {
+    handleInputOptions(instance, params)
+  } else if (
+    ['text', 'email', 'number', 'tel', 'textarea'].includes(params.input) &&
+    (Object(_utils_js__WEBPACK_IMPORTED_MODULE_3__["hasToPromiseFn"])(params.inputValue) || Object(_utils_js__WEBPACK_IMPORTED_MODULE_3__["isPromise"])(params.inputValue))
+  ) {
+    Object(_staticMethods_showLoading_js__WEBPACK_IMPORTED_MODULE_4__["showLoading"])(_index_js__WEBPACK_IMPORTED_MODULE_0__["getConfirmButton"]())
+    handleInputValue(instance, params)
+  }
+}
+
+const getInputValue = (instance, innerParams) => {
+  const input = instance.getInput()
+  if (!input) {
+    return null
+  }
+  switch (innerParams.input) {
+    case 'checkbox':
+      return getCheckboxValue(input)
+    case 'radio':
+      return getRadioValue(input)
+    case 'file':
+      return getFileValue(input)
+    default:
+      return innerParams.inputAutoTrim ? input.value.trim() : input.value
+  }
+}
+
+const getCheckboxValue = (input) => input.checked ? 1 : 0
+
+const getRadioValue = (input) => input.checked ? input.value : null
+
+const getFileValue = (input) => input.files.length ? (input.getAttribute('multiple') !== null ? input.files : input.files[0]) : null
+
+const handleInputOptions = (instance, params) => {
+  const popup = _index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]()
+  const processInputOptions = (inputOptions) => populateInputOptions[params.input](popup, formatInputOptions(inputOptions), params)
+  if (Object(_utils_js__WEBPACK_IMPORTED_MODULE_3__["hasToPromiseFn"])(params.inputOptions) || Object(_utils_js__WEBPACK_IMPORTED_MODULE_3__["isPromise"])(params.inputOptions)) {
+    Object(_staticMethods_showLoading_js__WEBPACK_IMPORTED_MODULE_4__["showLoading"])(_index_js__WEBPACK_IMPORTED_MODULE_0__["getConfirmButton"]())
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_3__["asPromise"])(params.inputOptions).then((inputOptions) => {
+      instance.hideLoading()
+      processInputOptions(inputOptions)
+    })
+  } else if (typeof params.inputOptions === 'object') {
+    processInputOptions(params.inputOptions)
+  } else {
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_3__["error"])(`Unexpected type of inputOptions! Expected object, Map or Promise, got ${typeof params.inputOptions}`)
+  }
+}
+
+const handleInputValue = (instance, params) => {
+  const input = instance.getInput()
+  _index_js__WEBPACK_IMPORTED_MODULE_0__["hide"](input)
+  Object(_utils_js__WEBPACK_IMPORTED_MODULE_3__["asPromise"])(params.inputValue).then((inputValue) => {
+    input.value = params.input === 'number' ? parseFloat(inputValue) || 0 : `${inputValue}`
+    _index_js__WEBPACK_IMPORTED_MODULE_0__["show"](input)
+    input.focus()
+    instance.hideLoading()
+  })
+    .catch((err) => {
+      Object(_utils_js__WEBPACK_IMPORTED_MODULE_3__["error"])(`Error in inputValue promise: ${err}`)
+      input.value = ''
+      _index_js__WEBPACK_IMPORTED_MODULE_0__["show"](input)
+      input.focus()
+      instance.hideLoading()
+    })
+}
+
+const populateInputOptions = {
+  select: (popup, inputOptions, params) => {
+    const select = Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["getChildByClass"])(popup, _classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].select)
+    const renderOption = (parent, optionLabel, optionValue) => {
+      const option = document.createElement('option')
+      option.value = optionValue
+      _index_js__WEBPACK_IMPORTED_MODULE_0__["setInnerHtml"](option, optionLabel)
+      option.selected = isSelected(optionValue, params.inputValue)
+      parent.appendChild(option)
+    }
+    inputOptions.forEach(inputOption => {
+      const optionValue = inputOption[0]
+      const optionLabel = inputOption[1]
+      // <optgroup> spec:
+      // https://www.w3.org/TR/html401/interact/forms.html#h-17.6
+      // "...all OPTGROUP elements must be specified directly within a SELECT element (i.e., groups may not be nested)..."
+      // check whether this is a <optgroup>
+      if (Array.isArray(optionLabel)) { // if it is an array, then it is an <optgroup>
+        const optgroup = document.createElement('optgroup')
+        optgroup.label = optionValue
+        optgroup.disabled = false // not configurable for now
+        select.appendChild(optgroup)
+        optionLabel.forEach(o => renderOption(optgroup, o[1], o[0]))
+      } else { // case of <option>
+        renderOption(select, optionLabel, optionValue)
+      }
+    })
+    select.focus()
+  },
+
+  radio: (popup, inputOptions, params) => {
+    const radio = Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_2__["getChildByClass"])(popup, _classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].radio)
+    inputOptions.forEach(inputOption => {
+      const radioValue = inputOption[0]
+      const radioLabel = inputOption[1]
+      const radioInput = document.createElement('input')
+      const radioLabelElement = document.createElement('label')
+      radioInput.type = 'radio'
+      radioInput.name = _classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].radio
+      radioInput.value = radioValue
+      if (isSelected(radioValue, params.inputValue)) {
+        radioInput.checked = true
+      }
+      const label = document.createElement('span')
+      _index_js__WEBPACK_IMPORTED_MODULE_0__["setInnerHtml"](label, radioLabel)
+      label.className = _classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].label
+      radioLabelElement.appendChild(radioInput)
+      radioLabelElement.appendChild(label)
+      radio.appendChild(radioLabelElement)
+    })
+    const radios = radio.querySelectorAll('input')
+    if (radios.length) {
+      radios[0].focus()
+    }
+  }
+}
+
+/**
+ * Converts `inputOptions` into an array of `[value, label]`s
+ * @param inputOptions
+ */
+const formatInputOptions = (inputOptions) => {
+  const result = []
+  if (typeof Map !== 'undefined' && inputOptions instanceof Map) {
+    inputOptions.forEach((value, key) => {
+      let valueFormatted = value
+      if (typeof valueFormatted === 'object') { // case of <optgroup>
+        valueFormatted = formatInputOptions(valueFormatted)
+      }
+      result.push([key, valueFormatted])
+    })
+  } else {
+    Object.keys(inputOptions).forEach(key => {
+      let valueFormatted = inputOptions[key]
+      if (typeof valueFormatted === 'object') { // case of <optgroup>
+        valueFormatted = formatInputOptions(valueFormatted)
+      }
+      result.push([key, valueFormatted])
+    })
+  }
+  return result
+}
+
+const isSelected = (optionValue, inputValue) => {
+  return inputValue && inputValue.toString() === optionValue.toString()
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/measureScrollbar.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/measureScrollbar.js ***!
+  \********************************************************************/
+/*! exports provided: measureScrollbar */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "measureScrollbar", function() { return measureScrollbar; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+
+
+// Measure scrollbar width for padding body during modal show/hide
+// https://github.com/twbs/bootstrap/blob/master/js/src/modal.js
+const measureScrollbar = () => {
+  const scrollDiv = document.createElement('div')
+  scrollDiv.className = _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['scrollbar-measure']
+  document.body.appendChild(scrollDiv)
+  const scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth
+  document.body.removeChild(scrollDiv)
+  return scrollbarWidth
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/parseHtmlToContainer.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/parseHtmlToContainer.js ***!
+  \************************************************************************/
+/*! exports provided: parseHtmlToContainer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseHtmlToContainer", function() { return parseHtmlToContainer; });
+/* harmony import */ var _domUtils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./domUtils.js */ "./node_modules/sweetalert2/src/utils/dom/domUtils.js");
+
+
+const parseHtmlToContainer = (param, target) => {
+  // DOM element
+  if (param instanceof HTMLElement) {
+    target.appendChild(param)
+
+  // Object
+  } else if (typeof param === 'object') {
+    handleObject(param, target)
+
+  // Plain string
+  } else if (param) {
+    Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_0__["setInnerHtml"])(target, param)
+  }
+}
+
+const handleObject = (param, target) => {
+  // JQuery element(s)
+  if (param.jquery) {
+    handleJqueryElem(target, param)
+
+  // For other objects use their string representation
+  } else {
+    Object(_domUtils_js__WEBPACK_IMPORTED_MODULE_0__["setInnerHtml"])(target, param.toString())
+  }
+}
+
+const handleJqueryElem = (target, elem) => {
+  target.textContent = ''
+  if (0 in elem) {
+    for (let i = 0; i in elem; i++) {
+      target.appendChild(elem[i].cloneNode(true))
+    }
+  } else {
+    target.appendChild(elem.cloneNode(true))
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/render.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/render.js ***!
+  \********************************************************************/
+/*! exports provided: render */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony import */ var _getters_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../getters.js */ "./node_modules/sweetalert2/src/utils/dom/getters.js");
+/* harmony import */ var _renderActions_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./renderActions.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderActions.js");
+/* harmony import */ var _renderContainer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./renderContainer.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderContainer.js");
+/* harmony import */ var _renderContent_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./renderContent.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderContent.js");
+/* harmony import */ var _renderFooter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./renderFooter.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderFooter.js");
+/* harmony import */ var _renderCloseButton_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./renderCloseButton.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderCloseButton.js");
+/* harmony import */ var _renderIcon_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./renderIcon.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderIcon.js");
+/* harmony import */ var _renderImage_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./renderImage.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderImage.js");
+/* harmony import */ var _renderProgressSteps_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./renderProgressSteps.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderProgressSteps.js");
+/* harmony import */ var _renderTitle_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./renderTitle.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderTitle.js");
+/* harmony import */ var _renderPopup_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./renderPopup.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderPopup.js");
+
+
+
+
+
+
+
+
+
+
+
+
+const render = (instance, params) => {
+  Object(_renderPopup_js__WEBPACK_IMPORTED_MODULE_10__["renderPopup"])(instance, params)
+  Object(_renderContainer_js__WEBPACK_IMPORTED_MODULE_2__["renderContainer"])(instance, params)
+
+  Object(_renderProgressSteps_js__WEBPACK_IMPORTED_MODULE_8__["renderProgressSteps"])(instance, params)
+  Object(_renderIcon_js__WEBPACK_IMPORTED_MODULE_6__["renderIcon"])(instance, params)
+  Object(_renderImage_js__WEBPACK_IMPORTED_MODULE_7__["renderImage"])(instance, params)
+  Object(_renderTitle_js__WEBPACK_IMPORTED_MODULE_9__["renderTitle"])(instance, params)
+  Object(_renderCloseButton_js__WEBPACK_IMPORTED_MODULE_5__["renderCloseButton"])(instance, params)
+
+  Object(_renderContent_js__WEBPACK_IMPORTED_MODULE_3__["renderContent"])(instance, params)
+  Object(_renderActions_js__WEBPACK_IMPORTED_MODULE_1__["renderActions"])(instance, params)
+  Object(_renderFooter_js__WEBPACK_IMPORTED_MODULE_4__["renderFooter"])(instance, params)
+
+  if (typeof params.didRender === 'function') {
+    params.didRender(Object(_getters_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"])())
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderActions.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderActions.js ***!
+  \***************************************************************************/
+/*! exports provided: renderActions */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderActions", function() { return renderActions; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+
+
+
+
+const renderActions = (instance, params) => {
+  const actions = _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getActions"]()
+  const loader = _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getLoader"]()
+  const confirmButton = _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getConfirmButton"]()
+  const denyButton = _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getDenyButton"]()
+  const cancelButton = _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getCancelButton"]()
+
+  // Actions (buttons) wrapper
+  if (!params.showConfirmButton && !params.showDenyButton && !params.showCancelButton) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["hide"](actions)
+  } else {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["show"](actions)
+  }
+
+  // Custom class
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyCustomClass"](actions, params, 'actions')
+
+  // Render buttons
+  renderButton(confirmButton, 'confirm', params)
+  renderButton(denyButton, 'deny', params)
+  renderButton(cancelButton, 'cancel', params)
+  handleButtonsStyling(confirmButton, denyButton, cancelButton, params)
+
+  if (params.reverseButtons) {
+    actions.insertBefore(cancelButton, loader)
+    actions.insertBefore(denyButton, loader)
+    actions.insertBefore(confirmButton, loader)
+  }
+
+  // Loader
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["setInnerHtml"](loader, params.loaderHtml)
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyCustomClass"](loader, params, 'loader')
+}
+
+function handleButtonsStyling (confirmButton, denyButton, cancelButton, params) {
+  if (!params.buttonsStyling) {
+    return _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["removeClass"]([confirmButton, denyButton, cancelButton], _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].styled)
+  }
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"]([confirmButton, denyButton, cancelButton], _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].styled)
+
+  // Buttons background colors
+  if (params.confirmButtonColor) {
+    confirmButton.style.backgroundColor = params.confirmButtonColor
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"](confirmButton, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['default-outline'])
+  }
+  if (params.denyButtonColor) {
+    denyButton.style.backgroundColor = params.denyButtonColor
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"](denyButton, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['default-outline'])
+  }
+  if (params.cancelButtonColor) {
+    cancelButton.style.backgroundColor = params.cancelButtonColor
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"](cancelButton, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['default-outline'])
+  }
+}
+
+function renderButton (button, buttonType, params) {
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["toggle"](button, params[`show${Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["capitalizeFirstLetter"])(buttonType)}Button`], 'inline-block')
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["setInnerHtml"](button, params[`${buttonType}ButtonText`]) // Set caption text
+  button.setAttribute('aria-label', params[`${buttonType}ButtonAriaLabel`]) // ARIA label
+
+  // Add buttons custom classes
+  button.className = _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"][buttonType]
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyCustomClass"](button, params, `${buttonType}Button`)
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"](button, params[`${buttonType}ButtonClass`])
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderCloseButton.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderCloseButton.js ***!
+  \*******************************************************************************/
+/*! exports provided: renderCloseButton */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderCloseButton", function() { return renderCloseButton; });
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+
+
+const renderCloseButton = (instance, params) => {
+  const closeButton = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getCloseButton"]()
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["setInnerHtml"](closeButton, params.closeButtonHtml)
+
+  // Custom class
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["applyCustomClass"](closeButton, params, 'closeButton')
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["toggle"](closeButton, params.showCloseButton)
+  closeButton.setAttribute('aria-label', params.closeButtonAriaLabel)
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderContainer.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderContainer.js ***!
+  \*****************************************************************************/
+/*! exports provided: renderContainer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderContainer", function() { return renderContainer; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+
+
+
+
+function handleBackdropParam (container, backdrop) {
+  if (typeof backdrop === 'string') {
+    container.style.background = backdrop
+  } else if (!backdrop) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"]([document.documentElement, document.body], _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['no-backdrop'])
+  }
+}
+
+function handlePositionParam (container, position) {
+  if (position in _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](container, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"][position])
+  } else {
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["warn"])('The "position" parameter is not valid, defaulting to "center"')
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](container, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].center)
+  }
+}
+
+function handleGrowParam (container, grow) {
+  if (grow && typeof grow === 'string') {
+    const growClass = `grow-${grow}`
+    if (growClass in _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]) {
+      _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](container, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"][growClass])
+    }
+  }
+}
+
+const renderContainer = (instance, params) => {
+  const container = _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getContainer"]()
+
+  if (!container) {
+    return
+  }
+
+  handleBackdropParam(container, params.backdrop)
+
+  handlePositionParam(container, params.position)
+  handleGrowParam(container, params.grow)
+
+  // Custom class
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["applyCustomClass"](container, params, 'container')
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderContent.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderContent.js ***!
+  \***************************************************************************/
+/*! exports provided: renderContent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderContent", function() { return renderContent; });
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _renderInput_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./renderInput.js */ "./node_modules/sweetalert2/src/utils/dom/renderers/renderInput.js");
+
+
+
+const renderContent = (instance, params) => {
+  const htmlContainer = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getHtmlContainer"]()
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["applyCustomClass"](htmlContainer, params, 'htmlContainer')
+
+  // Content as HTML
+  if (params.html) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["parseHtmlToContainer"](params.html, htmlContainer)
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["show"](htmlContainer, 'block')
+
+  // Content as plain text
+  } else if (params.text) {
+    htmlContainer.textContent = params.text
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["show"](htmlContainer, 'block')
+
+  // No content
+  } else {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hide"](htmlContainer)
+  }
+
+  Object(_renderInput_js__WEBPACK_IMPORTED_MODULE_1__["renderInput"])(instance, params)
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderFooter.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderFooter.js ***!
+  \**************************************************************************/
+/*! exports provided: renderFooter */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderFooter", function() { return renderFooter; });
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+
+
+const renderFooter = (instance, params) => {
+  const footer = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getFooter"]()
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["toggle"](footer, params.footer)
+
+  if (params.footer) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["parseHtmlToContainer"](params.footer, footer)
+  }
+
+  // Custom class
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["applyCustomClass"](footer, params, 'footer')
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderIcon.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderIcon.js ***!
+  \************************************************************************/
+/*! exports provided: renderIcon */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderIcon", function() { return renderIcon; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+
+
+
+const renderIcon = (instance, params) => {
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_3__["default"].innerParams.get(instance)
+  const icon = _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getIcon"]()
+
+  // if the given icon already rendered, apply the styling without re-rendering the icon
+  if (innerParams && params.icon === innerParams.icon) {
+    // Custom or default content
+    setContent(icon, params)
+
+    applyStyles(icon, params)
+    return
+  }
+
+  if (!params.icon && !params.iconHtml) {
+    return _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["hide"](icon)
+  }
+
+  if (params.icon && Object.keys(_classes_js__WEBPACK_IMPORTED_MODULE_0__["iconTypes"]).indexOf(params.icon) === -1) {
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["error"])(`Unknown icon! Expected "success", "error", "warning", "info" or "question", got "${params.icon}"`)
+    return _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["hide"](icon)
+  }
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["show"](icon)
+
+  // Custom or default content
+  setContent(icon, params)
+
+  applyStyles(icon, params)
+
+  // Animate icon
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](icon, params.showClass.icon)
+}
+
+const applyStyles = (icon, params) => {
+  for (const iconType in _classes_js__WEBPACK_IMPORTED_MODULE_0__["iconTypes"]) {
+    if (params.icon !== iconType) {
+      _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["removeClass"](icon, _classes_js__WEBPACK_IMPORTED_MODULE_0__["iconTypes"][iconType])
+    }
+  }
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](icon, _classes_js__WEBPACK_IMPORTED_MODULE_0__["iconTypes"][params.icon])
+
+  // Icon color
+  setColor(icon, params)
+
+  // Success icon background color
+  adjustSuccessIconBackgoundColor()
+
+  // Custom class
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["applyCustomClass"](icon, params, 'icon')
+}
+
+// Adjust success icon background color to match the popup background color
+const adjustSuccessIconBackgoundColor = () => {
+  const popup = _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getPopup"]()
+  const popupBackgroundColor = window.getComputedStyle(popup).getPropertyValue('background-color')
+  const successIconParts = popup.querySelectorAll('[class^=swal2-success-circular-line], .swal2-success-fix')
+  for (let i = 0; i < successIconParts.length; i++) {
+    successIconParts[i].style.backgroundColor = popupBackgroundColor
+  }
+}
+
+const setContent = (icon, params) => {
+  icon.textContent = ''
+
+  if (params.iconHtml) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["setInnerHtml"](icon, iconContent(params.iconHtml))
+  } else if (params.icon === 'success') {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["setInnerHtml"](icon, `
+      <div class="swal2-success-circular-line-left"></div>
+      <span class="swal2-success-line-tip"></span> <span class="swal2-success-line-long"></span>
+      <div class="swal2-success-ring"></div> <div class="swal2-success-fix"></div>
+      <div class="swal2-success-circular-line-right"></div>
+    `)
+  } else if (params.icon === 'error') {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["setInnerHtml"](icon, `
+      <span class="swal2-x-mark">
+        <span class="swal2-x-mark-line-left"></span>
+        <span class="swal2-x-mark-line-right"></span>
+      </span>
+    `)
+  } else {
+    const defaultIconHtml = {
+      question: '?',
+      warning: '!',
+      info: 'i'
+    }
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["setInnerHtml"](icon, iconContent(defaultIconHtml[params.icon]))
+  }
+}
+
+const setColor = (icon, params) => {
+  if (!params.iconColor) {
+    return
+  }
+  icon.style.color = params.iconColor
+  icon.style.borderColor = params.iconColor
+  for (const sel of ['.swal2-success-line-tip', '.swal2-success-line-long', '.swal2-x-mark-line-left', '.swal2-x-mark-line-right']) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["setStyle"](icon, sel, 'backgroundColor', params.iconColor)
+  }
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["setStyle"](icon, '.swal2-success-ring', 'borderColor', params.iconColor)
+}
+
+const iconContent = (content) => `<div class="${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['icon-content']}">${content}</div>`
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderImage.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderImage.js ***!
+  \*************************************************************************/
+/*! exports provided: renderImage */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderImage", function() { return renderImage; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+
+
+
+const renderImage = (instance, params) => {
+  const image = _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getImage"]()
+
+  if (!params.imageUrl) {
+    return _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["hide"](image)
+  }
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["show"](image, '')
+
+  // Src, alt
+  image.setAttribute('src', params.imageUrl)
+  image.setAttribute('alt', params.imageAlt)
+
+  // Width, height
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyNumericalStyle"](image, 'width', params.imageWidth)
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyNumericalStyle"](image, 'height', params.imageHeight)
+
+  // Class
+  image.className = _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].image
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyCustomClass"](image, params, 'image')
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderInput.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderInput.js ***!
+  \*************************************************************************/
+/*! exports provided: renderInput */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderInput", function() { return renderInput; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _privateProps_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../privateProps.js */ "./node_modules/sweetalert2/src/privateProps.js");
+
+
+
+
+
+const inputTypes = ['input', 'file', 'range', 'select', 'radio', 'checkbox', 'textarea']
+
+const renderInput = (instance, params) => {
+  const popup = _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getPopup"]()
+  const innerParams = _privateProps_js__WEBPACK_IMPORTED_MODULE_3__["default"].innerParams.get(instance)
+  const rerender = !innerParams || params.input !== innerParams.input
+
+  inputTypes.forEach((inputType) => {
+    const inputClass = _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"][inputType]
+    const inputContainer = _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getChildByClass"](popup, inputClass)
+
+    // set attributes
+    setAttributes(inputType, params.inputAttributes)
+
+    // set class
+    inputContainer.className = inputClass
+
+    if (rerender) {
+      _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["hide"](inputContainer)
+    }
+  })
+
+  if (params.input) {
+    if (rerender) {
+      showInput(params)
+    }
+    // set custom class
+    setCustomClass(params)
+  }
+}
+
+const showInput = (params) => {
+  if (!renderInputType[params.input]) {
+    return Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["error"])(`Unexpected type of input! Expected "text", "email", "password", "number", "tel", "select", "radio", "checkbox", "textarea", "file" or "url", got "${params.input}"`)
+  }
+
+  const inputContainer = getInputContainer(params.input)
+  const input = renderInputType[params.input](inputContainer, params)
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["show"](input)
+
+  // input autofocus
+  setTimeout(() => {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["focusInput"](input)
+  })
+}
+
+const removeAttributes = (input) => {
+  for (let i = 0; i < input.attributes.length; i++) {
+    const attrName = input.attributes[i].name
+    if (!['type', 'value', 'style'].includes(attrName)) {
+      input.removeAttribute(attrName)
+    }
+  }
+}
+
+const setAttributes = (inputType, inputAttributes) => {
+  const input = _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getInput"](_dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getPopup"](), inputType)
+  if (!input) {
+    return
+  }
+
+  removeAttributes(input)
+
+  for (const attr in inputAttributes) {
+    input.setAttribute(attr, inputAttributes[attr])
+  }
+}
+
+const setCustomClass = (params) => {
+  const inputContainer = getInputContainer(params.input)
+  if (params.customClass) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](inputContainer, params.customClass.input)
+  }
+}
+
+const setInputPlaceholder = (input, params) => {
+  if (!input.placeholder || params.inputPlaceholder) {
+    input.placeholder = params.inputPlaceholder
+  }
+}
+
+const setInputLabel = (input, prependTo, params) => {
+  if (params.inputLabel) {
+    input.id = _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].input
+    const label = document.createElement('label')
+    const labelClass = _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['input-label']
+    label.setAttribute('for', input.id)
+    label.className = labelClass
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](label, params.customClass.inputLabel)
+    label.innerText = params.inputLabel
+    prependTo.insertAdjacentElement('beforebegin', label)
+  }
+}
+
+const getInputContainer = (inputType) => {
+  const inputClass = _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"][inputType] ? _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"][inputType] : _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].input
+  return _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getChildByClass"](_dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getPopup"](), inputClass)
+}
+
+const renderInputType = {}
+
+renderInputType.text =
+renderInputType.email =
+renderInputType.password =
+renderInputType.number =
+renderInputType.tel =
+renderInputType.url = (input, params) => {
+  if (typeof params.inputValue === 'string' || typeof params.inputValue === 'number') {
+    input.value = params.inputValue
+  } else if (!Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["isPromise"])(params.inputValue)) {
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["warn"])(`Unexpected type of inputValue! Expected "string", "number" or "Promise", got "${typeof params.inputValue}"`)
+  }
+  setInputLabel(input, input, params)
+  setInputPlaceholder(input, params)
+  input.type = params.input
+  return input
+}
+
+renderInputType.file = (input, params) => {
+  setInputLabel(input, input, params)
+  setInputPlaceholder(input, params)
+  return input
+}
+
+renderInputType.range = (range, params) => {
+  const rangeInput = range.querySelector('input')
+  const rangeOutput = range.querySelector('output')
+  rangeInput.value = params.inputValue
+  rangeInput.type = params.input
+  rangeOutput.value = params.inputValue
+  setInputLabel(rangeInput, range, params)
+  return range
+}
+
+renderInputType.select = (select, params) => {
+  select.textContent = ''
+  if (params.inputPlaceholder) {
+    const placeholder = document.createElement('option')
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["setInnerHtml"](placeholder, params.inputPlaceholder)
+    placeholder.value = ''
+    placeholder.disabled = true
+    placeholder.selected = true
+    select.appendChild(placeholder)
+  }
+  setInputLabel(select, select, params)
+  return select
+}
+
+renderInputType.radio = (radio) => {
+  radio.textContent = ''
+  return radio
+}
+
+renderInputType.checkbox = (checkboxContainer, params) => {
+  const checkbox = _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getInput"](_dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getPopup"](), 'checkbox')
+  checkbox.value = 1
+  checkbox.id = _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].checkbox
+  checkbox.checked = Boolean(params.inputValue)
+  const label = checkboxContainer.querySelector('span')
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["setInnerHtml"](label, params.inputPlaceholder)
+  return checkboxContainer
+}
+
+renderInputType.textarea = (textarea, params) => {
+  textarea.value = params.inputValue
+  setInputPlaceholder(textarea, params)
+  setInputLabel(textarea, textarea, params)
+
+  const getMargin = (el) => parseInt(window.getComputedStyle(el).marginLeft) + parseInt(window.getComputedStyle(el).marginRight)
+
+  setTimeout(() => { // #2291
+    if ('MutationObserver' in window) { // #1699
+      const initialPopupWidth = parseInt(window.getComputedStyle(_dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getPopup"]()).width)
+      const textareaResizeHandler = () => {
+        const textareaWidth = textarea.offsetWidth + getMargin(textarea)
+        if (textareaWidth > initialPopupWidth) {
+          _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getPopup"]().style.width = `${textareaWidth}px`
+        } else {
+          _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getPopup"]().style.width = null
+        }
+      }
+      new MutationObserver(textareaResizeHandler).observe(textarea, {
+        attributes: true, attributeFilter: ['style']
+      })
+    }
+  })
+
+  return textarea
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderPopup.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderPopup.js ***!
+  \*************************************************************************/
+/*! exports provided: renderPopup */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderPopup", function() { return renderPopup; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+
+
+
+const renderPopup = (instance, params) => {
+  const container = _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getContainer"]()
+  const popup = _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getPopup"]()
+
+  // Width
+  if (params.toast) { // #2170
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyNumericalStyle"](container, 'width', params.width)
+    popup.style.width = '100%'
+    popup.insertBefore(_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getLoader"](), _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getIcon"]())
+  } else {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyNumericalStyle"](popup, 'width', params.width)
+  }
+
+  // Padding
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyNumericalStyle"](popup, 'padding', params.padding)
+
+  // Background
+  if (params.background) {
+    popup.style.background = params.background
+  }
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["hide"](_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["getValidationMessage"]())
+
+  // Classes
+  addClasses(popup, params)
+}
+
+const addClasses = (popup, params) => {
+  // Default Class + showClass when updating Swal.update({})
+  popup.className = `${_classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].popup} ${_dom_index_js__WEBPACK_IMPORTED_MODULE_1__["isVisible"](popup) ? params.showClass.popup : ''}`
+
+  if (params.toast) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"]([document.documentElement, document.body], _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['toast-shown'])
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"](popup, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].toast)
+  } else {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"](popup, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"].modal)
+  }
+
+  // Custom class
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["applyCustomClass"](popup, params, 'popup')
+  if (typeof params.customClass === 'string') {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"](popup, params.customClass)
+  }
+
+  // Icon class (#1842)
+  if (params.icon) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["addClass"](popup, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"][`icon-${params.icon}`])
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderProgressSteps.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderProgressSteps.js ***!
+  \*********************************************************************************/
+/*! exports provided: renderProgressSteps */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderProgressSteps", function() { return renderProgressSteps; });
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+
+
+
+
+const createStepElement = (step) => {
+  const stepEl = document.createElement('li')
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](stepEl, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['progress-step'])
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["setInnerHtml"](stepEl, step)
+  return stepEl
+}
+
+const createLineElement = (params) => {
+  const lineEl = document.createElement('li')
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](lineEl, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['progress-step-line'])
+  if (params.progressStepsDistance) {
+    lineEl.style.width = params.progressStepsDistance
+  }
+  return lineEl
+}
+
+const renderProgressSteps = (instance, params) => {
+  const progressStepsContainer = _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["getProgressSteps"]()
+  if (!params.progressSteps || params.progressSteps.length === 0) {
+    return _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["hide"](progressStepsContainer)
+  }
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["show"](progressStepsContainer)
+  progressStepsContainer.textContent = ''
+  if (params.currentProgressStep >= params.progressSteps.length) {
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["warn"])(
+      'Invalid currentProgressStep parameter, it should be less than progressSteps.length ' +
+      '(currentProgressStep like JS arrays starts from 0)'
+    )
+  }
+
+  params.progressSteps.forEach((step, index) => {
+    const stepEl = createStepElement(step)
+    progressStepsContainer.appendChild(stepEl)
+    if (index === params.currentProgressStep) {
+      _dom_index_js__WEBPACK_IMPORTED_MODULE_2__["addClass"](stepEl, _classes_js__WEBPACK_IMPORTED_MODULE_0__["swalClasses"]['active-progress-step'])
+    }
+
+    if (index !== params.progressSteps.length - 1) {
+      const lineEl = createLineElement(params)
+      progressStepsContainer.appendChild(lineEl)
+    }
+  })
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/dom/renderers/renderTitle.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/dom/renderers/renderTitle.js ***!
+  \*************************************************************************/
+/*! exports provided: renderTitle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderTitle", function() { return renderTitle; });
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+
+
+const renderTitle = (instance, params) => {
+  const title = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getTitle"]()
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["toggle"](title, params.title || params.titleText, 'block')
+
+  if (params.title) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["parseHtmlToContainer"](params.title, title)
+  }
+
+  if (params.titleText) {
+    title.innerText = params.titleText
+  }
+
+  // Custom class
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["applyCustomClass"](title, params, 'title')
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/getTemplateParams.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/getTemplateParams.js ***!
+  \*****************************************************************/
+/*! exports provided: getTemplateParams */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTemplateParams", function() { return getTemplateParams; });
+/* harmony import */ var _params_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./params.js */ "./node_modules/sweetalert2/src/utils/params.js");
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+
+
+
+const swalStringParams = ['swal-title', 'swal-html', 'swal-footer']
+
+const getTemplateParams = (params) => {
+  const template = typeof params.template === 'string' ? document.querySelector(params.template) : params.template
+  if (!template) {
+    return {}
+  }
+  const templateContent = template.content
+
+  showWarningsForElements(templateContent)
+
+  const result = Object.assign(
+    getSwalParams(templateContent),
+    getSwalButtons(templateContent),
+    getSwalImage(templateContent),
+    getSwalIcon(templateContent),
+    getSwalInput(templateContent),
+    getSwalStringParams(templateContent, swalStringParams),
+  )
+  return result
+}
+
+const getSwalParams = (templateContent) => {
+  const result = {}
+  Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["toArray"])(templateContent.querySelectorAll('swal-param')).forEach((param) => {
+    showWarningsForAttributes(param, ['name', 'value'])
+    const paramName = param.getAttribute('name')
+    let value = param.getAttribute('value')
+    if (typeof _params_js__WEBPACK_IMPORTED_MODULE_0__["default"][paramName] === 'boolean' && value === 'false') {
+      value = false
+    }
+    if (typeof _params_js__WEBPACK_IMPORTED_MODULE_0__["default"][paramName] === 'object') {
+      value = JSON.parse(value)
+    }
+    result[paramName] = value
+  })
+  return result
+}
+
+const getSwalButtons = (templateContent) => {
+  const result = {}
+  Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["toArray"])(templateContent.querySelectorAll('swal-button')).forEach((button) => {
+    showWarningsForAttributes(button, ['type', 'color', 'aria-label'])
+    const type = button.getAttribute('type')
+    result[`${type}ButtonText`] = button.innerHTML
+    result[`show${Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["capitalizeFirstLetter"])(type)}Button`] = true
+    if (button.hasAttribute('color')) {
+      result[`${type}ButtonColor`] = button.getAttribute('color')
+    }
+    if (button.hasAttribute('aria-label')) {
+      result[`${type}ButtonAriaLabel`] = button.getAttribute('aria-label')
+    }
+  })
+  return result
+}
+
+const getSwalImage = (templateContent) => {
+  const result = {}
+  const image = templateContent.querySelector('swal-image')
+  if (image) {
+    showWarningsForAttributes(image, ['src', 'width', 'height', 'alt'])
+    if (image.hasAttribute('src')) {
+      result.imageUrl = image.getAttribute('src')
+    }
+    if (image.hasAttribute('width')) {
+      result.imageWidth = image.getAttribute('width')
+    }
+    if (image.hasAttribute('height')) {
+      result.imageHeight = image.getAttribute('height')
+    }
+    if (image.hasAttribute('alt')) {
+      result.imageAlt = image.getAttribute('alt')
+    }
+  }
+  return result
+}
+
+const getSwalIcon = (templateContent) => {
+  const result = {}
+  const icon = templateContent.querySelector('swal-icon')
+  if (icon) {
+    showWarningsForAttributes(icon, ['type', 'color'])
+    if (icon.hasAttribute('type')) {
+      result.icon = icon.getAttribute('type')
+    }
+    if (icon.hasAttribute('color')) {
+      result.iconColor = icon.getAttribute('color')
+    }
+    result.iconHtml = icon.innerHTML
+  }
+  return result
+}
+
+const getSwalInput = (templateContent) => {
+  const result = {}
+  const input = templateContent.querySelector('swal-input')
+  if (input) {
+    showWarningsForAttributes(input, ['type', 'label', 'placeholder', 'value'])
+    result.input = input.getAttribute('type') || 'text'
+    if (input.hasAttribute('label')) {
+      result.inputLabel = input.getAttribute('label')
+    }
+    if (input.hasAttribute('placeholder')) {
+      result.inputPlaceholder = input.getAttribute('placeholder')
+    }
+    if (input.hasAttribute('value')) {
+      result.inputValue = input.getAttribute('value')
+    }
+  }
+  const inputOptions = templateContent.querySelectorAll('swal-input-option')
+  if (inputOptions.length) {
+    result.inputOptions = {}
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["toArray"])(inputOptions).forEach((option) => {
+      showWarningsForAttributes(option, ['value'])
+      const optionValue = option.getAttribute('value')
+      const optionName = option.innerHTML
+      result.inputOptions[optionValue] = optionName
+    })
+  }
+  return result
+}
+
+const getSwalStringParams = (templateContent, paramNames) => {
+  const result = {}
+  for (const i in paramNames) {
+    const paramName = paramNames[i]
+    const tag = templateContent.querySelector(paramName)
+    if (tag) {
+      showWarningsForAttributes(tag, [])
+      result[paramName.replace(/^swal-/, '')] = tag.innerHTML.trim()
+    }
+  }
+  return result
+}
+
+const showWarningsForElements = (template) => {
+  const allowedElements = swalStringParams.concat([
+    'swal-param',
+    'swal-button',
+    'swal-image',
+    'swal-icon',
+    'swal-input',
+    'swal-input-option',
+  ])
+  Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["toArray"])(template.children).forEach((el) => {
+    const tagName = el.tagName.toLowerCase()
+    if (allowedElements.indexOf(tagName) === -1) {
+      Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["warn"])(`Unrecognized element <${tagName}>`)
+    }
+  })
+}
+
+const showWarningsForAttributes = (el, allowedAttributes) => {
+  Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["toArray"])(el.attributes).forEach((attribute) => {
+    if (allowedAttributes.indexOf(attribute.name) === -1) {
+      Object(_utils_js__WEBPACK_IMPORTED_MODULE_1__["warn"])([
+        `Unrecognized attribute "${attribute.name}" on <${el.tagName.toLowerCase()}>.`,
+        `${allowedAttributes.length ? `Allowed attributes are: ${allowedAttributes.join(', ')}` : 'To set the value, use HTML within the element.'}`
+      ])
+    }
+  })
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/iosFix.js":
+/*!******************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/iosFix.js ***!
+  \******************************************************/
+/*! exports provided: iOSfix, undoIOSfix */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "iOSfix", function() { return iOSfix; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "undoIOSfix", function() { return undoIOSfix; });
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* istanbul ignore file */
+
+
+
+// Fix iOS scrolling http://stackoverflow.com/q/39626302
+
+const iOSfix = () => {
+  const iOS = (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  if (iOS && !_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hasClass"](document.body, _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].iosfix)) {
+    const offset = document.body.scrollTop
+    document.body.style.top = `${offset * -1}px`
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["addClass"](document.body, _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].iosfix)
+    lockBodyScroll()
+    addBottomPaddingForTallPopups() // #1948
+  }
+}
+
+const addBottomPaddingForTallPopups = () => {
+  const safari = !navigator.userAgent.match(/(CriOS|FxiOS|EdgiOS|YaBrowser|UCBrowser)/i)
+  if (safari) {
+    const bottomPanelHeight = 44
+    if (_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]().scrollHeight > window.innerHeight - bottomPanelHeight) {
+      _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getContainer"]().style.paddingBottom = `${bottomPanelHeight}px`
+    }
+  }
+}
+
+const lockBodyScroll = () => { // #1246
+  const container = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getContainer"]()
+  let preventTouchMove
+  container.ontouchstart = (e) => {
+    preventTouchMove = shouldPreventTouchMove(e)
+  }
+  container.ontouchmove = (e) => {
+    if (preventTouchMove) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+  }
+}
+
+const shouldPreventTouchMove = (event) => {
+  const target = event.target
+  const container = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getContainer"]()
+  if (isStylys(event) || isZoom(event)) {
+    return false
+  }
+  if (target === container) {
+    return true
+  }
+  if (
+    !_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["isScrollable"](container) &&
+    target.tagName !== 'INPUT' && // #1603
+    target.tagName !== 'TEXTAREA' && // #2266
+    !(
+      _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["isScrollable"](_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getHtmlContainer"]()) && // #1944
+      _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getHtmlContainer"]().contains(target)
+    )
+  ) {
+    return true
+  }
+  return false
+}
+
+const isStylys = (event) => { // #1786
+  return event.touches && event.touches.length && event.touches[0].touchType === 'stylus'
+}
+
+const isZoom = (event) => { // #1891
+  return event.touches && event.touches.length > 1
+}
+
+const undoIOSfix = () => {
+  if (_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hasClass"](document.body, _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].iosfix)) {
+    const offset = parseInt(document.body.style.top, 10)
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["removeClass"](document.body, _utils_classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].iosfix)
+    document.body.style.top = ''
+    document.body.scrollTop = (offset * -1)
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/isNodeEnv.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/isNodeEnv.js ***!
+  \*********************************************************/
+/*! exports provided: isNodeEnv */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNodeEnv", function() { return isNodeEnv; });
+// Detect Node env
+const isNodeEnv = () => typeof window === 'undefined' || typeof document === 'undefined'
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/openPopup.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/openPopup.js ***!
+  \*********************************************************/
+/*! exports provided: SHOW_CLASS_TIMEOUT, openPopup */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SHOW_CLASS_TIMEOUT", function() { return SHOW_CLASS_TIMEOUT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "openPopup", function() { return openPopup; });
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _classes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./classes.js */ "./node_modules/sweetalert2/src/utils/classes.js");
+/* harmony import */ var _scrollbarFix_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scrollbarFix.js */ "./node_modules/sweetalert2/src/utils/scrollbarFix.js");
+/* harmony import */ var _iosFix_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./iosFix.js */ "./node_modules/sweetalert2/src/utils/iosFix.js");
+/* harmony import */ var _aria_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./aria.js */ "./node_modules/sweetalert2/src/utils/aria.js");
+/* harmony import */ var _globalState_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../globalState.js */ "./node_modules/sweetalert2/src/globalState.js");
+
+
+
+
+
+
+
+const SHOW_CLASS_TIMEOUT = 10
+
+/**
+ * Open popup, add necessary classes and styles, fix scrollbar
+ *
+ * @param params
+ */
+const openPopup = (params) => {
+  const container = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getContainer"]()
+  const popup = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]()
+
+  if (typeof params.willOpen === 'function') {
+    params.willOpen(popup)
+  }
+
+  const bodyStyles = window.getComputedStyle(document.body)
+  const initialBodyOverflow = bodyStyles.overflowY
+  addClasses(container, popup, params)
+
+  // scrolling is 'hidden' until animation is done, after that 'auto'
+  setTimeout(() => {
+    setScrollingVisibility(container, popup)
+  }, SHOW_CLASS_TIMEOUT)
+
+  if (_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["isModal"]()) {
+    fixScrollContainer(container, params.scrollbarPadding, initialBodyOverflow)
+    Object(_aria_js__WEBPACK_IMPORTED_MODULE_4__["setAriaHidden"])()
+  }
+
+  if (!_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["isToast"]() && !_globalState_js__WEBPACK_IMPORTED_MODULE_5__["default"].previousActiveElement) {
+    _globalState_js__WEBPACK_IMPORTED_MODULE_5__["default"].previousActiveElement = document.activeElement
+  }
+
+  if (typeof params.didOpen === 'function') {
+    setTimeout(() => params.didOpen(popup))
+  }
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["removeClass"](container, _classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"]['no-transition'])
+}
+
+const swalOpenAnimationFinished = (event) => {
+  const popup = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getPopup"]()
+  if (event.target !== popup) {
+    return
+  }
+  const container = _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["getContainer"]()
+  popup.removeEventListener(_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["animationEndEvent"], swalOpenAnimationFinished)
+  container.style.overflowY = 'auto'
+}
+
+const setScrollingVisibility = (container, popup) => {
+  if (_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["animationEndEvent"] && _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["hasCssAnimation"](popup)) {
+    container.style.overflowY = 'hidden'
+    popup.addEventListener(_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["animationEndEvent"], swalOpenAnimationFinished)
+  } else {
+    container.style.overflowY = 'auto'
+  }
+}
+
+const fixScrollContainer = (container, scrollbarPadding, initialBodyOverflow) => {
+  Object(_iosFix_js__WEBPACK_IMPORTED_MODULE_3__["iOSfix"])()
+
+  if (scrollbarPadding && initialBodyOverflow !== 'hidden') {
+    Object(_scrollbarFix_js__WEBPACK_IMPORTED_MODULE_2__["fixScrollbar"])()
+  }
+
+  // sweetalert2/issues/1247
+  setTimeout(() => {
+    container.scrollTop = 0
+  })
+}
+
+const addClasses = (container, popup, params) => {
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["addClass"](container, params.showClass.backdrop)
+  // the workaround with setting/unsetting opacity is needed for #2019 and 2059
+  popup.style.setProperty('opacity', '0', 'important')
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["show"](popup, 'grid')
+  setTimeout(() => {
+    // Animate popup right after showing it
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["addClass"](popup, params.showClass.popup)
+    // and remove the opacity workaround
+    popup.style.removeProperty('opacity')
+  }, SHOW_CLASS_TIMEOUT) // 10ms in order to fix #2062
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["addClass"]([document.documentElement, document.body], _classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"].shown)
+  if (params.heightAuto && params.backdrop && !params.toast) {
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["addClass"]([document.documentElement, document.body], _classes_js__WEBPACK_IMPORTED_MODULE_1__["swalClasses"]['height-auto'])
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/params.js":
+/*!******************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/params.js ***!
+  \******************************************************/
+/*! exports provided: defaultParams, updatableParams, deprecatedParams, isValidParameter, isUpdatableParameter, isDeprecatedParameter, showWarningsForParams, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultParams", function() { return defaultParams; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updatableParams", function() { return updatableParams; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deprecatedParams", function() { return deprecatedParams; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidParameter", function() { return isValidParameter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isUpdatableParameter", function() { return isUpdatableParameter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isDeprecatedParameter", function() { return isDeprecatedParameter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showWarningsForParams", function() { return showWarningsForParams; });
+/* harmony import */ var _utils_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+
+
+const defaultParams = {
+  title: '',
+  titleText: '',
+  text: '',
+  html: '',
+  footer: '',
+  icon: undefined,
+  iconColor: undefined,
+  iconHtml: undefined,
+  template: undefined,
+  toast: false,
+  showClass: {
+    popup: 'swal2-show',
+    backdrop: 'swal2-backdrop-show',
+    icon: 'swal2-icon-show',
+  },
+  hideClass: {
+    popup: 'swal2-hide',
+    backdrop: 'swal2-backdrop-hide',
+    icon: 'swal2-icon-hide',
+  },
+  customClass: {},
+  target: 'body',
+  backdrop: true,
+  heightAuto: true,
+  allowOutsideClick: true,
+  allowEscapeKey: true,
+  allowEnterKey: true,
+  stopKeydownPropagation: true,
+  keydownListenerCapture: false,
+  showConfirmButton: true,
+  showDenyButton: false,
+  showCancelButton: false,
+  preConfirm: undefined,
+  preDeny: undefined,
+  confirmButtonText: 'OK',
+  confirmButtonAriaLabel: '',
+  confirmButtonColor: undefined,
+  denyButtonText: 'No',
+  denyButtonAriaLabel: '',
+  denyButtonColor: undefined,
+  cancelButtonText: 'Cancel',
+  cancelButtonAriaLabel: '',
+  cancelButtonColor: undefined,
+  buttonsStyling: true,
+  reverseButtons: false,
+  focusConfirm: true,
+  focusDeny: false,
+  focusCancel: false,
+  returnFocus: true,
+  showCloseButton: false,
+  closeButtonHtml: '&times;',
+  closeButtonAriaLabel: 'Close this dialog',
+  loaderHtml: '',
+  showLoaderOnConfirm: false,
+  showLoaderOnDeny: false,
+  imageUrl: undefined,
+  imageWidth: undefined,
+  imageHeight: undefined,
+  imageAlt: '',
+  timer: undefined,
+  timerProgressBar: false,
+  width: undefined,
+  padding: undefined,
+  background: undefined,
+  input: undefined,
+  inputPlaceholder: '',
+  inputLabel: '',
+  inputValue: '',
+  inputOptions: {},
+  inputAutoTrim: true,
+  inputAttributes: {},
+  inputValidator: undefined,
+  returnInputValueOnDeny: false,
+  validationMessage: undefined,
+  grow: false,
+  position: 'center',
+  progressSteps: [],
+  currentProgressStep: undefined,
+  progressStepsDistance: undefined,
+  willOpen: undefined,
+  didOpen: undefined,
+  didRender: undefined,
+  willClose: undefined,
+  didClose: undefined,
+  didDestroy: undefined,
+  scrollbarPadding: true
+}
+
+const updatableParams = [
+  'allowEscapeKey',
+  'allowOutsideClick',
+  'background',
+  'buttonsStyling',
+  'cancelButtonAriaLabel',
+  'cancelButtonColor',
+  'cancelButtonText',
+  'closeButtonAriaLabel',
+  'closeButtonHtml',
+  'confirmButtonAriaLabel',
+  'confirmButtonColor',
+  'confirmButtonText',
+  'currentProgressStep',
+  'customClass',
+  'denyButtonAriaLabel',
+  'denyButtonColor',
+  'denyButtonText',
+  'didClose',
+  'didDestroy',
+  'footer',
+  'hideClass',
+  'html',
+  'icon',
+  'iconColor',
+  'iconHtml',
+  'imageAlt',
+  'imageHeight',
+  'imageUrl',
+  'imageWidth',
+  'preConfirm',
+  'preDeny',
+  'progressSteps',
+  'returnFocus',
+  'reverseButtons',
+  'showCancelButton',
+  'showCloseButton',
+  'showConfirmButton',
+  'showDenyButton',
+  'text',
+  'title',
+  'titleText',
+  'willClose',
+]
+
+const deprecatedParams = {}
+
+const toastIncompatibleParams = [
+  'allowOutsideClick',
+  'allowEnterKey',
+  'backdrop',
+  'focusConfirm',
+  'focusDeny',
+  'focusCancel',
+  'returnFocus',
+  'heightAuto',
+  'keydownListenerCapture'
+]
+
+/**
+ * Is valid parameter
+ * @param {String} paramName
+ */
+const isValidParameter = (paramName) => {
+  return Object.prototype.hasOwnProperty.call(defaultParams, paramName)
+}
+
+/**
+ * Is valid parameter for Swal.update() method
+ * @param {String} paramName
+ */
+const isUpdatableParameter = (paramName) => {
+  return updatableParams.indexOf(paramName) !== -1
+}
+
+/**
+ * Is deprecated parameter
+ * @param {String} paramName
+ */
+const isDeprecatedParameter = (paramName) => {
+  return deprecatedParams[paramName]
+}
+
+const checkIfParamIsValid = (param) => {
+  if (!isValidParameter(param)) {
+    Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_0__["warn"])(`Unknown parameter "${param}"`)
+  }
+}
+
+const checkIfToastParamIsValid = (param) => {
+  if (toastIncompatibleParams.includes(param)) {
+    Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_0__["warn"])(`The parameter "${param}" is incompatible with toasts`)
+  }
+}
+
+const checkIfParamIsDeprecated = (param) => {
+  if (isDeprecatedParameter(param)) {
+    Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_0__["warnAboutDeprecation"])(param, isDeprecatedParameter(param))
+  }
+}
+
+/**
+ * Show relevant warnings for given params
+ *
+ * @param params
+ */
+const showWarningsForParams = (params) => {
+  if (!params.backdrop && params.allowOutsideClick) {
+    Object(_utils_utils_js__WEBPACK_IMPORTED_MODULE_0__["warn"])('"allowOutsideClick" parameter requires `backdrop` parameter to be set to `true`')
+  }
+
+  for (const param in params) {
+    checkIfParamIsValid(param)
+
+    if (params.toast) {
+      checkIfToastParamIsValid(param)
+    }
+
+    checkIfParamIsDeprecated(param)
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (defaultParams);
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/scrollbarFix.js":
+/*!************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/scrollbarFix.js ***!
+  \************************************************************/
+/*! exports provided: fixScrollbar, undoScrollbar */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fixScrollbar", function() { return fixScrollbar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "undoScrollbar", function() { return undoScrollbar; });
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+
+
+const fixScrollbar = () => {
+  // for queues, do not do this more than once
+  if (_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["states"].previousBodyPadding !== null) {
+    return
+  }
+  // if the body has overflow
+  if (document.body.scrollHeight > window.innerHeight) {
+    // add padding so the content doesn't shift after removal of scrollbar
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["states"].previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'))
+    document.body.style.paddingRight = `${_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["states"].previousBodyPadding + _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["measureScrollbar"]()}px`
+  }
+}
+
+const undoScrollbar = () => {
+  if (_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["states"].previousBodyPadding !== null) {
+    document.body.style.paddingRight = `${_dom_index_js__WEBPACK_IMPORTED_MODULE_0__["states"].previousBodyPadding}px`
+    _dom_index_js__WEBPACK_IMPORTED_MODULE_0__["states"].previousBodyPadding = null
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/setParameters.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/setParameters.js ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return setParameters; });
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils.js */ "./node_modules/sweetalert2/src/utils/utils.js");
+/* harmony import */ var _dom_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dom/index.js */ "./node_modules/sweetalert2/src/utils/dom/index.js");
+/* harmony import */ var _defaultInputValidators_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./defaultInputValidators.js */ "./node_modules/sweetalert2/src/utils/defaultInputValidators.js");
+
+
+
+
+function setDefaultInputValidators (params) {
+  // Use default `inputValidator` for supported input types if not provided
+  if (!params.inputValidator) {
+    Object.keys(_defaultInputValidators_js__WEBPACK_IMPORTED_MODULE_2__["default"]).forEach((key) => {
+      if (params.input === key) {
+        params.inputValidator = _defaultInputValidators_js__WEBPACK_IMPORTED_MODULE_2__["default"][key]
+      }
+    })
+  }
+}
+
+function validateCustomTargetElement (params) {
+  // Determine if the custom target element is valid
+  if (
+    !params.target ||
+    (typeof params.target === 'string' && !document.querySelector(params.target)) ||
+    (typeof params.target !== 'string' && !params.target.appendChild)
+  ) {
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_0__["warn"])('Target parameter is not valid, defaulting to "body"')
+    params.target = 'body'
+  }
+}
+
+/**
+ * Set type, text and actions on popup
+ *
+ * @param params
+ * @returns {boolean}
+ */
+function setParameters (params) {
+  setDefaultInputValidators(params)
+
+  // showLoaderOnConfirm && preConfirm
+  if (params.showLoaderOnConfirm && !params.preConfirm) {
+    Object(_utils_js__WEBPACK_IMPORTED_MODULE_0__["warn"])(
+      'showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' +
+      'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' +
+      'https://sweetalert2.github.io/#ajax-request'
+    )
+  }
+
+  validateCustomTargetElement(params)
+
+  // Replace newlines with <br> in title
+  if (typeof params.title === 'string') {
+    params.title = params.title.split('\n').join('<br />')
+  }
+
+  _dom_index_js__WEBPACK_IMPORTED_MODULE_1__["init"](params)
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/sweetalert2/src/utils/utils.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/sweetalert2/src/utils/utils.js ***!
+  \*****************************************************/
+/*! exports provided: consolePrefix, uniqueArray, capitalizeFirstLetter, toArray, warn, error, warnOnce, warnAboutDeprecation, callIfFunction, hasToPromiseFn, asPromise, isPromise */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "consolePrefix", function() { return consolePrefix; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "uniqueArray", function() { return uniqueArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "capitalizeFirstLetter", function() { return capitalizeFirstLetter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toArray", function() { return toArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "warn", function() { return warn; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "error", function() { return error; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "warnOnce", function() { return warnOnce; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "warnAboutDeprecation", function() { return warnAboutDeprecation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "callIfFunction", function() { return callIfFunction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hasToPromiseFn", function() { return hasToPromiseFn; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "asPromise", function() { return asPromise; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPromise", function() { return isPromise; });
+const consolePrefix = 'SweetAlert2:'
+
+/**
+ * Filter the unique values into a new array
+ * @param arr
+ */
+const uniqueArray = (arr) => {
+  const result = []
+  for (let i = 0; i < arr.length; i++) {
+    if (result.indexOf(arr[i]) === -1) {
+      result.push(arr[i])
+    }
+  }
+  return result
+}
+
+/**
+ * Capitalize the first letter of a string
+ * @param str
+ */
+const capitalizeFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+
+/**
+ * Convert NodeList to Array
+ * @param nodeList
+ */
+const toArray = (nodeList) => Array.prototype.slice.call(nodeList)
+
+/**
+ * Standardise console warnings
+ * @param message
+ */
+const warn = (message) => {
+  console.warn(`${consolePrefix} ${typeof message === 'object' ? message.join(' ') : message}`)
+}
+
+/**
+ * Standardise console errors
+ * @param message
+ */
+const error = (message) => {
+  console.error(`${consolePrefix} ${message}`)
+}
+
+/**
+ * Private global state for `warnOnce`
+ * @type {Array}
+ * @private
+ */
+const previousWarnOnceMessages = []
+
+/**
+ * Show a console warning, but only if it hasn't already been shown
+ * @param message
+ */
+const warnOnce = (message) => {
+  if (!previousWarnOnceMessages.includes(message)) {
+    previousWarnOnceMessages.push(message)
+    warn(message)
+  }
+}
+
+/**
+ * Show a one-time console warning about deprecated params/methods
+ */
+const warnAboutDeprecation = (deprecatedParam, useInstead) => {
+  warnOnce(`"${deprecatedParam}" is deprecated and will be removed in the next major release. Please use "${useInstead}" instead.`)
+}
+
+/**
+ * If `arg` is a function, call it (with no arguments or context) and return the result.
+ * Otherwise, just pass the value through
+ * @param arg
+ */
+const callIfFunction = (arg) => typeof arg === 'function' ? arg() : arg
+
+const hasToPromiseFn = (arg) => arg && typeof arg.toPromise === 'function'
+
+const asPromise = (arg) => hasToPromiseFn(arg) ? arg.toPromise() : Promise.resolve(arg)
+
+const isPromise = (arg) => arg && Promise.resolve(arg) === arg
 
 
 /***/ }),
@@ -55851,7 +60130,7 @@ __webpack_require__(/*! datatables.net-bs4 */ "./node_modules/datatables.net-bs4
 
 __webpack_require__(/*! datatables.net-buttons-bs4 */ "./node_modules/datatables.net-buttons-bs4/js/buttons.bootstrap4.js");
 
-__webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+__webpack_require__(/*! sweetalert2/src/sweetalert2 */ "./node_modules/sweetalert2/src/sweetalert2.js");
 
 /***/ }),
 

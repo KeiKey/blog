@@ -28,6 +28,6 @@
     },
     "dependencies": {
         "dropzone": "^5.9.2",
-        "toastr": "^2.1.4"
+        "sweetalert2": "^11.1.4"
     }
 }

@@ -4,8 +4,6 @@ namespace App\Services;
 
 use App\Enums\State;
 use App\Models\Category\Category;
-use App\Models\User\User;
-use Illuminate\Http\RedirectResponse;
 
 class CategoryService
 {

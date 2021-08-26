@@ -12,6 +12,8 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -95,58 +97,40 @@
         </nav>
 
         <main class="py-4">
-{{--            todo - use message fashing      --}}
-            <div class="container">
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if (session('no_access'))
-                    <div class="alert alert-warning">
-                        {{ session('no_access') }}
-                    </div>
-                @endif
-
-                @if (session('fail'))
-                    <div class="alert alert-danger">
-                        {{ session('fail') }}
-                    </div>
-                @endif
-            </div>
-
             @yield('content')
         </main>
     </div>
 
 @yield('scripts')
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+@if (session('success'))
     <script>
-        console.log('here3');
-        $(document).ready(function() {
-            toastr.info("tessst")
-        });
-{{--        @if(Session::has('message'))--}}
-{{--        var type="{{Session::get('alert-type','info')}}"--}}
-
-{{--        switch(type){--}}
-{{--            case 'info':--}}
-{{--                toastr.info("{{ Session::get('message') }}");--}}
-{{--                break;--}}
-{{--            case 'success':--}}
-{{--                toastr.success("{{ Session::get('message') }}");--}}
-{{--                break;--}}
-{{--            case 'warning':--}}
-{{--                toastr.warning("{{ Session::get('message') }}");--}}
-{{--                break;--}}
-{{--            case 'error':--}}
-{{--                toastr.error("{{ Session::get('message') }}");--}}
-{{--                break;--}}
-//         }
-{{--        @endif--}}
-
+        Swal.fire({
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            icon: 'success'
+        })
     </script>
+@endif
+
+@if (session('no_access'))
+    <script>
+        Swal.fire({
+            title: 'Warning!',
+            text: '{{ session('no_access') }}',
+            icon: 'warning'
+        })
+    </script>
+@endif
+
+@if (session('fail'))
+    <script>
+        Swal.fire({
+            title: 'Error!',
+            text: '{{ session('fail') }}',
+            icon: 'error'
+        })
+    </script>
+@endif
 </body>
 </html>

@@ -16,8 +16,9 @@ class PostService
 
     private $userPolicy;
 
-    public function __construct(UserPolicy $userPolicy)
-    {
+    public function __construct(
+        UserPolicy $userPolicy
+    ) {
         $this->userPolicy = $userPolicy;
         $this->response = ['no_access', 'Not Authorized!'];
     }
