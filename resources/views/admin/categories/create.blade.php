@@ -3,7 +3,7 @@
 @section('content')
     @include('partials.create_form',
              [
-                 'action' => 'panel.admin.categories.store',
+                 'action' => 'panel.admin.users.store',
                  'title' => 'Create a new category',
                  'items' =>
                             [

@@ -132,6 +132,18 @@ Route::middleware('auth')
                     ->uses('Admin\UserController@update')
                     ->name('panel.admin.users.update');
 
+                Route::post('/users/{user}/disable')
+                    ->uses('Admin\UserController@disable')
+                    ->name('panel.admin.users.disable');
+
+                Route::post('/users/{user}/enable')
+                    ->uses('Admin\UserController@enable')
+                    ->name('panel.admin.users.enable');
+
+                Route::post('/users/{user}/promote')
+                    ->uses('Admin\UserController@promote')
+                    ->name('panel.admin.users.promote');
+
                 //todo - hard delete a category
             });
         });

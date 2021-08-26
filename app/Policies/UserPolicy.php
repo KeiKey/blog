@@ -11,19 +11,29 @@ class UserPolicy
 {
     use HandlesAuthorization;
 
-    public function createUser(User $user): bool
+    public function promoteUser(User $user, User $userEdit): bool
     {
-        return $user->role === Role::ADMIN;
+        return $user->isAdmin() && $userEdit->role !== Role::ADMIN;
     }
 
-    public function accessUser(User $user): bool
+    public function enablesUser(User $user, User $userEdit): bool
     {
-        return $user->role === Role::ADMIN;
+        if ($user->isAdmin()) {
+            return $userEdit->disabled_by === $user->id;
+        }
+
+        return $user->id === $userEdit->id;
+    }
+
+    public function disableUser(User $user, User $userEdit): bool
+    {
+
+        return $user->isAdmin() && $userEdit->isUser();
     }
 
     public function accessPost(User $user, Post $post): bool
     {
-        return $user->role === Role::ADMIN || $user->id === $post->userId();
+        return $user->isAdmin() || $user->id === $post->userId();
     }
 
     public function createPost(User $user): bool
@@ -33,12 +43,12 @@ class UserPolicy
 
     public function disablePost(User $user, Post $post): bool
     {
-        return $user->role === Role::ADMIN || $user->id === $post->userId();
+        return $user->isAdmin() || $user->id === $post->userId();
     }
 
     public function enablePost(User $user, Post $post): bool
     {
-        return $user->role === Role::ADMIN || $user->id === $post->userId();
+        return $user->isAdmin() || $user->id === $post->userId();
     }
 
     public function deletePost(User $user, Post $post): bool

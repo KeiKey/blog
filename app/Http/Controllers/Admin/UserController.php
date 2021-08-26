@@ -8,6 +8,7 @@ use App\Models\User\User;
 use App\Services\UserService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -28,7 +29,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('admin.users.index', ['users' => '']);
+        return view('admin.users.index', ['users' => User::withTrashed()->get()]);
     }
 
     /**
@@ -44,34 +45,12 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @param UserStoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(UserStoreRequest $request)
+    public function store(UserStoreRequest $request): RedirectResponse
     {
-        return $this->userService;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param User $user
-     * @return Application|Factory|View
-     */
-    public function show(User $user)
-    {
-        return view('admin.users.show', ['user' => $user]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param User $user
-     * @return Application|Factory|View
-     */
-    public function edit(User $user)
-    {
-        return view('admin.users.edit', ['user' => $user]);
+        return $this->userService->create($request);
     }
 
     /**
@@ -81,8 +60,9 @@ class UserController extends Controller
      * @param User $user
      * @return UserService
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): UserService
     {
+        //todo - profile panel
         return $this->userService;
     }
 
@@ -90,10 +70,53 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param User $user
-     * @return \Illuminate\Http\Response
+     * @return UserService
      */
-    public function destroy(User $user)
+    public function destroy(User $user): UserService
     {
+        //todo - profile panel
         return $this->userService;
+    }
+
+    /**
+     * Promote a user to admin role.
+     *
+     * @param User $user
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function promote(User $user, Request $request): RedirectResponse
+    {
+        $handler = $this->userService->promote($request->user(), $user);
+
+        return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
+    }
+
+    /**
+     * Disable a user|your account.
+     *
+     * @param User $user
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function disable(User $user, Request $request): RedirectResponse
+    {
+        $handler = $this->userService->disable($request->user(), $user);
+
+        return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
+    }
+
+    /**
+     * Enable a user|you account.
+     *
+     * @param User $user
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function enable(User $user, Request $request): RedirectResponse
+    {
+        $handler = $this->userService->enable($request->user(), $user);
+
+        return redirect()->route('panel.admin.users.index')->with($handler[0], $handler[1]);
     }
 }

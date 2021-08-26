@@ -109,9 +109,9 @@
                     </div>
                 @endif
 
-                @if (session('no_fail'))
+                @if (session('fail'))
                     <div class="alert alert-danger">
-                        {{ session('no_fail') }}
+                        {{ session('fail') }}
                     </div>
                 @endif
             </div>

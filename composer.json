@@ -17,7 +17,8 @@
         "laravel/framework": "^7.29",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^2.1",
-        "yoeunes/toastr": "^1.2"
+        "yoeunes/toastr": "^1.2",
+      "ext-http": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

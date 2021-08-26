@@ -14,6 +14,8 @@ use Illuminate\Notifications\Notifiable;
  * @property mixed email
  * @property mixed role
  * @property mixed email_verified_at
+ * @property mixed state
+ * @property mixed disabled_by
  */
 class User extends Authenticatable
 {
@@ -32,7 +34,9 @@ class User extends Authenticatable
         'surname',
         'email',
         'password',
-        'role'
+        'role',
+        'state',
+        'disabled_by'
     ];
 
     /**
