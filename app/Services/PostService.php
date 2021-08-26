@@ -185,16 +185,16 @@ class PostService
     }
 
     /**
-     * @param false $disabled
+     * @param bool $disabled
      * @return Post|Post[]|Builder|Collection|\Illuminate\Database\Query\Builder
      */
-    public function all($disabled = false)
+    public function all(bool $disabled = false)
     {
         if ($disabled) {
             return Post::withTrashed();
         }
 
-        return Post::all();
+        return Post::all()->where('state', '===', State::ACTIVE);
     }
 
     /**
