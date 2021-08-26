@@ -4,9 +4,7 @@ namespace App\Services;
 
 use App\Enums\Role;
 use App\Enums\State;
-use App\Models\Post\Post;
 use App\Models\User\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
@@ -73,7 +71,7 @@ class UserService
     }
 
     /**
-     * Enable a user|you account.
+     * Enable a user|you account.,
      *
      * @param User $user
      * @param User $userEdit

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post\Post;
-use App\Models\User\User;
+use App\Policies\UserPolicy;
 use App\Services\PostService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -16,14 +16,18 @@ class PostController extends Controller
 {
     private $postService;
 
+    private $userPolicy;
+
     public function __construct(
-        PostService $postService
+        PostService $postService,
+        UserPolicy $userPolicy
     ) {
+        $this->userPolicy = $userPolicy;
         $this->postService = $postService;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of Posts.
      *
      * @return Application|Factory|View
      */
@@ -33,7 +37,7 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified post.
+     * Display the Post post.
      *
      * @param Post $post
      * @param Request $request
@@ -41,10 +45,9 @@ class PostController extends Controller
      */
     public function show(Post $post, Request $request)
     {
-        //todo - fix the permission for the access of post
-//        if ($request->user()->can('accessPost', $post))
-        if ($request->user()->isAdmin() || $request->user() === $post->user_id)
+        if ($this->userPolicy->accessPost($request->user(), $post)) {
             return view('admin.posts.show', ['post' => $post]);
+        }
 
         return redirect()->route('admin.posts.index')->with('no_access', 'Not Authorized!');
     }

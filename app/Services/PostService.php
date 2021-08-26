@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\State;
 use App\Models\Post\Post;
 use App\Models\User\User;
+use App\Policies\UserPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
@@ -13,8 +14,11 @@ class PostService
 {
     private $response;
 
-    public function __construct()
+    private $userPolicy;
+
+    public function __construct(UserPolicy $userPolicy)
     {
+        $this->userPolicy = $userPolicy;
         $this->response = ['no_access', 'Not Authorized!'];
     }
 
@@ -64,7 +68,6 @@ class PostService
 
     public function getUserPosts($id, $disabled = false)
     {
-//        dd(Post::withTrashed()->where('user_id',$id));
         if ($disabled) {
             return Post::withTrashed()->where('user_id',$id);
         }
@@ -81,9 +84,7 @@ class PostService
      */
     public function disablePost(User $user, Post $post): array
     {
-        //todo - fix the policy for the disablePost
-//        if ($user->can('disablePost', $post)) {
-        if ($user->isAdmin() || $user->id === $post->user_id) {
+        if ($this->userPolicy->disablePost($user,$post)) {
             $post->update(['state' => State::DISABLED, 'disabled_by' => $user->id]);
             $this->response = ['success', 'You disabled the post: '. $post->title.'!'];
         }
@@ -98,9 +99,7 @@ class PostService
      */
     public function enablePost(User $user, Post $post): array
     {
-        //todo - fix the policy for the enablePost
-//        if ($user->can('enablePost', $post)) {
-        if ($post->disabled_by === $user->id) {
+        if ($this->userPolicy->enablePost($user, $post)) {
             $post->update(['state' => State::ACTIVE, 'disabled_by' => null]);
             $this->response = ['success', 'You enabled the post: '. $post->title.'!'];
         }

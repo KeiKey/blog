@@ -51,7 +51,7 @@ class UserPolicy
             return $post->disabled_by === $user->id;
         }
 
-        return $user->id === $post->id;
+        return $user->id === $post->user_id;
     }
 
     public function deletePost(User $user, Post $post): bool
