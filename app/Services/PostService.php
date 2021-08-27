@@ -54,8 +54,8 @@ class PostService
                 'title' => ucwords($request->title),
                 'content' => ucwords($request->content),
                 'category_id' => (int)$request->category ?? null,
-                'thumbnail' => $thumbnail_name ?? null,
-                'bg_image' => $bg_image_name ?? null,
+                'thumbnail' => $thumbnail_name ? $directory.'/'.$thumbnail_name : null,
+                'bg_image' => $bg_image_name ? $directory.'/'.$bg_image_name : null,
                 'user_id' => auth()->id()
             ]);
 
@@ -103,8 +103,8 @@ class PostService
                 'title' => ucwords($request->title),
                 'content' => ucwords($request->content),
                 'category_id' => (int)$request->category ?? null,
-                'thumbnail' => $thumbnail_name ?? null,
-                'bg_image' => $bg_image_name ?? null,
+                'thumbnail' => $thumbnail_name ? $directory.'/'.$thumbnail_name : null,
+                'bg_image' => $bg_image_name ? $directory.'/'.$bg_image_name : null,
                 'user_id' => auth()->id()
             ]);
 

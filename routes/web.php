@@ -19,11 +19,29 @@ Auth::routes();
 
 Route::get('/')
     ->uses('PostController@index')
-    ->name('posts.index');
+    ->name('home');
 
 Route::get('/posts/{post}')
     ->uses('PostController@show')
     ->name('posts.show');
+
+Route::get('/contact', function () {
+    return view('site.static.contact');
+})->name('contact');;
+
+Route::get('/about', function () {
+    return view('site.static.about');
+})->name('about');
+
+Route::post('/contact', function () {
+    return view('site.static.contact');
+})->name('contact');
+
+//todo - newsletter functionality
+Route::get('/subscribe')
+    ->uses('PostController@index')
+    ->name('subscribe');
+
 
 Route::middleware('auth')
     ->prefix('panel')

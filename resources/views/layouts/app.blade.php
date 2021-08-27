@@ -25,9 +25,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md shadow-sm @guest navbar-light bg-white @else @if(auth()->user()->isAdmin()) navbar-dark bg-dark @else navbar-light bg-white @endif @endguest">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
+                <a class="navbar-brand" href="{{ url('/') }}">{{ __('Cue') }}</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -37,7 +35,7 @@
                     <ul class="navbar-nav mr-auto">
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('posts.index') }}">{{ __('Posts') }}</a>
+                                <a class="nav-link" href="{{ route('home') }}">{{ __('Home') }}</a>
                             </li>
                         @else
                             @if(auth()->user()->isUser())

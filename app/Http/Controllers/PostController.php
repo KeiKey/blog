@@ -19,23 +19,23 @@ class PostController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the post.
      *
      * @return Application|Factory|View
      */
     public function index()
     {
-        return view('posts.index', ['posts' => $this->postService->all()]);
+        return view('site.posts.index', ['posts' => $this->postService->all()]);
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified post.
      *
      * @param Post $post
      * @return Application|Factory|View
      */
     public function show(Post $post)
     {
-        return view('posts.show', ['post' => $post]);
+        return view('site.posts.show', ['post' => $post]);
     }
 }

@@ -110,7 +110,7 @@ class PostController extends Controller
      */
     public function update(Post $post, PostStoreRequest $request): RedirectResponse
     {
-        $handler = $this->postService->updatePost($request->user(), $post);
+        $handler = $this->postService->updatePost($post, $request);
 
         return redirect()->route('panel.posts.show', $handler['id'])->with($handler['status'], $handler['message']);
     }
