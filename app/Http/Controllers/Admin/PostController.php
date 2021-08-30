@@ -33,7 +33,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('admin.posts.index', ['posts' => $this->postService->getUserPosts(auth()->id())]);
+        return view('admin.posts.index', ['posts' => $this->postService->all()]);
     }
 
     /**

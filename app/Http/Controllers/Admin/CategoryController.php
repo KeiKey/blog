@@ -51,7 +51,7 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->createCategory($request);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
+        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
     }
 
     /**
@@ -76,7 +76,7 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->updateCategory($category, $request);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
+        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
     }
 
     /**
@@ -89,7 +89,7 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->deleteCategory($category);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
+        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
     }
 
     /**
@@ -102,7 +102,7 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->disableCategory($category);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
+        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
     }
 
     /**
@@ -115,6 +115,6 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->enableCategory($category);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['success'], $handler['message']);
+        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
     }
 }
