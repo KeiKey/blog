@@ -14,7 +14,7 @@
                 </h3>
 
                 <div class="main-content-posts container">
-                    <h4>{{ __('Featured posts') }}</h4>
+                    <h4 id="intro">{{ __('Featured posts') }}</h4>
 
                     <div class="row">
                         @foreach($posts as $post)
