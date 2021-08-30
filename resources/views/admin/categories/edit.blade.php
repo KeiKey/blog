@@ -4,7 +4,7 @@
     @include('partials.edit_form',
              [
                  'action' => 'panel.admin.categories.update',
-                 'action_data' => [''],
+                 'action_data' => [$category->id],
                  'title' => 'Update a Category',
                  'entity' => $category,
                  'items' => [

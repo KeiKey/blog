@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ResponseStatus;
 use App\Enums\State;
 use App\Models\Post\Post;
 use App\Models\User\User;
@@ -21,10 +22,7 @@ class PostService
         UserPolicy $userPolicy
     ) {
         $this->userPolicy = $userPolicy;
-        $this->response = [
-            'status' => 'no_access',
-            'message' => 'Not Authorized!'
-        ];
+        $this->response = getActionResponse();
     }
 
     /**
@@ -59,12 +57,10 @@ class PostService
                 'user_id' => auth()->id()
             ]);
 
-            $this->response['status'] = 'success';
-            $this->response['message'] = 'You created this post!';
+            $this->response = getActionResponse(ResponseStatus::SUCCESS, 'You created this post!');
             $this->response['id'] = $post->id;
         } else {
-            $this->response['status'] = 'no_access';
-            $this->response['message'] = 'Admin is not allowed to create posts!';
+            $this->response = getActionResponse(ResponseStatus::NO_ACCESS, 'Admin is not allowed to create posts!');
 
             redirect()->back()->with($this->response['status'], $this->response['message']);
         }
@@ -108,12 +104,10 @@ class PostService
                 'user_id' => auth()->id()
             ]);
 
-            $this->response['status'] = 'success';
-            $this->response['message'] = 'You updated this post!';
+            $this->response = getActionResponse(ResponseStatus::SUCCESS, 'You updated this post!');
             $this->response['id'] = $post->id;
         } else {
-            $this->response['status'] = 'no_access';
-            $this->response['message'] = 'Admin is not allowed to update posts!';
+            $this->response = getActionResponse(ResponseStatus::NO_ACCESS, 'Admin is not allowed to update posts!');
 
             redirect()->back()->with($this->response['status'], $this->response['message']);
         }
@@ -137,11 +131,9 @@ class PostService
                 $title = $post->title;
                 $post->delete();
 
-                $this->response['status'] = 'success';
-                $this->response['message'] = 'You disabled the post: '. $title .'!';
+                $this->response = getActionResponse(ResponseStatus::SUCCESS, 'You disabled the post: '. $title .'!');
             } catch (Exception $e) {
-                $this->response['status'] = 'fail';
-                $this->response['message'] = 'Something went wrong!';
+                return getActionResponse(ResponseStatus::FAILURE);
             }
         }
 
@@ -160,8 +152,7 @@ class PostService
         if ($this->userPolicy->disablePost($user,$post)) {
             $post->update(['state' => State::DISABLED, 'disabled_by' => $user->id]);
 
-            $this->response['status'] = 'success';
-            $this->response['message'] = 'You disabled the post: '. $post->title.'!';
+            return getActionResponse(ResponseStatus::SUCCESS, 'You disabled the post: '. $post->title.'!');
         }
 
         return $this->response;
@@ -177,8 +168,7 @@ class PostService
         if ($this->userPolicy->enablePost($user, $post)) {
             $post->update(['state' => State::ACTIVE, 'disabled_by' => null]);
 
-            $this->response['status'] = 'success';
-            $this->response['message'] = 'You enabled the post: '. $post->title.'!';
+            return getActionResponse(ResponseStatus::SUCCESS, 'You enabled the post: '. $post->title.'!');
         }
 
         return $this->response;
