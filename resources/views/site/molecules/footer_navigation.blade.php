@@ -17,11 +17,11 @@
                 </li>
 
                 <li class="footer-link">
-                    <a href="#">{{ __('Contact') }}</a>
+                    <a href="{{ route('static.page', 'contact') }}">{{ __('Contact') }}</a>
                 </li>
 
                 <li class="footer-link">
-                    <a href="{{ route('about') }}">{{ __('About Us') }}</a>
+                    <a href="{{ route('static.page', 'about') }}">{{ __('About Us') }}</a>
                 </li>
 
                 <li class="footer-link">

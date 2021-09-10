@@ -9,7 +9,7 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('about') }}">{{ __('About Us') }}</a>
+        <a class="nav-link" href="{{ route('static.page', 'about') }}">{{ __('About Us') }}</a>
     </li>
 
     <li class="nav-item">

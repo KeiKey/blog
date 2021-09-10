@@ -6,11 +6,11 @@
             </li>
 
             <li class="nav-item text-center">
-                <a class="nav-link" href="{{ route('contact') }}">{{ __('Contact') }}</a>
+                <a class="nav-link" href="{{ route('static.page', 'contact') }}">{{ __('Contact') }}</a>
             </li>
 
             <li class="nav-item text-center">
-                <a class="nav-link" href="{{ route('about') }}">{{ __('About Us') }}</a>
+                <a class="nav-link" href="{{ route('static.page', 'about') }}">{{ __('About Us') }}</a>
             </li>
 
             <li class="nav-item text-center">
