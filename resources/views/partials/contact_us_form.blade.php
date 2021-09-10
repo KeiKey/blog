@@ -1,5 +1,7 @@
 <div class="container contact-form">
     <form method="POST" action="{{ route('contact') }}">
+        @csrf
+
         <h3>Drop Us a Message</h3>
 
         <div class="row">

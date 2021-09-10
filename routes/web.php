@@ -33,6 +33,10 @@ Route::post('/subscribe')
     ->uses('SiteController@subscribe')
     ->name('subscribe');
 
+Route::post('/contact')
+    ->uses('SiteController@contact')
+    ->name('contact');
+
 
 Route::middleware('auth')
     ->prefix('panel')

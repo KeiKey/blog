@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Events\EmailSubscribed;
+use App\Events\InquiryCreated;
+use App\Listeners\CreateInquiry;
+use App\Listeners\RegisterEmail;
+use App\Listeners\SendConfirmationNotification;
+use App\Listeners\SendNewInquiryNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +24,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        EmailSubscribed::class => [
+            RegisterEmail::class,
+            SendConfirmationNotification::class
+        ],
+        InquiryCreated::class => [
+            CreateInquiry::class,
+            SendNewInquiryNotification::class,
+            SendConfirmationNotification::class
+        ]
     ];
 
     /**
@@ -28,7 +43,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }
