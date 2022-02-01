@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('partials.edit_form',
+    @include('partials.edit-form',
              [
                  'action' => 'panel.admin.posts.update',
                  'title' => 'Update post',

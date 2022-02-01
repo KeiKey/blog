@@ -11,9 +11,9 @@
         </div>
     </div>
 
-    @include('site.molecules.footer_navigation')
+    @include('site.molecules.footer-navigation')
 
-    @include('site.molecules.footer_copyright')
+    @include('site.molecules.footer-copyright')
 
-    @include('site.molecules.footer_mobile')
+    @include('site.molecules.footer-mobile')
 </footer>

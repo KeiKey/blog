@@ -1,9 +1,9 @@
 <header class="header">
-    @include('site.molecules.navbar_mobile')
+    @include('site.molecules.navbar-mobile')
 
-    @include('site.molecules.navbar_dark')
+    @include('site.molecules.navbar-dark')
 
-    @include('site.molecules.navbar_light')
+    @include('site.molecules.navbar-light')
 
     <ul class="nav justify-content-center brand">
         <li class="nav-item">
@@ -13,5 +13,5 @@
         </li>
     </ul>
 
-    @include('site.atoms.button_explore')
+    @include('site.atoms.button-explore')
 </header>

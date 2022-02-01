@@ -27,7 +27,7 @@
 <body class="antialiased">
     <div id="wrapper">
         <div id="right-content">
-            @include('site.partials.side_menu')
+            @include('site.partials.side-menu')
         </div>
 
         <div id="left-content">

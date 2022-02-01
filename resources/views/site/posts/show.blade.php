@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
 @section('content')
-    @include('site.partials.header_inside')
+    @include('site.partials.header-inside')
 
     <div class="container" style="margin-top: -15vh;">
         <div class="row">

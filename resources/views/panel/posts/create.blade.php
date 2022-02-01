@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('partials.create_form',
+    @include('partials.create-form',
              [
                  'action' => 'panel.posts.store',
                  'title' => 'Create a new post',

@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
 @section('content')
-    @include('site.partials.header_home')
+    @include('site.partials.header-home')
 
     <section class="main-content">
         <div class="container">

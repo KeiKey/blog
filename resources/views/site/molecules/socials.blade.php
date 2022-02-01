@@ -1,13 +1,13 @@
 <ul class="social-icons">
     <li>
-        @include('site.atoms.icon_facebook')
+        @include('site.atoms.icon-facebook')
     </li>
 
     <li>
-        @include('site.atoms.icon_twitter')
+        @include('site.atoms.icon-twitter')
     </li>
 
     <li>
-        @include('site.atoms.icon_instagram')
+        @include('site.atoms.icon-instagram')
     </li>
 </ul>
