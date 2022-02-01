@@ -9,6 +9,7 @@ use App\Services\CategoryService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
@@ -49,9 +50,11 @@ class CategoryController extends Controller
      */
     public function store(CategoryStoreRequest $request): RedirectResponse
     {
-        $handler = $this->categoryService->createCategory($request);
+        $category = $this->categoryService->createCategory($request);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.categories.index',
+            Lang::get('general.create_success', ['name' => $category->name])
+        );
     }
 
     /**
@@ -74,9 +77,11 @@ class CategoryController extends Controller
      */
     public function update(Category $category, CategoryStoreRequest $request): RedirectResponse
     {
-        $handler = $this->categoryService->updateCategory($category, $request);
+        $category = $this->categoryService->updateCategory($category, $request);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.categories.index',
+            Lang::get('general.update_success', ['name' => $category->name])
+        );
     }
 
     /**
@@ -89,7 +94,9 @@ class CategoryController extends Controller
     {
         $handler = $this->categoryService->deleteCategory($category);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.categories.index',
+            Lang::get('general.delete_success', ['name' => $category->name])
+        );
     }
 
     /**
@@ -100,9 +107,11 @@ class CategoryController extends Controller
      */
     public function disable(Category $category): RedirectResponse
     {
-        $handler = $this->categoryService->disableCategory($category);
+        $category = $this->categoryService->disableCategory($category);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.categories.index',
+            Lang::get('general.disable_success', ['name' => $category->name])
+        );
     }
 
     /**
@@ -113,8 +122,10 @@ class CategoryController extends Controller
      */
     public function enable(Category $category): RedirectResponse
     {
-        $handler = $this->categoryService->enableCategory($category);
+        $category = $this->categoryService->enableCategory($category);
 
-        return redirect()->route('panel.admin.categories.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.categories.index',
+            Lang::get('general.enable_success', ['name' => $category->name])
+        );
     }
 }

@@ -17,27 +17,25 @@ class CategoryService
 
     /**
      * @param $request
-     * @return string[]
+     * @return Category
      */
-    public function createCategory($request): array
+    public function createCategory($request): Category
     {
-        $category = Category::create([
+        return Category::create([
             'name' => ucwords($request->name),
         ]);
-
-        return getActionResponse(ResponseStatus::SUCCESS, 'You created the category '. $category->name .'!');
     }
 
     /**
      * @param Category $category
      * @param $request
-     * @return string[]
+     * @return Category
      */
-    public function updateCategory(Category $category, $request): array
+    public function updateCategory(Category $category, $request): Category
     {
         $category->update(['name' => ucwords($request->name)]);
 
-        return getActionResponse(ResponseStatus::SUCCESS, 'You updated the category '. $category->name .'!');
+        return $category;
     }
 
     /**
@@ -57,23 +55,23 @@ class CategoryService
 
     /**
      * @param Category $category
-     * @return string[]
+     * @return Category
      */
-    public function disableCategory(Category $category): array
+    public function disableCategory(Category $category): Category
     {
         $category->update(['state' => State::DISABLED]);
 
-        return getActionResponse(ResponseStatus::SUCCESS, 'You disabled the category '. $category->name .'!');
+        return $category;
     }
 
     /**
      * @param Category $category
-     * @return string[]
+     * @return Category
      */
-    public function enableCategory(Category $category): array
+    public function enableCategory(Category $category): Category
     {
         $category->update(['state' => State::ACTIVE]);
 
-        return getActionResponse(ResponseStatus::SUCCESS, 'You enabled the category '. $category->name .'!');
+        return $category;
     }
 }
