@@ -6,11 +6,8 @@ use App\Events\InquiryCreated;
 use App\Http\Requests\ContactUsRequest;
 use App\Http\Requests\SubscribeRequest;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class SiteController extends Controller
