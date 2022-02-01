@@ -23,7 +23,7 @@ class CreateInquiry
      * @param InquiryCreated $event
      * @return void
      */
-    public function handle(InquiryCreated $event)
+    public function handle(InquiryCreated $event): void
     {
         $request = $event->getRequest();
 
