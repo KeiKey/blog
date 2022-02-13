@@ -17,137 +17,101 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/')
-    ->uses('PostController@index')
-    ->name('home');
+Route::get('/', [App\Http\Controllers\PostController::class, 'index'])->name('home');
 
-Route::get('/posts/{post}')
-    ->uses('PostController@show')
-    ->name('posts.show');
+Route::get('posts/{post}', [App\Http\Controllers\PostController::class, 'show'])->name('posts.show');
 
-Route::get('{static}')
-    ->uses('SiteController@index')
-    ->name('static.page');
+Route::get('{static}', [App\Http\Controllers\SiteController::class, 'index'])->name('static.page');
 
-Route::post('/subscribe')
-    ->uses('SiteController@subscribe')
-    ->name('subscribe');
+Route::post('subscribe', [App\Http\Controllers\SiteController::class, 'subscribe'])->name('subscribe');
 
-Route::post('/contact')
-    ->uses('SiteController@contact')
-    ->name('contact');
+Route::post('contact', [App\Http\Controllers\SiteController::class, 'contact'])->name('contact');
 
 
 Route::middleware('auth')
     ->prefix('panel')
     ->group(function () {
-        Route::get('/posts')
-            ->uses('Panel\PostController@index')
+        Route::get('posts', [App\Http\Controllers\Panel\PostController::class, 'index'])
             ->name('panel.posts.index');
 
-        Route::put('/posts/disable/{post}')
-            ->uses('Panel\PostController@disable')
+        Route::put('posts/disable/{post}', [App\Http\Controllers\Panel\PostController::class, 'disable'])
             ->name('panel.posts.disable');
 
-        Route::get('/posts/create')
-            ->uses('Panel\PostController@create')
+        Route::get('posts/create', [App\Http\Controllers\Panel\PostController::class, 'create'])
             ->name('panel.posts.create');
 
-        Route::post('/posts/create')
-            ->uses('Panel\PostController@store')
+        Route::post('posts/create', [App\Http\Controllers\Panel\PostController::class, 'store'])
             ->name('panel.posts.store');
 
-        Route::get('/posts/{post}')
-            ->uses('Panel\PostController@show')
+        Route::get('posts/{post}', [App\Http\Controllers\Panel\PostController::class, 'show'])
             ->name('panel.posts.show');
 
-        Route::delete('/posts/{post}')
-            ->uses('Panel\PostController@destroy')
+        Route::delete('posts/{post}', [App\Http\Controllers\Panel\PostController::class, 'destroy'])
             ->name('panel.posts.destroy');
 
-        Route::get('/posts/{post}/edit')
-            ->uses('Panel\PostController@edit')
+        Route::get('posts/{post}/edit', [App\Http\Controllers\Panel\PostController::class, 'edit'])
             ->name('panel.posts.edit');
 
-        Route::put('/posts/{post}/edit')
-            ->uses('Panel\PostController@update')
+        Route::put('posts/{post}/edit', [App\Http\Controllers\Panel\PostController::class, 'update'])
             ->name('panel.posts.update');
 
         Route::prefix('admin')
             ->middleware('role:' . Role::ADMIN)
             ->group(function () {
-                Route::get('/posts/')
-                    ->uses('Admin\PostController@index')
+                Route::get('posts/', [App\Http\Controllers\Admin\PostController::class, 'index'])
                     ->name('panel.admin.posts.index');
 
-                Route::post('/posts/disable/{post}')
-                    ->uses('Admin\PostController@disable')
+                Route::post('posts/disable/{post}', [App\Http\Controllers\Admin\PostController::class, 'disable'])
                     ->name('panel.admin.posts.disable');
 
-                Route::post('/posts/enable/{post}')
-                    ->uses('Admin\PostController@enable')
+                Route::post('posts/enable/{post}', [App\Http\Controllers\Admin\PostController::class, 'enable'])
                     ->name('panel.admin.posts.enable');
 
-                Route::get('/posts/{post}')
-                    ->uses('Admin\PostController@show')
+                Route::get('posts/{post}', [App\Http\Controllers\Admin\PostController::class, 'show'])
                     ->name('panel.admin.posts.show');
 
 
-                Route::get('/categories/')
-                    ->uses('Admin\CategoryController@index')
+                Route::get('categories/', [App\Http\Controllers\Admin\CategoryController::class, 'index'])
                     ->name('panel.admin.categories.index');
 
-                Route::get('/categories/create')
-                    ->uses('Admin\CategoryController@create')
+                Route::get('categories/create', [App\Http\Controllers\Admin\CategoryController::class, 'create'])
                     ->name('panel.admin.categories.create');
 
-                Route::post('/categories/create')
-                    ->uses('Admin\CategoryController@store')
+                Route::post('categories/create', [App\Http\Controllers\Admin\CategoryController::class, 'store'])
                     ->name('panel.admin.categories.store');
 
-                Route::delete('/categories/{category}')
-                    ->uses('Admin\CategoryController@destroy')
+                Route::delete('categories/{category}', [App\Http\Controllers\Admin\CategoryController::class, 'destroy'])
                     ->name('panel.admin.categories.destroy');
 
-                Route::get('/categories/{category}/edit')
-                    ->uses('Admin\CategoryController@edit')
+                Route::get('categories/{category}/edit', [App\Http\Controllers\Admin\CategoryController::class, 'edit'])
                     ->name('panel.admin.categories.edit');
 
-                Route::put('/categories/{category}/edit')
-                    ->uses('Admin\CategoryController@update')
+                Route::put('categories/{category}/edit', [App\Http\Controllers\Admin\CategoryController::class, 'update'])
                     ->name('panel.admin.categories.update');
 
-                Route::post('/categories/{category}/disable')
-                    ->uses('Admin\CategoryController@disable')
+                Route::post('categories/{category}/disable', [App\Http\Controllers\Admin\CategoryController::class, 'disable'])
                     ->name('panel.admin.categories.disable');
 
-                Route::post('/categories/{category}/enable')
-                    ->uses('Admin\CategoryController@enable')
+                Route::post('categories/{category}/enable', [App\Http\Controllers\Admin\CategoryController::class, 'enable'])
                     ->name('panel.admin.categories.enable');
 
 
-                Route::get('/users/')
-                    ->uses('Admin\UserController@index')
+                Route::get('users/', [App\Http\Controllers\Admin\UserController::class, 'index'])
                     ->name('panel.admin.users.index');
 
-                Route::get('/users/create')
-                    ->uses('Admin\UserController@create')
+                Route::get('users/create', [App\Http\Controllers\Admin\UserController::class, 'create'])
                     ->name('panel.admin.users.create');
 
-                Route::post('/users/create')
-                    ->uses('Admin\UserController@store')
+                Route::post('users/create', [App\Http\Controllers\Admin\UserController::class, 'store'])
                     ->name('panel.admin.users.store');
 
-                Route::post('/users/{user}/disable')
-                    ->uses('Admin\UserController@disable')
+                Route::post('users/{user}/disable', [App\Http\Controllers\Admin\UserController::class, 'disable'])
                     ->name('panel.admin.users.disable');
 
-                Route::post('/users/{user}/enable')
-                    ->uses('Admin\UserController@enable')
+                Route::post('users/{user}/enable', [App\Http\Controllers\Admin\UserController::class, 'enable'])
                     ->name('panel.admin.users.enable');
 
-                Route::post('/users/{user}/promote')
-                    ->uses('Admin\UserController@promote')
+                Route::post('users/{user}/promote', [App\Http\Controllers\Admin\UserController::class, 'promote'])
                     ->name('panel.admin.users.promote');
 
                 //todo - hard delete a category
