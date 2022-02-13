@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Enums\ResponseStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,18 +16,18 @@ class MacroServiceProvider extends ServiceProvider
     {
         RedirectResponse::macro( 'success', function(?string $route = null, string $message='Success!') {
             if ($route) {
-                return redirect()->route($route)->with(ResponseStatus::SUCCESS, $message);
+                return redirect()->route($route)->with('success', $message);
             }
 
-            return redirect()->back()->with(ResponseStatus::SUCCESS, $message);
+            return redirect()->back()->with('success', $message);
         });
 
         RedirectResponse::macro('error', function(?string $route = null, string $message='Error!') {
             if ($route) {
-                return redirect()->route($route)->with(ResponseStatus::FAILURE, $message);
+                return redirect()->route($route)->with('error', $message);
             }
 
-            return redirect()->back()->with(ResponseStatus::FAILURE, $message);
+            return redirect()->back()->with('error', $message);
         });
     }
 
