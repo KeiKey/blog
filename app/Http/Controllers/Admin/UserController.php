@@ -8,6 +8,7 @@ use App\Models\User\User;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -54,12 +55,11 @@ class UserController extends Controller
      * Promote a user to admin role.
      *
      * @param User $user
-     * @param Request $request
      * @return RedirectResponse
      */
-    public function promote(User $user, Request $request): RedirectResponse
+    public function promote(User $user): RedirectResponse
     {
-        $this->userService->promoteUser($request->user(), $user);
+        $this->userService->promoteUser(Auth::user(), $user);
 
         return RedirectResponse::success('panel.admin.users.index', 'You promoted the user ' . $user->name);
     }
@@ -68,12 +68,11 @@ class UserController extends Controller
      * Disable a user|your account.
      *
      * @param User $user
-     * @param Request $request
      * @return RedirectResponse
      */
-    public function disable(User $user, Request $request): RedirectResponse
+    public function disable(User $user): RedirectResponse
     {
-        $this->userService->disableUser($request->user(), $user);
+        $this->userService->disableUser(Auth::user(), $user);
 
         return RedirectResponse::success('panel.admin.users.index', 'You disabled the user ' . $user->name);
     }
@@ -85,9 +84,9 @@ class UserController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function enable(User $user, Request $request): RedirectResponse
+    public function enable(User $user): RedirectResponse
     {
-        $this->userService->enableUser($request->user(), $user);
+        $this->userService->enableUser(Auth::user(), $user);
 
         return RedirectResponse::success('panel.admin.users.index', 'You disabled the user ' . $user->name);
     }

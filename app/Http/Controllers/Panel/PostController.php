@@ -11,6 +11,7 @@ use App\Services\PostService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -24,23 +25,21 @@ class PostController extends Controller
     /**
      * Display a listing of the posts.
      *
-     * @param Request $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(): View
     {
-        return view('panel.posts.index', ['posts' => $request->user()->posts]);
+        return view('panel.posts.index', ['posts' => Auth::user()->posts]);
     }
 
     /**
      * Show the form for creating a new post.
      *
-     * @param Request $request
      * @return View|RedirectResponse
      */
-    public function create(Request $request): View|RedirectResponse
+    public function create(): View|RedirectResponse
     {
-        if (!$this->userPolicy->createPost($request->user())) {
+        if (!$this->userPolicy->createPost(Auth::user())) {
             return RedirectResponse::error(null, 'Admin is not allowed to create posts!');
         }
 
@@ -64,12 +63,11 @@ class PostController extends Controller
      * Display the specified post.
      *
      * @param Post $post
-     * @param Request $request
      * @return View|RedirectResponse
      */
-    public function show(Post $post, Request $request): View|RedirectResponse
+    public function show(Post $post): View|RedirectResponse
     {
-        if (!$this->userPolicy->accessPost($request->user(), $post)) {
+        if (!$this->userPolicy->accessPost(Auth::user(), $post)) {
             return RedirectResponse::error('panel.posts.index', 'Not Authorized!');
         }
 
@@ -80,12 +78,11 @@ class PostController extends Controller
      * Show the form for editing the post resource.
      *
      * @param Post $post
-     * @param Request $request
      * @return View|RedirectResponse
      */
-    public function edit(Post $post, Request $request): View|RedirectResponse
+    public function edit(Post $post): View|RedirectResponse
     {
-        if (!$this->userPolicy->createPost($request->user())) {
+        if (!$this->userPolicy->createPost(Auth::user())) {
             return RedirectResponse::error(null, 'Admin is not allowed to create posts!');
         }
 
@@ -114,13 +111,12 @@ class PostController extends Controller
      * Remove the specified post from storage.
      *
      * @param Post $post
-     * @param Request $request
      * @return RedirectResponse
      */
-    public function destroy(Post $post, Request $request): RedirectResponse
+    public function destroy(Post $post): RedirectResponse
     {
         try {
-            $this->postService->deletePost($request->user(), $post);
+            $this->postService->deletePost(Auth::user(), $post);
         } catch(Exception $e) {
             return RedirectResponse::error(null, $e->getMessage());
         }
@@ -132,13 +128,12 @@ class PostController extends Controller
      * Disable a post.
      *
      * @param Post $post
-     * @param Request $request
      * @return RedirectResponse
      */
-    public function disable(Post $post, Request $request): RedirectResponse
+    public function disable(Post $post): RedirectResponse
     {
         try {
-            $this->postService->disablePost($request->user(), $post);
+            $this->postService->disablePost(Auth::user(), $post);
         } catch(Exception $e) {
             return RedirectResponse::error(null, $e->getMessage());
         }

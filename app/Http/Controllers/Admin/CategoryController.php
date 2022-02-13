@@ -73,7 +73,7 @@ class CategoryController extends Controller
 
         if (!$category->update(['name' => $categoryName])) {
             return RedirectResponse::error();
-        };
+        }
 
         return RedirectResponse::success();
     }

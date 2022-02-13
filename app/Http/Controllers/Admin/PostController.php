@@ -8,6 +8,7 @@ use App\Policies\UserPolicy;
 use App\Services\PostService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\View\View;
 
@@ -31,14 +32,13 @@ class PostController extends Controller
     /**
      * Display the specified post.
      *
-     * @param Request $request
      * @param Post $post
      * @param UserPolicy $userPolicy
      * @return View|RedirectResponse
      */
-    public function show(Request $request, Post $post, UserPolicy $userPolicy): View|RedirectResponse
+    public function show(Post $post, UserPolicy $userPolicy): View|RedirectResponse
     {
-        if ($userPolicy->accessPost($request->user(), $post)) {
+        if ($userPolicy->accessPost(Auth::user(), $post)) {
             return view('admin.posts.show', ['post' => $post]);
         }
 
@@ -49,12 +49,11 @@ class PostController extends Controller
      * Disable the specified post.
      *
      * @param Post $post
-     * @param Request $request
      * @return RedirectResponse
      */
-    public function disable(Post $post, Request $request): RedirectResponse
+    public function disable(Post $post): RedirectResponse
     {
-        $this->postService->disablePost($request->user(), $post);
+        $this->postService->disablePost(Auth::user(), $post);
 
         return RedirectResponse::success('panel.admin.posts.index',
             Lang::get('general.disable_success', ['name' => $post->title])
@@ -65,12 +64,11 @@ class PostController extends Controller
      * Enable a post.
      *
      * @param Post $post
-     * @param Request $request
      * @return RedirectResponse
      */
-    public function enable(Post $post, Request $request): RedirectResponse
+    public function enable(Post $post): RedirectResponse
     {
-        $this->postService->enablePost($request->user(), $post);
+        $this->postService->enablePost(Auth::user(), $post);
 
         return RedirectResponse::success('panel.admin.posts.index',
             Lang::get('general.enable_success', ['name' => $post->title])
