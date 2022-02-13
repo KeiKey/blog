@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\State;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryStoreRequest;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category\Category;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -35,13 +35,15 @@ class CategoryController extends Controller
     /**
      * Store a newly created category in storage.
      *
-     * @param CategoryStoreRequest $request
+     * @param CategoryRequest $request
      * @return RedirectResponse
      */
-    public function store(CategoryStoreRequest $request): RedirectResponse
+    public function store(CategoryRequest $request): RedirectResponse
     {
+        $categoryName = ucwords($request->validated()['name']);
+
         Category::create([
-            'name' => ucwords($request->validated()['name']),
+            'name' => $categoryName,
         ]);
 
         return RedirectResponse::success();
@@ -61,11 +63,11 @@ class CategoryController extends Controller
     /**
      * Update the specified category in storage.
      *
+     * @param CategoryRequest $request
      * @param Category $category
-     * @param CategoryStoreRequest $request
      * @return RedirectResponse
      */
-    public function update(Category $category, CategoryStoreRequest $request): RedirectResponse
+    public function update(CategoryRequest $request, Category $category): RedirectResponse
     {
         $categoryName = ucwords($request->validated()['name']);
 
