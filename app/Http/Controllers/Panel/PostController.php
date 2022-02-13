@@ -8,6 +8,7 @@ use App\Models\Category\Category;
 use App\Models\Post\Post;
 use App\Policies\UserPolicy;
 use App\Services\PostService;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -24,15 +25,11 @@ class PostController extends Controller
      * Display a listing of the posts.
      *
      * @param Request $request
-     * @return View|RedirectResponse
+     * @return View
      */
-    public function index(Request $request): View|RedirectResponse
+    public function index(Request $request): View
     {
-        if ($request->user()->isUser()) {
-            return view('panel.posts.index', ['posts' => $this->postService->getUserPosts(auth()->id())]);
-        }
-
-        return redirect()->back()->with('no_access', 'Admin is not allowed to have posts!');
+        return view('panel.posts.index', ['posts' => $request->user()->posts]);
     }
 
     /**
@@ -43,11 +40,11 @@ class PostController extends Controller
      */
     public function create(Request $request): View|RedirectResponse
     {
-        if ($this->userPolicy->createPost($request->user())) {
-            return view('panel.posts.create', ['categories' => Category::all()]);
+        if (!$this->userPolicy->createPost($request->user())) {
+            return RedirectResponse::error(null, 'Admin is not allowed to create posts!');
         }
 
-        return redirect()->back()->with('no_access', 'Admin is not allowed to create posts!');
+        return view('panel.posts.create', ['categories' => Category::all()]);
     }
 
     /**
@@ -58,9 +55,9 @@ class PostController extends Controller
      */
     public function store(PostStoreRequest $request): RedirectResponse
     {
-        $handler = $this->postService->createPost($request->user());
+        $post = $this->postService->createPost($request);
 
-        return redirect()->route('panel.posts.show', $handler['id'])->with($handler['status'], $handler['message']);
+        return redirect()->route('panel.posts.show', $post->id)->with('success', 'Success!');
     }
 
     /**
@@ -72,11 +69,11 @@ class PostController extends Controller
      */
     public function show(Post $post, Request $request): View|RedirectResponse
     {
-        if ($this->userPolicy->accessPost($request->user(), $post)) {
-            return view('panel.posts.show', ['post' => $post]);
+        if (!$this->userPolicy->accessPost($request->user(), $post)) {
+            return RedirectResponse::error('panel.posts.index', 'Not Authorized!');
         }
 
-        return redirect()->route('panel.posts.index')->with('no_access', 'Not Authorized!');
+        return view('panel.posts.show', ['post' => $post]);
     }
 
     /**
@@ -88,11 +85,11 @@ class PostController extends Controller
      */
     public function edit(Post $post, Request $request): View|RedirectResponse
     {
-        if ($this->userPolicy->createPost($request->user())) {
-            return view('panel.posts.edit', ['post' => $post, 'categories' => Category::all()]);
+        if (!$this->userPolicy->createPost($request->user())) {
+            return RedirectResponse::error(null, 'Admin is not allowed to create posts!');
         }
 
-        return redirect()->back()->with('no_access', 'Admin is not allowed to create posts!');
+        return view('panel.posts.edit', ['post' => $post, 'categories' => Category::all()]);
     }
 
     /**
@@ -104,9 +101,13 @@ class PostController extends Controller
      */
     public function update(Post $post, PostStoreRequest $request): RedirectResponse
     {
-        $handler = $this->postService->updatePost($post, $request);
+        try {
+            $this->postService->updatePost($post, $request);
+        } catch(Exception $e) {
+            return RedirectResponse::error(null, $e->getMessage());
+        }
 
-        return redirect()->route('panel.posts.show', $handler['id'])->with($handler['status'], $handler['message']);
+        return redirect()->route('panel.posts.show', $post->id)->with('success', 'Success!');
     }
 
     /**
@@ -118,9 +119,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post, Request $request): RedirectResponse
     {
-        $handler = $this->postService->deletePost($request->user(), $post);
+        try {
+            $this->postService->deletePost($request->user(), $post);
+        } catch(Exception $e) {
+            return RedirectResponse::error(null, $e->getMessage());
+        }
 
-        return redirect()->route('panel.posts.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.posts.index', 'You deleted the post!');
     }
 
     /**
@@ -132,8 +137,12 @@ class PostController extends Controller
      */
     public function disable(Post $post, Request $request): RedirectResponse
     {
-        $handler = $this->postService->disablePost($request->user(), $post);
+        try {
+            $this->postService->disablePost($request->user(), $post);
+        } catch(Exception $e) {
+            return RedirectResponse::error(null, $e->getMessage());
+        }
 
-        return redirect()->route('panel.posts.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.posts.index');
     }
 }

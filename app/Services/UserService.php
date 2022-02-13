@@ -2,38 +2,29 @@
 
 namespace App\Services;
 
-use App\Enums\ResponseStatus;
 use App\Enums\Role;
 use App\Enums\State;
+use App\Exceptions\NotAuthorizedException;
 use App\Models\User\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
-    private $response;
-
-    public function __construct()
-    {
-        $this->response = getActionResponse();
-    }
-
     /**
      * Create a new user.
      *
      * @param $request
-     * @return string[]
+     * @return User
      */
-    public function createUser($request): array
+    public function createUser($request): User
     {
-        $user = User::create([
+        return User::create([
             'name' => ucwords($request->name),
             'surname' => ucwords($request->surname),
             'email' => $request->email,
             'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
-
-        return getActionResponse(ResponseStatus::SUCCESS, 'You created the user '.$user->name .'!');
     }
 
     /**
@@ -41,17 +32,15 @@ class UserService
      *
      * @param User $user
      * @param User $userEdit
-     * @return string[]
+     * @return bool
      */
-    public function promoteUser(User $user, User $userEdit): array
+    public function promoteUser(User $user, User $userEdit): bool
     {
-        if ($user->can('promoteUser', $userEdit)) {
-            $userEdit->update(['role' => Role::ADMIN, 'disabled_by' => null]);
-
-            $this->response = getActionResponse(ResponseStatus::SUCCESS, 'You promoted the user '.$userEdit->name .'!');
+        if (!$user->can('promoteUser', $userEdit)) {
+            throw new NotAuthorizedException('Not Authorized!');
         }
 
-        return $this->response;
+        return $userEdit->update(['role' => Role::ADMIN, 'disabled_by' => null]);
     }
 
     /**
@@ -59,34 +48,30 @@ class UserService
      *
      * @param User $user
      * @param User $userEdit
-     * @return string[]
+     * @return bool
      */
-    public function disableUser(User $user, User $userEdit): array
+    public function disableUser(User $user, User $userEdit): bool
     {
-        if ($user->can('disableUser', $userEdit)) {
-            $userEdit->update(['state' => State::DISABLED, 'disabled_by' => $user->id]);
-
-            $this->response = getActionResponse(ResponseStatus::SUCCESS, 'You disabled the user '.$userEdit->name .'!');
+        if (!$user->can('disableUser', $userEdit)) {
+            throw new NotAuthorizedException('Not Authorized!');
         }
 
-        return $this->response;
+        return $userEdit->update(['state' => State::DISABLED, 'disabled_by' => $user->id]);
     }
 
     /**
-     * Enable a user|you account.,
+     * Enable a user|your account.
      *
      * @param User $user
      * @param User $userEdit
-     * @return string[]
+     * @return bool
      */
-    public function enableUser(User $user, User $userEdit): array
+    public function enableUser(User $user, User $userEdit): bool
     {
-        if ($user->can('enablesUser', $userEdit)) {
-            $userEdit->update(['state' => State::ACTIVE]);
-
-            $this->response = getActionResponse(ResponseStatus::SUCCESS, 'You enabled the user '.$userEdit->name .'!');
+        if (!$user->can('enablesUser', $userEdit)) {
+            throw new NotAuthorizedException('Not Authorized!');
         }
 
-        return $this->response;
+        return $userEdit->update(['state' => State::ACTIVE]);
     }
 }

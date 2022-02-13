@@ -20,6 +20,7 @@ class Post extends Model
 {
     use RelationshipTrait,
         AttributesTrait,
+        ScopesTrait,
         SoftDeletes;
 
     /**

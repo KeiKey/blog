@@ -45,9 +45,9 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request): RedirectResponse
     {
-        $handler = $this->userService->createUser($request);
+        $user = $this->userService->createUser($request);
 
-        return redirect()->route('panel.admin.users.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.users.index', 'You created the user '.$user->name);
     }
 
     /**
@@ -59,9 +59,9 @@ class UserController extends Controller
      */
     public function promote(User $user, Request $request): RedirectResponse
     {
-        $handler = $this->userService->promoteUser($request->user(), $user);
+        $this->userService->promoteUser($request->user(), $user);
 
-        return redirect()->route('panel.admin.users.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.users.index', 'You promoted the user ' . $user->name);
     }
 
     /**
@@ -73,9 +73,9 @@ class UserController extends Controller
      */
     public function disable(User $user, Request $request): RedirectResponse
     {
-        $handler = $this->userService->disableUser($request->user(), $user);
+        $this->userService->disableUser($request->user(), $user);
 
-        return redirect()->route('panel.admin.users.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.users.index', 'You disabled the user ' . $user->name);
     }
 
     /**
@@ -87,8 +87,8 @@ class UserController extends Controller
      */
     public function enable(User $user, Request $request): RedirectResponse
     {
-        $handler = $this->userService->enableUser($request->user(), $user);
+        $this->userService->enableUser($request->user(), $user);
 
-        return redirect()->route('panel.admin.users.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.users.index', 'You disabled the user ' . $user->name);
     }
 }

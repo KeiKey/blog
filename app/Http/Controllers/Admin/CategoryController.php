@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\State;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Models\Category\Category;
-use App\Services\CategoryService;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function __construct(
-        private CategoryService $categoryService
-    ) {
-    }
-
     /**
      * Display a listing of categories.
      *
@@ -45,11 +41,11 @@ class CategoryController extends Controller
      */
     public function store(CategoryStoreRequest $request): RedirectResponse
     {
-        $category = $this->categoryService->createCategory($request);
+        Category::create([
+            'name' => ucwords($request->validated()['name']),
+        ]);
 
-        return RedirectResponse::success('panel.admin.categories.index',
-            Lang::get('general.create_success', ['name' => $category->name])
-        );
+        return RedirectResponse::success();
     }
 
     /**
@@ -72,11 +68,13 @@ class CategoryController extends Controller
      */
     public function update(Category $category, CategoryStoreRequest $request): RedirectResponse
     {
-        $category = $this->categoryService->updateCategory($category, $request);
+        $categoryName = ucwords($request->validated()['name']);
 
-        return RedirectResponse::success('panel.admin.categories.index',
-            Lang::get('general.update_success', ['name' => $category->name])
-        );
+        if (!$category->update(['name' => $categoryName])) {
+            return RedirectResponse::error();
+        };
+
+        return RedirectResponse::success();
     }
 
     /**
@@ -87,11 +85,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
-        $this->categoryService->deleteCategory($category);
+        try {
+            $category->delete();
+        } catch (Exception $e) {
+            return RedirectResponse::error(null, $e->getMessage());
+        }
 
-        return RedirectResponse::success('panel.admin.categories.index',
-            Lang::get('general.delete_success', ['name' => $category->name])
-        );
+        return RedirectResponse::success();
     }
 
     /**
@@ -102,11 +102,11 @@ class CategoryController extends Controller
      */
     public function disable(Category $category): RedirectResponse
     {
-        $category = $this->categoryService->disableCategory($category);
+        if (!$category->update(['state' => State::DISABLED])) {
+            return RedirectResponse::error();
+        }
 
-        return RedirectResponse::success('panel.admin.categories.index',
-            Lang::get('general.disable_success', ['name' => $category->name])
-        );
+        return RedirectResponse::success();
     }
 
     /**
@@ -117,10 +117,10 @@ class CategoryController extends Controller
      */
     public function enable(Category $category): RedirectResponse
     {
-        $category = $this->categoryService->enableCategory($category);
+        if (!$category->update(['state' => State::ACTIVE])) {
+            return RedirectResponse::error();
+        }
 
-        return RedirectResponse::success('panel.admin.categories.index',
-            Lang::get('general.enable_success', ['name' => $category->name])
-        );
+        return RedirectResponse::success();
     }
 }
