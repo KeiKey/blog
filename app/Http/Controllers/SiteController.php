@@ -12,7 +12,6 @@ use Illuminate\View\View;
 
 class SiteController extends Controller
 {
-
     public function __construct(
     ) {
     }

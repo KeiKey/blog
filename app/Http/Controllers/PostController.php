@@ -10,12 +10,9 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    private $postService;
-
     public function __construct(
-        PostService $postService
+        private PostService $postService
     ) {
-        $this->postService = $postService;
     }
 
     /**

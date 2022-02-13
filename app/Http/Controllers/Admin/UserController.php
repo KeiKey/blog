@@ -14,12 +14,9 @@ use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    private $userService;
-
     public function __construct(
-        UserService $userService
+        private UserService $userService
     ) {
-        $this->userService = $userService;
     }
 
     /**

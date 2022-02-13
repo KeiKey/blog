@@ -10,20 +10,15 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    private $postService;
-
-    private $userPolicy;
-
     public function __construct(
-        PostService $postService,
-        UserPolicy $userPolicy
+        private PostService $postService,
+        private UserPolicy $userPolicy
     ) {
-        $this->userPolicy = $userPolicy;
-        $this->postService = $postService;
     }
 
     /**
@@ -63,7 +58,9 @@ class PostController extends Controller
     {
         $handler = $this->postService->disablePost($request->user(), $post);
 
-        return redirect()->route('panel.admin.posts.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.posts.index',
+            Lang::get('general.disable_success', ['name' => $post->title])
+        );
     }
 
     /**
@@ -77,6 +74,8 @@ class PostController extends Controller
     {
         $handler = $this->postService->enablePost($request->user(), $post);
 
-        return redirect()->route('panel.admin.posts.index')->with($handler['status'], $handler['message']);
+        return RedirectResponse::success('panel.admin.posts.index',
+            Lang::get('general.enable_success', ['name' => $post->title])
+        );
     }
 }

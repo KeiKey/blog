@@ -14,12 +14,9 @@ use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    private $categoryService;
-
     public function __construct(
-        CategoryService $categoryService
+        private CategoryService $categoryService
     ) {
-        $this->categoryService = $categoryService;
     }
 
     /**

@@ -16,16 +16,10 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    private $postService;
-
-    private $userPolicy;
-
     public function __construct(
-        PostService $postService,
-        UserPolicy $userPolicy
+        private PostService $postService,
+        private UserPolicy $userPolicy
     ) {
-        $this->postService = $postService;
-        $this->userPolicy = $userPolicy;
     }
 
     /**
