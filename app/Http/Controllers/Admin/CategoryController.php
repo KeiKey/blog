@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Models\Category\Category;
 use App\Services\CategoryService;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\View\View;
@@ -22,9 +20,9 @@ class CategoryController extends Controller
     /**
      * Display a listing of categories.
      *
-     * @return Application|Factory|View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('admin.categories.index', ['categories' => Category::all()]);
     }
@@ -58,9 +56,9 @@ class CategoryController extends Controller
      * Show the form for editing the Category resource.
      *
      * @param Category $category
-     * @return Application|Factory|View
+     * @return View
      */
-    public function edit(Category $category)
+    public function edit(Category $category): View
     {
         return view('admin.categories.edit', ['category' => $category]);
     }
@@ -89,7 +87,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
-        $handler = $this->categoryService->deleteCategory($category);
+        $this->categoryService->deleteCategory($category);
 
         return RedirectResponse::success('panel.admin.categories.index',
             Lang::get('general.delete_success', ['name' => $category->name])

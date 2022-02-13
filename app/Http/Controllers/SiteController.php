@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Events\InquiryCreated;
 use App\Http\Requests\ContactUsRequest;
 use App\Http\Requests\SubscribeRequest;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -19,9 +17,10 @@ class SiteController extends Controller
     /**
      * Display the required static page.
      *
-     * @return Application|Factory|View
+     * @param $static
+     * @return View
      */
-    public function index($static)
+    public function index($static): View
     {
         return view('site.static.'.$static);
     }

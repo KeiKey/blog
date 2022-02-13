@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Post\Post;
 use App\Services\PostService;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -18,9 +16,9 @@ class PostController extends Controller
     /**
      * Display a listing of the post.
      *
-     * @return Application|Factory|View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('site.posts.index', ['posts' => $this->postService->all()]);
     }
@@ -29,9 +27,9 @@ class PostController extends Controller
      * Display the specified post.
      *
      * @param Post $post
-     * @return Application|Factory|View
+     * @return View
      */
-    public function show(Post $post)
+    public function show(Post $post): View
     {
         return view('site.posts.show', ['post' => $post]);
     }

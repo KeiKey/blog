@@ -74,7 +74,6 @@ class PostService
      * @param Post $post
      * @param $request
      * @return string[]
-     * @throws NotAuthorizedException
      */
     public function updatePost(Post $post, $request): array
     {
@@ -120,7 +119,6 @@ class PostService
      * @param User $user
      * @param Post $post
      * @return string[]
-     * @throws NotAuthorizedException
      */
     public function deletePost(User $user, Post $post): array
     {
@@ -148,7 +146,6 @@ class PostService
      * @param Post $post
      * @param User $user
      * @return string[]
-     * @throws NotAuthorizedException
      */
     public function disablePost(User $user, Post $post): array
     {
@@ -165,7 +162,6 @@ class PostService
      * @param Post $post
      * @param User $user
      * @return string[]
-     * @throws NotAuthorizedException
      */
     public function enablePost(User $user, Post $post): array
     {
@@ -180,12 +176,12 @@ class PostService
 
     /**
      * @param bool $disabled
-     * @return Post|Post[]|Builder|Collection|\Illuminate\Database\Query\Builder
+     * @return Collection
      */
-    public function all(bool $disabled = false)
+    public function all(bool $disabled = false): Collection
     {
         if ($disabled) {
-            return Post::withTrashed();
+            return Post::withTrashed()->get();
         }
 
         return Post::all()->where('state', '===', State::ACTIVE);
@@ -196,14 +192,14 @@ class PostService
      *
      * @param $id
      * @param false $disabled
-     * @return Post|Post[]|Builder|Collection|\Illuminate\Database\Query\Builder
+     * @return Collection
      */
-    public function getUserPosts($id, bool $disabled = false)
+    public function getUserPosts($id, bool $disabled = false): Collection
     {
         if ($disabled) {
-            return Post::withTrashed()->where('user_id',$id);
+            return Post::withTrashed()->where('user_id', $id)->get();
         }
 
-        return Post::all()->where('user_id',$id);
+        return Post::all()->where('user_id', $id);
     }
 }

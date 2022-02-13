@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Models\User\User;
 use App\Services\UserService;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -22,9 +20,9 @@ class UserController extends Controller
     /**
      * Display a listing of users.
      *
-     * @return Application|Factory|View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('admin.users.index', ['users' => User::withTrashed()->get()]);
     }
@@ -32,9 +30,9 @@ class UserController extends Controller
     /**
      * Show the form for creating a new user.
      *
-     * @return Application|Factory|View
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('admin.users.create');
     }

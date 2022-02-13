@@ -8,8 +8,6 @@ use App\Models\Category\Category;
 use App\Models\Post\Post;
 use App\Policies\UserPolicy;
 use App\Services\PostService;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -25,9 +23,10 @@ class PostController extends Controller
     /**
      * Display a listing of the posts.
      *
-     * @return Application|Factory|RedirectResponse|View
+     * @param Request $request
+     * @return View|RedirectResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): View|RedirectResponse
     {
         if ($request->user()->isUser()) {
             return view('panel.posts.index', ['posts' => $this->postService->getUserPosts(auth()->id())]);
@@ -39,9 +38,10 @@ class PostController extends Controller
     /**
      * Show the form for creating a new post.
      *
-     * @return Application|Factory|RedirectResponse|View
+     * @param Request $request
+     * @return View|RedirectResponse
      */
-    public function create(Request $request)
+    public function create(Request $request): View|RedirectResponse
     {
         if ($this->userPolicy->createPost($request->user())) {
             return view('panel.posts.create', ['categories' => Category::all()]);
@@ -68,9 +68,9 @@ class PostController extends Controller
      *
      * @param Post $post
      * @param Request $request
-     * @return Application|Factory|RedirectResponse|View
+     * @return View|RedirectResponse
      */
-    public function show(Post $post, Request $request)
+    public function show(Post $post, Request $request): View|RedirectResponse
     {
         if ($this->userPolicy->accessPost($request->user(), $post)) {
             return view('panel.posts.show', ['post' => $post]);
@@ -84,9 +84,9 @@ class PostController extends Controller
      *
      * @param Post $post
      * @param Request $request
-     * @return Application|Factory|RedirectResponse|View
+     * @return View|RedirectResponse
      */
-    public function edit(Post $post, Request $request)
+    public function edit(Post $post, Request $request): View|RedirectResponse
     {
         if ($this->userPolicy->createPost($request->user())) {
             return view('panel.posts.edit', ['post' => $post, 'categories' => Category::all()]);

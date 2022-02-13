@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Post\Post;
 use App\Policies\UserPolicy;
 use App\Services\PostService;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
@@ -16,17 +14,16 @@ use Illuminate\View\View;
 class PostController extends Controller
 {
     public function __construct(
-        private PostService $postService,
-        private UserPolicy $userPolicy
+        private PostService $postService
     ) {
     }
 
     /**
      * Display a listing of Posts.
      *
-     * @return Application|Factory|View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('admin.posts.index', ['posts' => $this->postService->all()]);
     }
@@ -34,13 +31,14 @@ class PostController extends Controller
     /**
      * Display the specified post.
      *
-     * @param Post $post
      * @param Request $request
-     * @return Application|Factory|RedirectResponse|View
+     * @param Post $post
+     * @param UserPolicy $userPolicy
+     * @return View|RedirectResponse
      */
-    public function show(Post $post, Request $request)
+    public function show(Request $request, Post $post, UserPolicy $userPolicy): View|RedirectResponse
     {
-        if ($this->userPolicy->accessPost($request->user(), $post)) {
+        if ($userPolicy->accessPost($request->user(), $post)) {
             return view('admin.posts.show', ['post' => $post]);
         }
 
@@ -56,7 +54,7 @@ class PostController extends Controller
      */
     public function disable(Post $post, Request $request): RedirectResponse
     {
-        $handler = $this->postService->disablePost($request->user(), $post);
+        $this->postService->disablePost($request->user(), $post);
 
         return RedirectResponse::success('panel.admin.posts.index',
             Lang::get('general.disable_success', ['name' => $post->title])
@@ -72,7 +70,7 @@ class PostController extends Controller
      */
     public function enable(Post $post, Request $request): RedirectResponse
     {
-        $handler = $this->postService->enablePost($request->user(), $post);
+        $this->postService->enablePost($request->user(), $post);
 
         return RedirectResponse::success('panel.admin.posts.index',
             Lang::get('general.enable_success', ['name' => $post->title])
