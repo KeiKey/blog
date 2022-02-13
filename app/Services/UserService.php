@@ -13,17 +13,17 @@ class UserService
     /**
      * Create a new user.
      *
-     * @param $request
+     * @param array $data
      * @return User
      */
-    public function createUser($request): User
+    public function createUser(array $data): User
     {
         return User::create([
-            'name' => ucwords($request->name),
-            'surname' => ucwords($request->surname),
-            'email' => $request->email,
-            'role' => $request->role,
-            'password' => Hash::make($request->password),
+            'name' => ucwords($data['name']),
+            'surname' => ucwords($data['surname']),
+            'email' => $data['email'],
+            'role' => $data['role'],
+            'password' => Hash::make($data['password']),
         ]);
     }
 

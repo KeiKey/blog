@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserRequest;
 use App\Models\User\User;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -41,10 +40,10 @@ class UserController extends Controller
     /**
      * Store a user in storage.
      *
-     * @param UserStoreRequest $request
+     * @param UserRequest $request
      * @return RedirectResponse
      */
-    public function store(UserStoreRequest $request): RedirectResponse
+    public function store(UserRequest $request): RedirectResponse
     {
         $user = $this->userService->createUser($request);
 
@@ -81,7 +80,6 @@ class UserController extends Controller
      * Enable a user|you account.
      *
      * @param User $user
-     * @param Request $request
      * @return RedirectResponse
      */
     public function enable(User $user): RedirectResponse
