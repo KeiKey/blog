@@ -7,7 +7,6 @@ use App\Models\Post\Post;
 use App\Policies\UserPolicy;
 use App\Services\PostService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\View\View;

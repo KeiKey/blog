@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PostStoreRequest;
+use App\Http\Requests\PostRequest;
 use App\Models\Category\Category;
 use App\Models\Post\Post;
 use App\Policies\UserPolicy;
 use App\Services\PostService;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
@@ -49,12 +48,12 @@ class PostController extends Controller
     /**
      * Store a newly created post in storage.
      *
-     * @param PostStoreRequest $request
+     * @param PostRequest $request
      * @return RedirectResponse
      */
-    public function store(PostStoreRequest $request): RedirectResponse
+    public function store(PostRequest $request): RedirectResponse
     {
-        $post = $this->postService->createPost($request);
+        $post = $this->postService->createPost($request->validated(), Auth::user());
 
         return redirect()->route('panel.posts.show', $post->id)->with('success', 'Success!');
     }
@@ -92,14 +91,14 @@ class PostController extends Controller
     /**
      * Update the specified post in storage.
      *
+     * @param PostRequest $request
      * @param Post $post
-     * @param PostStoreRequest $request
      * @return RedirectResponse
      */
-    public function update(Post $post, PostStoreRequest $request): RedirectResponse
+    public function update(PostRequest $request, Post $post): RedirectResponse
     {
         try {
-            $this->postService->updatePost($post, $request);
+            $this->postService->updatePost($post, $request->validated());
         } catch(Exception $e) {
             return RedirectResponse::error(null, $e->getMessage());
         }

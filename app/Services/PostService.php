@@ -19,36 +19,23 @@ class PostService
     /**
      * Create a post.
      *
-     * @param $request
+     * @param array $data
+     * @param User $user
      * @return Post
      */
-    public function createPost($request): Post
+    public function createPost(array $data, User $user): Post
     {
-        if (!$this->userPolicy->createPost($request->user())) {
-            throw new NotAuthorizedException('Admin is not allowed to create posts!');
-        }
+        $thumbnailName = $data['thumbnail'] ?? $this->storeFile($data, 'thumbnails');
 
-        $directory = str_replace(' ', '_', $request->title);
-
-        if ($request->hasFile('thumbnail')) {
-            $extension = $request->thumbnail->extension();
-            $thumbnail_name = time().".".$extension;
-            $request->thumbnail->move(public_path('images/thumbnails/'.$directory), $thumbnail_name);
-        }
-
-        if ($request->hasFile('bg_image')) {
-            $extension = $request->bg_image->extension();
-            $bg_image_name = time().".".$extension;
-            $request->bg_image->move(public_path('images/bg_images/'.$directory), $bg_image_name);
-        }
+        $backgroundName = $data['bg_image'] ?? $this->storeFile($data, 'bg_images');
 
         return Post::create([
-            'title' => ucwords($request->title),
-            'content' => ucwords($request->content),
-            'category_id' => (int)$request->category ?? null,
-            'thumbnail' => $thumbnail_name ? $directory.'/'.$thumbnail_name : null,
-            'bg_image' => $bg_image_name ? $directory.'/'.$bg_image_name : null,
-            'user_id' => auth()->id()
+            'title' => ucwords($data['title']),
+            'content' => ucwords($data['content']),
+            'category_id' => (int)$data['category'] ?? null,
+            'thumbnail' => $thumbnailName,
+            'bg_image' => $backgroundName,
+            'user_id' => $user->id
         ]);
     }
 
@@ -56,39 +43,26 @@ class PostService
      * Update a post.
      *
      * @param Post $post
-     * @param $request
+     * @param array $data
      * @return Post
      */
-    public function updatePost(Post $post, $request): Post
+    public function updatePost(Post $post, array $data): Post
     {
-        if (!$this->userPolicy->createPost($request->user())) {
-            throw new NotAuthorizedException('Admin is not allowed to update posts!');
-        }
+        $directory = str_replace(' ', '_', $data['title']);
 
-        $directory = str_replace(' ', '_', $request->title);
+        $thumbnailName = $data['thumbnail'] ?? $this->storeFile($data, 'thumbnails');
 
-        if ($request->hasFile('thumbnail')) {
-            $extension = $request->thumbnail->extension();
-            $thumbnail_name = time().'.'.$extension;
-            $request->thumbnail->move(public_path('images/thumbnails/'.$directory), $thumbnail_name);
-        }
-
-        if ($request->hasFile('bg_image')) {
-            $extension = $request->bg_image->extension();
-            $bg_image_name = time().".".$extension;
-            $request->bg_image->move(public_path('images/bg_images/'.$directory), $bg_image_name);
-        }
+        $backgroundName = $data['bg_image'] ?? $this->storeFile($data, 'bg_images');
 
         File::delete(public_path('images/thumbnails/'.$directory) .'/'. $post->thumbnail);
         File::delete(public_path('images/bg_images/'.$directory) .'/'. $post->bg_image);
 
         $post->update([
-            'title' => ucwords($request->title),
-            'content' => ucwords($request->content),
-            'category_id' => (int)$request->category ?? null,
-            'thumbnail' => $thumbnail_name ? $directory.'/'.$thumbnail_name : null,
-            'bg_image' => $bg_image_name ? $directory.'/'.$bg_image_name : null,
-            'user_id' => auth()->id()
+            'title' => ucwords($data['title']),
+            'content' => ucwords($data['content']),
+            'category_id' => (int)$data['category'] ?? null,
+            'thumbnail' => $thumbnailName,
+            'bg_image' => $backgroundName
         ]);
 
         return $post;
@@ -146,5 +120,25 @@ class PostService
         $post->update(['state' => State::ACTIVE, 'disabled_by' => null]);
 
         return $post;
+    }
+
+    /**
+     * Return the path to the file being stored.
+     *
+     * @param array $data
+     * @param string $subfolder
+     * @return string
+     */
+    private function storeFile(array $data, string $subfolder): string
+    {
+        $directory = str_replace(' ', '_', $data['title']);
+
+        $extension = $data['thumbnail']->extension();
+
+        $fileName = time().'.'.$extension;
+
+        $data['thumbnail']->move(public_path('images/'.$subfolder.'/'.$directory), $fileName);
+
+        return $directory.'/'.$data['thumbnail'];
     }
 }
