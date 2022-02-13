@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Policies\UserPolicy;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserStoreRequest extends FormRequest
@@ -12,9 +11,8 @@ class UserStoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-//        return $this->user()->can('createUser');
         return true;
     }
 
@@ -30,7 +28,7 @@ class UserStoreRequest extends FormRequest
             'surname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ''
+            'role' => ['']
         ];
     }
 }

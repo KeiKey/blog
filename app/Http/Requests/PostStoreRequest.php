@@ -24,9 +24,9 @@ class PostStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required',
-            'content' => 'required',
-            'category' => '',
+            'title' => ['required'],
+            'content' => ['required'],
+            'category' => ['exists:categories,id'],
             'thumbnail' => ['image', 'mimes:jpeg,png,jpg,svg', 'max:2048'],
             'bg_image' =>  ['image', 'mimes:jpeg,png,jpg,svg', 'max:2048'],
         ];
