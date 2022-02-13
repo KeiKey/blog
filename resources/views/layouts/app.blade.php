@@ -121,11 +121,11 @@
     </script>
 @endif
 
-@if (session('fail'))
+@if (session('error'))
     <script>
         Swal.fire({
             title: 'Error!',
-            text: '{{ session('fail') }}',
+            text: '{{ session('error') }}',
             icon: 'error'
         })
     </script>
